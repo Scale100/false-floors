@@ -1,0 +1,46 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Scale100
+
+The register content in this repository is licensed under the Creative Commons
+Attribution 4.0 International licence.
+
+Full legal text:  https://creativecommons.org/licenses/by/4.0/legalcode
+Plain summary:    https://creativecommons.org/licenses/by/4.0/
+
+WHAT THIS COVERS
+
+The catalogue entries themselves, the register markdown files,
+`register-data.json`, and documentation derived from them.
+
+The CODE in this repository – checker scripts, the extraction script and the
+trust-check tool – is licensed separately under the MIT licence. See LICENSE.
+
+WHAT YOU MAY DO
+
+Share and adapt the material for any purpose, including commercially. Map your
+own framework onto these entries. Quote them in reports, in training material,
+in vendor documentation, in academic work. Fork the catalogue and take it in a
+direction the maintainers disagree with.
+
+There is no non-commercial restriction and there will not be one.
+
+THE ONE CONDITION
+
+Give appropriate credit, link to this licence, and indicate if you made
+changes. You may do so in any reasonable manner, but not in any way that
+suggests the licensor endorses you or your use.
+
+Suggested attribution:
+
+    Failure entries from False Floors by Scale100, CC BY 4.0.
+    <repository URL>
+
+If you have adapted or extended the entries, say so, so that readers do not
+attribute your changes to the original.
+
+NO ENDORSEMENT, NO CERTIFICATION
+
+Attribution is not endorsement. Using this catalogue does not make a product,
+an assessment or an organisation certified, accredited, approved or verified by
+Scale100, and nothing in this repository may be presented as though it does.

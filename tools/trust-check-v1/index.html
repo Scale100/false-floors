@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Agent Trust Check</title>
+  <style>
+    :root {
+      --ink: #17221d;
+      --muted: #607068;
+      --paper: #f4f1e9;
+      --panel: #fffdf8;
+      --line: #d8d5ca;
+      --forest: #153d32;
+      --green: #2f6d55;
+      --mint: #cbe7d7;
+      --lime: #d9ed91;
+      --amber: #f2bb62;
+      --red: #b6503e;
+      --shadow: 0 18px 50px rgba(26, 43, 35, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% 3%, rgba(217, 237, 145, 0.32), transparent 23rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    .shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      border-bottom: 1px solid rgba(23, 34, 29, 0.13);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -0.02em; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--forest);
+      color: var(--lime);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 15px;
+    }
+    .privacy { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .privacy svg { color: var(--green); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 52px;
+      align-items: center;
+      padding: 78px 0 58px;
+    }
+    .eyebrow { margin: 0 0 15px; color: var(--green); font: 700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+    h1 { max-width: 780px; margin: 0; font-size: clamp(48px, 7vw, 88px); line-height: 0.95; letter-spacing: -0.065em; }
+    .hero-copy { max-width: 680px; margin: 25px 0 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); }
+
+    .signal-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 310px;
+      padding: 26px;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 28px;
+      background: var(--forest);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+    .signal-card::after { content: ""; position: absolute; right: -70px; bottom: -90px; width: 250px; height: 250px; border: 54px solid rgba(217, 237, 145, 0.14); border-radius: 50%; }
+    .signal-label { color: var(--lime); font: 700 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+    .signal-number { margin-top: 30px; font-size: 78px; line-height: 1; letter-spacing: -0.07em; font-weight: 800; }
+    .signal-caption { max-width: 220px; margin-top: 8px; color: rgba(255,255,255,0.74); }
+    .signal-lines { position: absolute; right: 24px; top: 30px; display: grid; gap: 9px; width: 90px; }
+    .signal-lines span { height: 6px; border-radius: 10px; background: var(--lime); transform-origin: right; }
+    .signal-lines span:nth-child(2) { transform: scaleX(.76); opacity: .72; }
+    .signal-lines span:nth-child(3) { transform: scaleX(.52); opacity: .48; }
+
+    .workflow { padding-bottom: 90px; }
+    .step {
+      margin-top: 20px;
+      padding: clamp(24px, 4vw, 44px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 253, 248, 0.84);
+      box-shadow: 0 6px 24px rgba(26, 43, 35, 0.035);
+    }
+    .step[hidden] { display: none; }
+    .step-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .step-kicker { margin: 0 0 6px; color: var(--green); font: 700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.045em; line-height: 1.05; }
+    .step-note { max-width: 680px; margin: 10px 0 0; color: var(--muted); }
+
+    .agent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .agent-card {
+      min-height: 150px;
+      padding: 20px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+    button.agent-card { cursor: pointer; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    button.agent-card:hover { transform: translateY(-2px); border-color: var(--green); }
+    button.agent-card[aria-pressed="true"] { border-color: var(--forest); background: var(--mint); box-shadow: inset 0 0 0 1px var(--forest); }
+    .agent-name { display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+    .agent-meta { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; }
+    .agent-card.soon { opacity: .62; }
+    .soon-label { display: inline-block; margin-top: 18px; padding: 4px 8px; border-radius: 99px; background: #ebe8df; color: var(--muted); font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; letter-spacing: .08em; }
+    .platform-note { margin: 18px 0 0; padding: 14px 16px; border-left: 3px solid var(--amber); background: #fff8e8; color: #5d5037; font-size: 14px; }
+
+    .progress-wrap { min-width: 180px; text-align: right; }
+    .progress-text { color: var(--muted); font-size: 13px; }
+    .progress-track { width: 180px; height: 6px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: #e3e0d7; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--green); transition: width .2s ease; }
+    .questions { display: grid; gap: 12px; }
+    .question {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+    }
+    .question h3 { margin: 0; font-size: 16px; line-height: 1.35; }
+    .question p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .binary { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; }
+    .binary button { width: 64px; min-height: 42px; border: 0; background: #f3f0e8; cursor: pointer; font-weight: 750; }
+    .binary button + button { border-left: 1px solid var(--line); }
+    .binary button[aria-pressed="true"] { background: var(--forest); color: white; }
+    .run-row { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-top: 22px; }
+    .run-hint { color: var(--muted); font-size: 13px; }
+    .run-button { padding: 13px 20px; border: 0; border-radius: 12px; background: var(--forest); color: white; font-weight: 800; cursor: pointer; }
+    .run-button:disabled { opacity: .38; cursor: not-allowed; }
+
+    .scoreboard { margin: 4px 0 26px; padding: 18px 20px; border-radius: 15px; background: var(--forest); color: white; font-size: clamp(16px, 2vw, 20px); }
+    .scoreboard strong { color: var(--lime); }
+    .platform-coverage { margin: -10px 0 26px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .platform-coverage summary { cursor: pointer; padding: 15px 18px; color: var(--forest); font-weight: 800; }
+    .platform-coverage[open] summary { border-bottom: 1px solid var(--line); }
+    .platform-coverage-list { display: grid; gap: 0; }
+    .platform-coverage-item { padding: 14px 18px; }
+    .platform-coverage-item + .platform-coverage-item { border-top: 1px solid var(--line); }
+    .platform-coverage-item strong { display: block; color: var(--ink); font-size: 14px; }
+    .platform-coverage-item p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .ranking { margin: -6px 0 28px; color: var(--muted); font-size: 13px; }
+    .count-pill { padding: 3px 8px; border-radius: 99px; background: var(--mint); color: var(--forest); font: 800 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .empty { padding: 25px; border: 1px dashed #a8b2aa; border-radius: 16px; color: var(--muted); background: rgba(203, 231, 215, .2); }
+    .recognise { margin: 8px 0 0; color: var(--red); font-weight: 650; }
+    .detail-label { display: block; margin-bottom: 4px; color: var(--muted); font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .source-ids { margin-top: 13px; color: var(--muted); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .source-ids a { text-decoration-color: #aab4ad; text-underline-offset: 3px; }
+
+    .copy-panel { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0 0 20px; padding: 19px 20px; border: 1px solid #d6c285; border-radius: 16px; background: #fff8e8; }
+    .copy-panel h3 { margin: 0; font-size: 17px; }
+    .copy-panel p { max-width: 690px; margin: 5px 0 0; color: #65583e; font-size: 13px; }
+    .copy-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; flex: 0 0 auto; min-height: 48px; padding: 12px 17px; border: 0; border-radius: 11px; background: var(--forest); color: white; cursor: pointer; font-weight: 800; }
+    .copy-button:hover { background: #1e5142; }
+    .copy-button svg { flex: 0 0 auto; }
+    .copy-status { display: block; min-height: 17px; margin-top: 6px; color: var(--green); font-size: 12px; font-weight: 750; }
+
+    .result-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 520px; margin: 0 0 28px; padding: 5px; border-radius: 14px; background: #e6e2d8; }
+    .result-tab { min-height: 46px; padding: 10px 16px; border: 0; border-radius: 10px; background: transparent; cursor: pointer; font-weight: 800; }
+    .result-tab[aria-selected="true"] { background: var(--panel); color: var(--forest); box-shadow: 0 2px 10px rgba(26, 43, 35, .08); }
+    .result-screen[hidden] { display: none; }
+    .screen-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin: 0 0 24px; }
+    .screen-intro h3 { margin: 0; font-size: clamp(27px, 4vw, 38px); letter-spacing: -.04em; }
+    .screen-intro p { max-width: 700px; margin: 8px 0 0; color: var(--muted); }
+    .action-total { flex: 0 0 auto; padding: 8px 11px; border-radius: 10px; background: var(--mint); color: var(--forest); font: 800 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .priority-box { margin: 0 0 28px; padding: 19px; border-radius: 17px; background: var(--forest); color: white; }
+    .priority-box h4 { margin: 0 0 12px; color: var(--lime); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+    .priority-links { display: flex; flex-wrap: wrap; gap: 9px; }
+    .priority-link { padding: 9px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 10px; color: white; text-decoration: none; font-weight: 750; font-size: 14px; }
+    .setting-areas { display: grid; gap: 24px; }
+    .setting-area { padding-top: 22px; border-top: 1px solid var(--line); }
+    .setting-area-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 13px; }
+    .setting-area h4 { margin: 0; font-size: 21px; letter-spacing: -.025em; }
+    .setting-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .setting-card { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); scroll-margin-top: 20px; }
+    .setting-card h5 { margin: 0; font-size: 16px; }
+    .setting-card .configure { margin: 9px 0 0; color: var(--ink); font-size: 14px; }
+    .setting-card .recognise { margin-top: 9px; font-size: 13px; }
+    .setting-benefit { margin-top: 12px; padding-top: 11px; border-top: 1px solid #e6e2d8; color: var(--muted); font-size: 12px; }
+    .maintenance { margin-top: 34px; padding: 24px; border-radius: 18px; background: #e9eee9; }
+    .maintenance-head h4 { margin: 0; font-size: 22px; }
+    .maintenance-head p { margin: 7px 0 0; color: var(--muted); }
+    .maintenance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-top: 17px; }
+    .maintenance-card { padding: 16px; border: 1px solid #ccd5ce; border-radius: 13px; background: rgba(255,255,255,.58); }
+    .maintenance-card h5 { margin: 0; font-size: 15px; }
+    .maintenance-card p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+    .maintenance-card .source-ids { margin-top: 10px; }
+    .screen-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+    .secondary-button { padding: 12px 17px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); cursor: pointer; font-weight: 800; }
+    .context-panel { margin-bottom: 25px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    .context-panel h4 { margin: 0; font-size: 15px; }
+    .context-panel p { margin: 5px 0 13px; color: var(--muted); font-size: 13px; }
+    .modifier-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .modifier { padding: 9px 12px; border: 1px solid var(--line); border-radius: 99px; background: #f4f1e9; cursor: pointer; font-size: 13px; font-weight: 750; }
+    .modifier[aria-pressed="true"] { border-color: var(--forest); background: var(--forest); color: white; }
+    .workflow-summary { margin: 0 0 17px; color: var(--muted); font-size: 13px; }
+    .phase-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; align-items: start; }
+    .phase { padding: 18px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,253,248,.75); }
+    .phase-head { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 11px; align-items: center; margin-bottom: 14px; }
+    .phase-number { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--forest); color: var(--lime); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .phase h4 { margin: 0; font-size: 17px; line-height: 1.15; }
+    .phase-count { margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .workflow-actions { display: grid; gap: 9px; }
+    .workflow-action { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; padding: 14px; border: 1px solid #e0ddd3; border-radius: 13px; background: var(--panel); cursor: pointer; }
+    .workflow-action input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); }
+    .workflow-action h5 { margin: 0; font-size: 14px; line-height: 1.3; }
+    .workflow-action p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .done-when { margin-top: 9px !important; color: var(--ink) !important; }
+    .done-when strong { color: var(--green); }
+    .action-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; }
+    .risk-count { color: var(--muted); font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .condition-tag { padding: 3px 6px; border-radius: 99px; background: #fae8c9; color: #6e4a16; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+    .workflow-action:has(input:checked) { border-color: #9ac6ae; background: #edf7f1; }
+    .workflow-action:has(input:checked) h5 { text-decoration: line-through; text-decoration-color: #82a390; }
+    .workflow-sources { margin-top: 8px; color: var(--muted); font: 9px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    footer { padding: 0 0 55px; color: var(--muted); font-size: 12px; }
+    .footer-line { padding-top: 18px; border-top: 1px solid var(--line); }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding-top: 54px; }
+      .signal-card { min-height: 240px; }
+      .agent-grid { grid-template-columns: 1fr; }
+      .question { grid-template-columns: 1fr; }
+      .binary { width: 100%; }
+      .binary button { width: auto; }
+      .step-head { display: block; }
+      .progress-wrap { margin-top: 18px; text-align: left; }
+      .screen-intro { display: block; }
+      .action-total { display: inline-block; margin-top: 13px; }
+      .setting-grid, .maintenance-grid, .phase-grid { grid-template-columns: 1fr; }
+      .priority-links { display: grid; }
+      .copy-panel { display: block; }
+      .copy-button { width: 100%; margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">A✓</span> Agent Trust Check</div>
+    <div class="privacy">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Runs on this page. Nothing leaves your browser.
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">A 3-minute exposure check</p>
+        <h1>Know what your agent can get wrong.</h1>
+        <p class="hero-copy">Answer ten concrete questions. Get the settings to configure and a short workflow for preparing, supervising and accepting agent work.</p>
+      </div>
+      <aside class="signal-card" aria-label="Scope of the check">
+        <span class="signal-label">Known failure modes</span>
+        <div class="signal-number">133</div>
+        <div class="signal-caption">Derived from six canonical source files at one pinned version.</div>
+        <div class="signal-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+      </aside>
+    </section>
+
+    <div class="workflow">
+      <section class="step" id="agent-step">
+        <div class="step-head">
+          <div>
+            <p class="step-kicker">Step 1</p>
+            <h2>Select your agent family</h2>
+            <p class="step-note">The mechanisms differ by runtime. V1 only scores the family whose project behaviour has been verified.</p>
+          </div>
+        </div>
+        <div class="agent-grid">
+          <button class="agent-card" id="select-claude" type="button" aria-pressed="false">
+            <span class="agent-name">Claude Code</span>
+            <span class="agent-meta">Built-in defaults credited automatically</span>
+          </button>
+          <div class="agent-card soon" aria-disabled="true">
+            <span class="agent-name">Codex</span>
+            <span class="agent-meta">Mechanism verification pending</span>
+            <span class="soon-label">Coming later</span>
+          </div>
+          <div class="agent-card soon" aria-disabled="true">
+            <span class="agent-name">Other agents</span>
+            <span class="agent-meta">Same failure categories, different controls</span>
+            <span class="soon-label">Coming later</span>
+          </div>
+        </div>
+        <p class="platform-note">Claude Code defaults were checked against Anthropic’s current documentation on 10 August 2026 and are credited automatically, not recommended as extra work. Other platforms fail in the same categories with different mechanisms – coming as they are verified.</p>
+      </section>
+
+      <section class="step" id="questions-step" hidden>
+        <div class="step-head">
+          <div>
+            <p class="step-kicker">Step 2</p>
+            <h2>Mark what is true today</h2>
+            <p class="step-note">Answer for the controls that are actually in force, not the ones you intend to add.</p>
+          </div>
+          <div class="progress-wrap" aria-live="polite">
+            <div class="progress-text" id="progress-text">0 of 10 answered</div>
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          </div>
+        </div>
+        <div class="questions" id="questions"></div>
+        <div class="run-row">
+          <span class="run-hint">Press Enter when all ten are answered</span>
+          <button class="run-button" id="run-check" type="button" disabled>Build my plan</button>
+        </div>
+      </section>
+
+      <section class="step" id="results-step" hidden tabindex="-1">
+        <div class="step-head">
+          <div>
+            <p class="step-kicker">Step 3</p>
+            <h2>Your trust plan</h2>
+          </div>
+        </div>
+        <div class="scoreboard" id="scoreboard"></div>
+        <details class="platform-coverage" id="platform-coverage">
+          <summary id="platform-coverage-summary"></summary>
+          <div class="platform-coverage-list" id="platform-coverage-list"></div>
+        </details>
+        <section class="copy-panel" aria-labelledby="copy-heading">
+          <div>
+            <h3 id="copy-heading">Take the complete plan to your AI assistant</h3>
+            <p>Copies your answers, settings, maintenance and selected workflow as a structured implementation brief, without turning Claude Code defaults into extra work.</p>
+            <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+          </div>
+          <button class="copy-button" id="copy-markdown" type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>Copy all recommendations as Markdown</span>
+          </button>
+        </section>
+        <nav class="result-nav" role="tablist" aria-label="Trust plan screens">
+          <button class="result-tab" id="settings-tab" type="button" role="tab" aria-controls="settings-screen" aria-selected="true">1. Settings</button>
+          <button class="result-tab" id="workflow-tab" type="button" role="tab" aria-controls="workflow-screen" aria-selected="false">2. Workflow</button>
+        </nav>
+
+        <section class="result-screen" id="settings-screen" role="tabpanel" aria-labelledby="settings-tab">
+          <div class="screen-intro">
+            <div><h3>Configure your safeguards</h3><p>These are the one-off changes still needed beyond Claude Code’s built-in defaults. Your answers describe what is in force; this page does not inspect your machine.</p></div>
+            <span class="action-total" id="settings-count"></span>
+          </div>
+          <div class="priority-box" id="priority-box"><h4>Start here</h4><div class="priority-links" id="priority-links"></div></div>
+          <p class="ranking">Within each area, settings are ranked by highest severity, then controls whose whole group prevents before groups that include detection, then the earliest point of intervention.</p>
+          <div class="setting-areas" id="setting-areas"></div>
+          <section class="maintenance" aria-labelledby="maintenance-heading">
+            <div class="maintenance-head"><h4 id="maintenance-heading">Keep the safeguards healthy</h4><p>These are maintenance routines for the system, not steps to remember during every software task.</p></div>
+            <div class="maintenance-grid" id="maintenance-grid"></div>
+          </section>
+          <div class="screen-actions"><button class="run-button" id="continue-workflow" type="button">Continue to workflow</button></div>
+        </section>
+
+        <section class="result-screen" id="workflow-screen" role="tabpanel" aria-labelledby="workflow-tab" hidden>
+          <div class="screen-intro">
+            <div><h3>Follow the work in three clear phases</h3><p>The source risks are consolidated into actions you can perform before, during and after an agent run.</p></div>
+            <span class="action-total" id="workflow-count"></span>
+          </div>
+          <div class="context-panel">
+            <h4>Add what this run includes</h4>
+            <p>A standard code change is the baseline. Select any extra conditions to add their checks.</p>
+            <div class="modifier-list">
+              <button class="modifier" type="button" data-modifier="review" aria-pressed="false">Read-only review</button>
+              <button class="modifier" type="button" data-modifier="migration" aria-pressed="false">Migration or data change</button>
+              <button class="modifier" type="button" data-modifier="release" aria-pressed="false">Release or external action</button>
+              <button class="modifier" type="button" data-modifier="multi" aria-pressed="false">Multiple agents</button>
+            </div>
+          </div>
+          <p class="workflow-summary" id="workflow-summary"></p>
+          <div class="phase-grid" id="phase-grid"></div>
+          <div class="screen-actions"><button class="secondary-button" id="back-settings" type="button">Back to settings</button></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="shell">
+    <div class="footer-line"><strong>EXCLUDED FROM V1:</strong> Execution and capability — whether the work itself is correct — is <strong>not assessed</strong>. This check covers instruction, context, authority and access, recovery, provenance and truth; all 133 rows from those six registers were extracted. A clean result here does not mean the work is correct. Other agent families and machine scanning are outside this version.</div>
+  </footer>
+
+  <script id="register-data-fallback" type="application/json">{"generatedFrom":"5c1542aecd07bf316eb4091df4521ceb52a3c7ea","generatedBy":"extract-registers.mjs","canonBlobs":{"METHODOLOGY.md":"c83e6cbb27666bc038c449efd10afed61f3a7194","OPERATIONS.md":"15c98f7a4f6911f417ecfe99ba2f73b6668d3987","README.md":"e0140e14fa55fe4892f92997a2851f138258ff23","authority-access-layer.md":"cc59af749b56ec4a7decad7c9e014bda351b83d3","context-layer.md":"37880204fd416de2549bd4344d13c23c202fa38d","execution-capability-layer.md":"1092044b28dfb60e056d97844a9e477f4e43d765","five-domain-six-register-architecture.md":"eaca93976b7a66c941e27d5f3b2d5a1ab4c4b295","instruction-layer.md":"17bc4f9c29f378d708fb11abce4b89b1b3e9b0c7","provenance-layer.md":"57949e1ea564b0b4d124a2ccc7fe2fabd9ef109d","recovery-layer.md":"fc16e845e957f209ef7097d7b197d3464bbf0206","register-view-design-rationale.md":"53757006617db8f375901fd4187822618bf0bb16","truth-layer.md":"35776c990e22b9cbdae15b6659df73e68a56861f"},"rowCount":128,"rows":[{"id":"IL-1A","layer":"instruction","evidence":"candidate","severity":"S3","failure":"The rule set grew past what can be held","showsUpAs":"“Older rules quietly stopped being followed”","prevention":"Budget the set; retire and merge rules","catchPoint":"on disk","mechanism":"Size and token-budget lint on the rule file","tool":"Rule linter","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"monthly","nextAction":"MONTHLY — Review which rules stopped being followed"},{"id":"IL-1B","layer":"instruction","evidence":"candidate","severity":"S2","failure":"The rule only ever existed in chat","showsUpAs":"“We agreed this last week”","prevention":"Standing rule file, loaded every session","catchPoint":"stop","mechanism":"Stop hook scans the turn for new rules","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install the commitment-language stop hook"},{"id":"IL-1C","layer":"instruction","evidence":"evidenced","severity":"S2","failure":"Written as prose no machine can check","showsUpAs":"“Followed in spirit, breached in fact”","prevention":"Restate the rule as a testable predicate","catchPoint":"CI","mechanism":"Custom lint rule, run as a CI check","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Write the lint rule when you write the rule"},{"id":"IL-1D","layer":"instruction","evidence":"evidenced","severity":"S1","failure":"Two rules conflict, nothing says which wins","showsUpAs":"“It picked one, plausibly, and you disagree”","prevention":"Declare precedence inside the rule set","catchPoint":"on disk","mechanism":"Precedence header in the rule set","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Declare precedence when you add a rule"},{"id":"IL-1E","layer":"instruction","evidence":"evidenced","severity":"S3","failure":"Only half the decision was written down","showsUpAs":"“The record exists and still does not settle it”","prevention":"Require every field before the record counts","catchPoint":"on disk","mechanism":"Schema on the record, lint fails on a missing field","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every decision","nextAction":"AT EVERY DECISION — Write the half that is in your head"},{"id":"IL-1F","layer":"instruction","evidence":"candidate","severity":"S2","failure":"The rule was superseded and still loads","showsUpAs":"“Follows a rule you retired months ago”","prevention":"Generate the rule file from source; byte-diff so a hand edit cannot land","catchPoint":"CI","mechanism":"Regenerate AGENTS.md and byte-diff it against the committed copy","tool":"CI","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"B detected","trigger":"done · 5 aug 2026","nextAction":"DONE · 5 AUG 2026 — Gate active; the exporter run stays manual"},{"id":"IL-2A","layer":"instruction","evidence":"candidate","severity":"S4","failure":"The project-root rule file was never read this session","showsUpAs":"“Behaves as though the rule does not exist”","prevention":"Built-in project instruction loading","catchPoint":"session start","mechanism":"Claude Code loads project-root CLAUDE.md and unscoped rules","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"built","authority":null,"outcome":"C survives","trigger":"done · 10 aug 2026","nextAction":"DONE · 10 AUG 2026 — Delivery is automatic; compliance is not enforced"},{"id":"IL-2B","layer":"instruction","evidence":"evidenced","severity":"S3","failure":"The rule sat in a scope that did not apply","showsUpAs":"“Followed in one folder, ignored in the next”","prevention":"Scope rules deliberately and test the boundary","catchPoint":"on disk","mechanism":"Directory-scoped rule files","tool":"Rule file","runtime":"most runtimes","tier":"maintained","builtState":"built","authority":null,"outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Decide where each rule should reach"},{"id":"IL-2C","layer":"instruction","evidence":"candidate","severity":"S3","failure":"Project-root rules were lost during compaction","showsUpAs":"“Complied early, drifted late”","prevention":"Built-in re-injection after compaction","catchPoint":"compact","mechanism":"Claude Code re-injects project-root CLAUDE.md and unscoped rules","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"built","authority":null,"outcome":"C survives","trigger":"done · 10 aug 2026","nextAction":"DONE · 10 AUG 2026 — Re-injection is automatic; compliance is not enforced"},{"id":"IL-3A","layer":"instruction","evidence":"candidate","severity":"S3","failure":"A prohibition was read as a preference","showsUpAs":"“Did it anyway, with a justification” — includes the narrower case where an example was read as the limit and only the named instance was fixed","prevention":"Never/always wording, backed by a check; say whether an example is illustrative or exhaustive","catchPoint":"CI","mechanism":"Grep gate finds weak wording, not the reading","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"C survives","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Reserve hard language for what matters"},{"id":"IL-3C","layer":"instruction","evidence":"candidate","severity":"S1","failure":"The instruction was ambiguous","showsUpAs":"“Did something defensible you did not want”","prevention":"Restate the task back before acting","catchPoint":"prompt","mechanism":"Plan mode; spec-driven flow","tool":"Claude Code","runtime":"Claude Code","tier":"maintained","builtState":"built","authority":null,"outcome":"C survives","trigger":"every task","nextAction":"EVERY TASK — Restate the task back before acting"},{"id":"IL-4A","layer":"instruction","evidence":"evidenced","severity":"S4","failure":"A clear rule simply was not followed","showsUpAs":"“No reason given, no flag raised”","prevention":"Refuse the commit that breaks it","catchPoint":"pre-commit","mechanism":"ESLint rule enforced pre-commit","tool":"ESLint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Write the ESLint rule that blocks it"},{"id":"IL-4B","layer":"instruction","evidence":"candidate","severity":"S3","failure":"A trained default overrode the stated rule","showsUpAs":"“Reverted to the common convention”","prevention":"Lint the specific default out, pre-commit","catchPoint":"pre-commit","mechanism":"ESLint rule enforced pre-commit","tool":"ESLint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Name the specific default to block"},{"id":"IL-4C","layer":"instruction","evidence":"candidate","severity":"S3","failure":"It acted before it had the state","showsUpAs":"“Confident change built on a wrong reading”","prevention":"Require a read-and-confirm step first","catchPoint":"pre-tool","mechanism":"PreToolUse gate refuses a write to an unread file","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Install the read-before-write gate"},{"id":"IL-4D","layer":"instruction","evidence":"evidenced","severity":"S2","failure":"It did more than was asked","showsUpAs":"“Extra files touched, unrequested refactor”","prevention":"Declare scope, then diff touched files against it","catchPoint":"pre-commit","mechanism":"Touched-file diff gate, scoped to the ticket","tool":"Lovelace","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install Lovelace ticket scope"},{"id":"IL-4E","layer":"instruction","evidence":"evidenced","severity":"S4","failure":"A gate existed but the action routed around it","showsUpAs":"“The guard never ran; it was PR-only”","prevention":"Gate the boundary, not the happy path","catchPoint":"pre-commit","mechanism":"Server-side branch protection refuses the push","tool":"Branch rules","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"A prevented","trigger":"done · 26 jul 2026","nextAction":"DONE · 26 JUL 2026 — Ruleset active, nobody can bypass"},{"id":"IL-5A","layer":"instruction","evidence":"candidate","severity":"S3","failure":"Compliance decays over a long session","showsUpAs":"“First ten edits clean, last ten not”","prevention":"Check at the end of the turn, not only the start","catchPoint":"stop","mechanism":"Stop hook; session-check at end of turn","tool":"Lovelace","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install the Lovelace session-check"},{"id":"IL-5B","layer":"instruction","evidence":"candidate","severity":"S3","failure":"A subagent never received the rule","showsUpAs":"“Parent complies, children do not”","prevention":"Rules travel inside every agent brief","catchPoint":"subagent","mechanism":"CLAUDE.md hierarchy loads into every subagent","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"built","authority":null,"outcome":"C survives","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Write rules to file, not auto memory"},{"id":"IL-5C","layer":"instruction","evidence":"evidenced","severity":"S2","failure":"A settled decision gets reopened","showsUpAs":"“Raises a thing you already ruled out”","prevention":"Settled decisions become dated rules","catchPoint":"CI","mechanism":"Link check proves the record reachable, not obeyed","tool":"Link check","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"C survives","trigger":"at every decision","nextAction":"AT EVERY DECISION — Write the decision down when you make it"},{"id":"IL-6A","layer":"instruction","evidence":"candidate","severity":"S4","failure":"The violation is invisible in the output","showsUpAs":"“Looks right, breaks a rule you cannot see”","prevention":"A check per rule, or accept it is unenforced","catchPoint":"on disk","mechanism":"Schema finds rules with no check, not violations","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"C survives","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Decide which rules are worth a check"},{"id":"IL-6B","layer":"instruction","evidence":"candidate","severity":"S4","failure":"It reports compliance it never verified","showsUpAs":"“Following your style guide”, with nothing run","prevention":"Commit the check output, not the assurance","catchPoint":"CI","mechanism":"CI artefact gates; byte-diff checks","tool":"CI","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"B detected","trigger":"done · 31 jul 2026","nextAction":"DONE · 31 JUL 2026 — Regenerate-and-byte-diff gates active in CI"},{"id":"IL-6C","layer":"instruction","evidence":"candidate","severity":"S3","failure":"Caught only when you happen to read it","showsUpAs":"“You found it; nothing else would have”","prevention":"Promote the recurring ones into checks","catchPoint":"CI","mechanism":"Checks promoted from repeat findings","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"B detected","trigger":"monthly","nextAction":"MONTHLY — Promote repeat findings into checks"},{"id":"CL-1A","layer":"context","evidence":"candidate","severity":"S3","failure":"The fact only ever existed in a chat thread","showsUpAs":"“We worked this out weeks ago”","prevention":"Archive every working conversation to disk","catchPoint":"stop","mechanism":"Stop hook offers to archive the turn’s findings","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install the conversation-archive stop hook"},{"id":"CL-1B","layer":"context","evidence":"evidenced","severity":"S3","failure":"The decision was recorded, the reason was not","showsUpAs":"“You know what was chosen, not why”","prevention":"Require a rationale field before it counts","catchPoint":"on disk","mechanism":"Schema on the decision log fails on a missing why","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every decision","nextAction":"AT EVERY DECISION — Write the reason while you still remember it"},{"id":"CL-1C","layer":"context","evidence":"candidate","severity":"S2","failure":"Written somewhere retrieval never looks","showsUpAs":"“The note exists and search never sees it”","prevention":"One canonical folder per class of fact","catchPoint":"pre-commit","mechanism":"Path lint refuses a file filed off-taxonomy","tool":"Path lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every new note","nextAction":"AT EVERY NEW NOTE — Check the taxonomy before you write"},{"id":"CL-1D","layer":"context","evidence":"evidenced","severity":"S1","failure":"Two notes disagree, nothing says which is current","showsUpAs":"“It quoted the stale one, plausibly”","prevention":"One source of truth; every copy points home","catchPoint":"on disk","mechanism":"Supersedes pointer in the front matter","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"at every rewrite","nextAction":"AT EVERY REWRITE — Retire the old note, do not just add a new one"},{"id":"CL-1E","layer":"context","evidence":"candidate","severity":"S3","failure":"Captured as a summary; the source was discarded","showsUpAs":"“You cannot check the claim back to anything”","prevention":"Keep the raw source beside the distillation","catchPoint":"on disk","mechanism":"A curated note must name its raw source file","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every import","nextAction":"AT EVERY IMPORT — Archive the raw file first, distil second"},{"id":"CL-1F","layer":"context","evidence":"candidate","severity":"S4","failure":"A spoken fact was never written down at all","showsUpAs":"“The only record is that someone remembers”","prevention":"Every call produces a transcript on disk","catchPoint":"on disk","mechanism":"Recorder writes the transcript; triage files it","tool":"Transcripts","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Turn on recording for every call"},{"id":"CL-2A","layer":"context","evidence":"evidenced","severity":"S4","failure":"Nobody looked; the answer came from training","showsUpAs":"“Confident answer, no file opened”","prevention":"Ground every factual answer in a read","catchPoint":"pre-tool","mechanism":"A prior read cannot bind a natural-language claim to evidence","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"C survives","trigger":"once","nextAction":"ONCE — Design a structured claim channel that requires an evidence reference"},{"id":"CL-2B","layer":"context","evidence":"evidenced","severity":"S3","failure":"The search terms did not match the wording","showsUpAs":"“The note exists and was never found”","prevention":"Index the old names, not only the current ones","catchPoint":"on disk","mechanism":"Naming changelog resolves every retired path","tool":"Alias index","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every rename","nextAction":"AT EVERY RENAME — Add the old name to the changelog table"},{"id":"CL-2C","layer":"context","evidence":"candidate","severity":"S3","failure":"Retrieved, then compacted away","showsUpAs":"“Cited it early, contradicted it late”","prevention":"Re-inject the working set after compaction","catchPoint":"compact","mechanism":"PostCompact hook re-reads the open files","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install the PostCompact re-read"},{"id":"CL-3A","layer":"context","evidence":"evidenced","severity":"S3","failure":"Someone’s claim was read as established fact","showsUpAs":"“Quoted a vendor’s framing as a finding”","prevention":"Every claim carries who said it, and when","catchPoint":"prompt","mechanism":"Source-attribution convention inside the note","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"every claim","nextAction":"EVERY CLAIM — Name the source in the sentence, not the footer"},{"id":"CL-3B","layer":"context","evidence":"evidenced","severity":"S4","failure":"An absence was reported as a finding","showsUpAs":"“Nothing covers this” — one grep settles it","prevention":"Prove a negative before you relay it","catchPoint":"prompt","mechanism":"Show-the-search convention: name where you looked","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"every finding","nextAction":"EVERY FINDING — Show the search, not just the conclusion"},{"id":"CL-3C","layer":"context","evidence":"evidenced","severity":"S3","failure":"The index was checked instead of the artefact","showsUpAs":"“The register row was right, the file was wrong”","prevention":"Verify the work, not the thing describing it","catchPoint":"CI","mechanism":"CI diffs the register against the files it names","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Build the register-versus-artefact diff"},{"id":"CL-4A","layer":"context","evidence":"candidate","severity":"S3","failure":"The right file was read and then ignored","showsUpAs":"“Opened it, then wrote something else”","prevention":"Make the output cite the file it used","catchPoint":"CI","mechanism":"Citation check on every generated document","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every template change","nextAction":"AT EVERY TEMPLATE CHANGE — Require a citation line per factual claim"},{"id":"CL-4B","layer":"context","evidence":"evidenced","severity":"S3","failure":"A trained default overrode the retrieved fact","showsUpAs":"“Used the standard figure, not yours”","prevention":"Name the specific wrong value to block","catchPoint":"pre-commit","mechanism":"Banned-value grep gate, run pre-commit","tool":"Grep gate","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every new default","nextAction":"AT EVERY NEW DEFAULT — List the wrong values you keep seeing"},{"id":"CL-4C","layer":"context","evidence":"candidate","severity":"S4","failure":"A gap was filled by inference, not a question","showsUpAs":"“Plausible number, no source”","prevention":"Mark unknowns; never estimate silently","catchPoint":"prompt","mechanism":"Unsourced-figure convention in the draft","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"every draft","nextAction":"EVERY DRAFT — Ask instead of estimating"},{"id":"CL-4D","layer":"context","evidence":"candidate","severity":"S3","failure":"Context from one project leaked into another","showsUpAs":"“Applied one client’s rule to another”","prevention":"Scope the knowledge, and test the boundary","catchPoint":"on disk","mechanism":"Directory-scoped context files","tool":"Rule file","runtime":"most runtimes","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every new client","nextAction":"AT EVERY NEW CLIENT — Decide what each folder is allowed to see"},{"id":"CL-4E","layer":"context","evidence":"candidate","severity":"S4","failure":"A qualified finding was used without its caveat","showsUpAs":"“The hedge was dropped on the way through”","prevention":"Carry the confidence marker with the fact","catchPoint":"on disk","mechanism":"Verification status travels with the claim","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C survives","trigger":"every handoff","nextAction":"EVERY HANDOFF — Repeat the caveat wherever the fact goes"},{"id":"CL-5A","layer":"context","evidence":"evidenced","severity":"S3","failure":"True when it was written, not true now","showsUpAs":"“Quoted a price you changed in March”","prevention":"Effective and review dates on every fact","catchPoint":"on disk","mechanism":"Schema requires an effective and a review date","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every review","nextAction":"AT EVERY REVIEW — Date the fact; expire it on review"},{"id":"CL-5B","layer":"context","evidence":"evidenced","severity":"S3","failure":"The copy drifted from the live source","showsUpAs":"“The vault says one thing, the system another”","prevention":"Derive the copy; never hand-maintain it","catchPoint":"session start","mechanism":"Live connector is available but does not force its use","tool":"MCP connector","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"C survives","trigger":"once","nextAction":"ONCE — Bind the generated view directly to the system of record"},{"id":"CL-5C","layer":"context","evidence":"candidate","severity":"S2","failure":"A superseded document still surfaces first","showsUpAs":"“Retrieval keeps returning the archived one”","prevention":"Archive out of the search path, not beside it","catchPoint":"on disk","mechanism":"Archive folder excluded from the retrieval path","tool":"Link check","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B detected","trigger":"at every archive","nextAction":"AT EVERY ARCHIVE — Move it out of reach, do not just rename it"},{"id":"CL-6A","layer":"context","evidence":"evidenced","severity":"S4","failure":"The wrong fact is invisible in the output","showsUpAs":"“Reads perfectly, is factually wrong”","prevention":"A check per load-bearing fact, or accept none","catchPoint":"on disk","mechanism":"Schema finds facts with no check, not wrong facts","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"C survives","trigger":"at every new fact","nextAction":"AT EVERY NEW FACT — Decide which facts are worth a check"},{"id":"CL-6B","layer":"context","evidence":"candidate","severity":"S4","failure":"It reports a source it never opened","showsUpAs":"“Cited a file that was never read”","prevention":"Compare citations against the read log","catchPoint":"stop","mechanism":"Cited files diffed against the session read log","tool":"CI","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":null,"outcome":"B detected","trigger":"once","nextAction":"ONCE — Install the citation-versus-read-log check"},{"id":"AL-1A","layer":"authority-access","evidence":"candidate","severity":"S4","failure":"Nobody listed what the session can reach","showsUpAs":"“It had the token because you were logged in”","prevention":"Inventory every credential a local process can use","catchPoint":"on disk","mechanism":"Nothing reads what this machine is logged in to","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":"none","outcome":"C survives","trigger":"every session","nextAction":"EVERY SESSION — Ask what this machine is logged in to"},{"id":"AL-1B","layer":"authority-access","evidence":"candidate","severity":"S2","failure":"The limit lives in the prompt, not in a policy","showsUpAs":"“I told it not to touch production”","prevention":"Put every “do not touch” beyond the writable surface","catchPoint":"pre-tool","mechanism":"A deny rule in a file the agent can edit is not a boundary","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":"bypassable","outcome":"C survives","trigger":"once","nextAction":"ONCE — Enforce the standing don’ts outside the agent's writable surface"},{"id":"AL-1C","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"The comment and the grant say different things","showsUpAs":"“The comment says service_role only”","prevention":"Generate the doc from the grant; never restate it","catchPoint":"CI","mechanism":"CI diffs the stated grant against the shipped one","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Diff every access comment against the real grant"},{"id":"AL-1D","layer":"authority-access","evidence":"evidenced","severity":"S1","failure":"A default grant nobody chose","showsUpAs":"“PUBLIC could run it the day it was created”","prevention":"Revoke explicitly; never rely on a default","catchPoint":"pre-commit","mechanism":"Lint fails a new function with no explicit revoke","tool":"Grant lint","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Check each new function carries its own revoke"},{"id":"AL-1E","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"It runs as its author, so policy is not the judge","showsUpAs":"“Row security never gets a say in this call”","prevention":"List every definer function and who may call it","catchPoint":"CI","mechanism":"CI lists definer functions and their grantees","tool":"Grant lint","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Re-read who can execute each definer function"},{"id":"AL-1F","layer":"authority-access","evidence":"evidenced","severity":"S2","failure":"A column the policy never constrains","showsUpAs":"“Created already revoked, in someone else’s name”","prevention":"Constrain every field the record is trusted for","catchPoint":"CI","mechanism":"A test writes the forged value and expects refusal","tool":"pgTAP","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Add a test for each field a record is trusted for"},{"id":"AL-2A","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"The session holds more than the task needs","showsUpAs":"“Read-only work, write-capable credentials”","prevention":"Issue the narrowest credential the task can use","catchPoint":"session start","mechanism":"Nothing checks which key the session picked up","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":"none","outcome":"C survives","trigger":"every session","nextAction":"EVERY SESSION — Check which key this session is holding"},{"id":"AL-2B","layer":"authority-access","evidence":"candidate","severity":"S4","failure":"One admin flag bypasses the whole rule","showsUpAs":"“Admin can, so the rule does not apply”","prevention":"Write the exception as a policy, not a bypass","catchPoint":"CI","mechanism":"A test asserts admin cannot reverse a one-way step","tool":"pgTAP","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Test the admin path, not only the tenant one"},{"id":"AL-2C","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"A reach path across tenants nobody tested","showsUpAs":"“Descent reaches further than you thought”","prevention":"Prove every reach path, including assumed ones","catchPoint":"CI","mechanism":"The isolation matrix has a cell for every path","tool":"pgTAP","runtime":"any runtime","tier":"automatic","builtState":"built","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Add a matrix cell for each new reach path"},{"id":"AL-3A","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"A local credential routes around every gate","showsUpAs":"“It never went near a pull request”","prevention":"Deploy only from CI; unlink the local client","catchPoint":"session start","mechanism":"Unlinking is a habit, not a thing that refuses","tool":"Supabase CLI","runtime":"any runtime","tier":"maintained","builtState":"built","authority":"bypassable","outcome":"B detected","trigger":"every session","nextAction":"EVERY SESSION — Confirm the CLI is not linked to staging"},{"id":"AL-3B","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"A local guard that one flag defeats","showsUpAs":"“--no-verify, and the hook is gone”","prevention":"Put the same rule on the server, not the laptop","catchPoint":"pre-commit","mechanism":"Server-side ruleset, with no bypass for the owner","tool":"GitHub","runtime":"any runtime","tier":"automatic","builtState":"built","authority":"unbypassable","outcome":"A prevented","trigger":"once","nextAction":"ONCE — Move every local-only guard to the server"},{"id":"AL-3C","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"A second session writing underneath the first — one you did not start","showsUpAs":"“The file I deleted exists again”","prevention":"One writer per repo, or a worktree each","catchPoint":"session start","mechanism":"Nothing tells one session another is writing","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":"none","outcome":"C survives","trigger":"every task","nextAction":"EVERY TASK — Know which sessions can write this repo"},{"id":"AL-4A","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"The gate runs on the route it did not take","showsUpAs":"“Straight to main, so nothing ran”","prevention":"Gate the destination, not the polite route to it","catchPoint":"pre-commit","mechanism":"Required checks sit on the branch, not on the PR","tool":"GitHub","runtime":"any runtime","tier":"automatic","builtState":"built","authority":"unbypassable","outcome":"A prevented","trigger":"once","nextAction":"ONCE — Check every guard also covers a direct push"},{"id":"AL-4B","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"The check asks a different question","showsUpAs":"“It shipped a test with it, so it passed”","prevention":"An authorisation control must check authorisation","catchPoint":"CI","mechanism":"The guard reads the diff for policy and grant changes","tool":"CI guard","runtime":"any runtime","tier":"automatic","builtState":"built","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Ask what each guard actually asserts"},{"id":"AL-4C","layer":"authority-access","evidence":"candidate","severity":"S3","failure":"Asked for a report, it edited the repository","showsUpAs":"“You asked for a report; it wrote a migration”","prevention":"Deny the write; do not request restraint","catchPoint":"pre-tool","mechanism":"A prompt asks for restraint; nothing refuses the write","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"designed","authority":"bypassable","outcome":"C survives","trigger":"once","nextAction":"ONCE — Wire read-only passes to a deny rule"},{"id":"AL-4D","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"The log’s guard can be dropped by what it logs","showsUpAs":"“An owner can drop the trigger”","prevention":"Ship the log off the platform that writes it","catchPoint":"review","mechanism":"The audit trail is defended by the thing it audits","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":"bypassable","outcome":"C survives","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Confirm the audit sink sits outside the database"},{"id":"AL-4E","layer":"authority-access","evidence":"candidate","severity":"S2","failure":"The approval gate with nobody to approve","showsUpAs":"“Review required, zero reviewers required”","prevention":"Say plainly which gates are structural only","catchPoint":"pre-commit","mechanism":"A pull request is required; a second reader is not","tool":"GitHub","runtime":"any runtime","tier":"automatic","builtState":"built","authority":"bypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Re-read what the merge gate actually requires"},{"id":"AL-5A","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"The grant outlives the reason for it","showsUpAs":"“Still visible long after they left”","prevention":"Bound each grant to the window that justifies it","catchPoint":"CI","mechanism":"A test asserts the grant expires with the window","tool":"pgTAP","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Give every new grant an end condition"},{"id":"AL-5B","layer":"authority-access","evidence":"candidate","severity":"S2","failure":"A subagent inherits more than its brief","showsUpAs":"“The child could write what the parent could”","prevention":"Give the child its own tools, not the parent’s","catchPoint":"subagent","mechanism":"The tool list is a file the agent can also edit","tool":"Claude Code","runtime":"Claude Code","tier":"automatic","builtState":"built","authority":"bypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Check what each agent type is allowed to call"},{"id":"AL-5C","layer":"authority-access","evidence":"candidate","severity":"S3","failure":"An accepted risk becomes a forgotten one","showsUpAs":"“We decided to live with it, once”","prevention":"Every acceptance carries a named reopen trigger","catchPoint":"review","mechanism":"A register field, only as good as the reading of it","tool":"Register","runtime":"any runtime","tier":"maintained","builtState":"built","authority":"bypassable","outcome":"B detected","trigger":"at every decision","nextAction":"AT EVERY DECISION — Give each acceptance a condition, not a date"},{"id":"AL-6A","layer":"authority-access","evidence":"evidenced","severity":"S4","failure":"The control was never watched failing anything","showsUpAs":"“Green from the day it was written”","prevention":"Test each control against a case it must catch","catchPoint":"CI","mechanism":"The guard pattern is replayed against real history","tool":"CI guard","runtime":"any runtime","tier":"automatic","builtState":"designed","authority":"unbypassable","outcome":"B detected","trigger":"at every rule change","nextAction":"AT EVERY RULE CHANGE — Prove the guard catches a known bad commit"},{"id":"AL-6B","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"The tool’s own account is the only record","showsUpAs":"“Its files-changed list left one out”","prevention":"Diff the repository; do not read the summary","catchPoint":"review","mechanism":"Diffing is a habit; nothing runs it for you","tool":"git","runtime":"any runtime","tier":"maintained","builtState":"built","authority":"bypassable","outcome":"B detected","trigger":"every session","nextAction":"EVERY SESSION — Diff the tree after every automated pass"},{"id":"AL-6C","layer":"authority-access","evidence":"evidenced","severity":"S3","failure":"Crossed and sanctioned look identical","showsUpAs":"“It was approved; nobody checked the log”","prevention":"Read the decision record before calling it a breach","catchPoint":"review","mechanism":"No check tells a sanctioned change from a breach","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":"none","outcome":"C survives","trigger":"every session","nextAction":"EVERY SESSION — Read the decision log before you read the diff"},{"id":"RL-1A","layer":"recovery","evidence":"candidate","severity":"S3","failure":"No restore point between the last good state and now","showsUpAs":"“It worked an hour and forty edits ago”","prevention":"Automatic checkpoint before each user prompt","catchPoint":"prompt","mechanism":"Claude Code checkpoints direct file-tool edits; rewind restores","tool":"Claude Code","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"A prevented","trigger":"done · 10 aug 2026","nextAction":"DONE · 10 AUG 2026 — Built into Claude Code; no configuration required"},{"id":"RL-1B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"Work happened where Git cannot see it","showsUpAs":"“It edited a file the repo has never held”","prevention":"Keep every writable path under version control","catchPoint":"on disk","mechanism":"Untracked-path audit on the working set","tool":"Git","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"once","nextAction":"ONCE — Bring the stray working folders under Git"},{"id":"RL-1C","layer":"recovery","evidence":"candidate","severity":"S4","failure":"The data changed with no restore point","showsUpAs":"“The migration ran; the old rows are gone”","prevention":"Snapshot before any schema or data change","catchPoint":"pre-tool","mechanism":"Snapshot or branch gate before migrate","tool":"Supabase","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"at every migration","nextAction":"AT EVERY MIGRATION — Take the snapshot before you run it"},{"id":"RL-1D","layer":"recovery","evidence":"candidate","severity":"S3","failure":"The restore point caught the files, not the state","showsUpAs":"“The code came back; the data did not”","prevention":"Decide what a restore point must include, per system","catchPoint":"on disk","mechanism":"Restore scope declared per system","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"once","nextAction":"ONCE — Write down what a restore point must cover"},{"id":"RL-1E","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"Two agents in a fan-out you started wrote the same tree at once","showsUpAs":"“Whose version is this?”","prevention":"Give each agent an isolated writable surface","catchPoint":"pre-tool","mechanism":"Git worktrees separate default paths but remain mutually reachable","tool":"Git worktree","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"C irreversible","trigger":"at every fan-out","nextAction":"AT EVERY FAN-OUT — Isolate each writable surface beyond the other agent's reach"},{"id":"RL-1F","layer":"recovery","evidence":"evidenced","severity":"S4","failure":"The backup you trusted has a snapshot cadence too coarse to catch a live incident","showsUpAs":"“Time Machine had a snapshot before and one after — nothing in between”","prevention":"Give the at-risk tree a restore point taken at the moment of risk, not on a fixed background cadence","catchPoint":"on disk","mechanism":"OS/vendor snapshot cadence is fixed and not agent-controllable","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"once","nextAction":"ONCE — Decide whether at-risk shared checkouts need an agent-native restore point (auto-stash / auto-commit) beyond what any OS backup guarantees"},{"id":"RL-2A","layer":"recovery","evidence":"candidate","severity":"S4","failure":"The agent could write anywhere on the machine","showsUpAs":"“It tidied a folder you never named”","prevention":"Bound the writable surface before the turn starts","catchPoint":"on disk","mechanism":"Agent-editable settings do not bound the operating-system principal","tool":"Claude Code","runtime":"any runtime","tier":"automatic","builtState":"built","authority":null,"outcome":"C irreversible","trigger":"once","nextAction":"ONCE — Enforce an OS or host sandbox the agent cannot modify"},{"id":"RL-2B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"Permissions were waived for the whole session","showsUpAs":"“It was faster with the prompts off”","prevention":"Waive per action, never per session","catchPoint":"prompt","mechanism":"Skip-permissions only inside a sandbox","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"every session","nextAction":"EVERY SESSION — Never open a session with permissions off"},{"id":"RL-2C","layer":"recovery","evidence":"evidenced","severity":"S4","failure":"A destructive command ran before you saw it","showsUpAs":"“rm -rf, and it was already gone”","prevention":"Refuse the command shape, not the intent","catchPoint":"pre-tool","mechanism":"Deny pattern on destructive shell shapes, conditioned on a dirty working tree","tool":"Hook","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"A prevented","trigger":"done · 18 aug 2026","nextAction":"DONE · 18 AUG 2026 — `~/.claude/hooks/destructive-git-guard.sh`, wired via `PreToolUse` in `~/.claude/settings.json`; C-54"},{"id":"RL-2D","layer":"recovery","evidence":"evidenced","severity":"S4","failure":"The change reached production directly","showsUpAs":"“There was nothing in between”","prevention":"Make production reachable only through a gate","catchPoint":"CI","mechanism":"Deploy only from a protected branch","tool":"Branch rules","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Protect the branch that deploys"},{"id":"RL-3A","layer":"recovery","evidence":"candidate","severity":"S2","failure":"Nobody read the diff before it was committed","showsUpAs":"“It said done, so it was done”","prevention":"Read the diff, not the summary","catchPoint":"pre-commit","mechanism":"Diff review gate on agent commits","tool":"Git","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"B recoverable","trigger":"every commit","nextAction":"EVERY COMMIT — Read the diff before you accept it"},{"id":"RL-3B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"The damage surfaced weeks later","showsUpAs":"“This has been wrong since July”","prevention":"A check that would have failed at the time","catchPoint":"CI","mechanism":"Regression test on the broken invariant","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"B recoverable","trigger":"at every late bug","nextAction":"AT EVERY LATE BUG — Add the test that would have caught it"},{"id":"RL-3C","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"Success was reported on work never finished","showsUpAs":"“The report says done; the file is not there”","prevention":"Verify the artifact, not the report","catchPoint":"stop","mechanism":"Artifact existence check at end of turn","tool":"Hook","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"every task","nextAction":"EVERY TASK — Check the file on disk, not the summary"},{"id":"RL-3D","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"Partial work stayed in context, never written","showsUpAs":"“The agent finished and the work went with it”","prevention":"Save incrementally, never once at the end","catchPoint":"subagent","mechanism":"Incremental-write instruction in every brief","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"every brief","nextAction":"EVERY BRIEF — Tell the agent to write as it goes"},{"id":"RL-4A","layer":"recovery","evidence":"evidenced","severity":"S2","failure":"The merge was squashed and the branch reused","showsUpAs":"“The next PR re-applied everything”","prevention":"Cut a fresh branch after a squash merge","catchPoint":"on disk","mechanism":"Parent-count check before branching","tool":"Git","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"at every merge","nextAction":"AT EVERY MERGE — Cut a new branch; never reuse the merged one"},{"id":"RL-4B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"History was rewritten over the only copy","showsUpAs":"“Force-pushed, and the old commits are gone”","prevention":"Refuse force-push on shared branches","catchPoint":"on disk","mechanism":"Force-push blocked server-side","tool":"Branch rules","runtime":"any runtime","tier":"maintained","builtState":"built","authority":null,"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Block force-push on the shared branches"},{"id":"RL-4C","layer":"recovery","evidence":"candidate","severity":"S3","failure":"The migration has no way back","showsUpAs":"“You can go forward or nowhere”","prevention":"Write the reversal with the change","catchPoint":"pre-commit","mechanism":"Migration refused without a down script","tool":"CI","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"at every migration","nextAction":"AT EVERY MIGRATION — Write the down script first"},{"id":"RL-4D","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"Files were moved rather than copied","showsUpAs":"“The move flattened the folders”","prevention":"Copy, verify, then delete","catchPoint":"pre-tool","mechanism":"Copy-and-verify gate in place of move","tool":"rsync","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"at every migration","nextAction":"AT EVERY MIGRATION — Copy and verify before you delete"},{"id":"RL-4E","layer":"recovery","evidence":"evidenced","severity":"S4","failure":"The side effect left the machine","showsUpAs":"“The email has already gone”","prevention":"Hold outbound actions behind a human gate","catchPoint":"pre-tool","mechanism":"Confirm gate on outbound and paid actions","tool":"Hook","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Gate every action that leaves the machine"},{"id":"RL-5A","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"The revert restored the code and broke the data","showsUpAs":"“The rollback made it worse”","prevention":"Reverse code and data as one unit","catchPoint":"CI","mechanism":"Paired code and data rollback plan","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"at every release","nextAction":"AT EVERY RELEASE — Say how the data comes back, too"},{"id":"RL-5B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"The restore was never once tested","showsUpAs":"“The backups existed; none of them worked” — including a runbook that exists and has never been run","prevention":"Restore on a schedule, not on an incident","catchPoint":"review","mechanism":"Scheduled restore drill that must pass, dated, with a time on it","tool":"Cron","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"quarterly","nextAction":"QUARTERLY — Restore from backup and time it"},{"id":"RL-5D","layer":"recovery","evidence":"evidenced","severity":"S3","failure":"The retry re-derived work already paid for","showsUpAs":"“It started again from nothing”","prevention":"Feed the finished output into the retry","catchPoint":"subagent","mechanism":"Orphan output collected before retry","tool":"none","runtime":"any runtime","tier":"process","builtState":"none","authority":null,"outcome":"C irreversible","trigger":"every retry","nextAction":"EVERY RETRY — Give the retry what the last run finished"},{"id":"RL-6B","layer":"recovery","evidence":"candidate","severity":"S4","failure":"The restore point is older than you think","showsUpAs":"“The last good snapshot is from March”","prevention":"Alert on snapshot age, not on its existence","catchPoint":"CI","mechanism":"Snapshot freshness check","tool":"Supabase","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"B recoverable","trigger":"once","nextAction":"ONCE — Alert on snapshot age"},{"id":"RL-6C","layer":"recovery","evidence":"candidate","severity":"S3","failure":"Nobody knows who calls the rollback","showsUpAs":"“Everyone waited for someone else”","prevention":"Name the decider before the incident","catchPoint":"on disk","mechanism":"Named rollback authority, required field","tool":"Schema lint","runtime":"any runtime","tier":"maintained","builtState":"designed","authority":null,"outcome":"C irreversible","trigger":"once","nextAction":"ONCE — Write down who calls the rollback"},{"id":"PL-1A","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"Agent starts blind to prior work","showsUpAs":"Redoes finished work, or reverses last session’s decision","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Session-start digest"},"repoArtefact":{"strength":"partial","mechanism":"Open questions in the record"},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"C survives","trigger":"once","nextAction":"ONCE — Install the session-start digest"},{"id":"PL-1C","layer":"provenance","evidence":"candidate","severity":"S4","failure":"Compaction drops a decision held only in context — or a constraint agreed in turn 3 is gone by turn 30","showsUpAs":"Silently reverts to a default you ruled out","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Checkpoint before compaction; re-inject, not just recall"},"repoArtefact":{"strength":"closes","mechanism":"Decision log entry; constraints as files, not chat"},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"B detected","trigger":"at every decision","nextAction":"AT EVERY DECISION — Log the decision before compaction"},{"id":"PL-2A","layer":"provenance","evidence":"candidate","severity":"S2","failure":"Work done with no unit of work attached","showsUpAs":"Nobody can say later what it was for","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"closes","mechanism":"Require an active ticket"},"repoArtefact":{"strength":"partial","mechanism":"Ticket committed with the code"},"controlPlaneCheck":{"strength":"partial","mechanism":"Assert every range has one"},"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Require a ticket before work starts"},{"id":"PL-2B","layer":"provenance","evidence":"candidate","severity":"S4","failure":"The gate only fires once a ticket is claimed","showsUpAs":"Never engaging reads as a clean pass","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"nothing","mechanism":"Cannot catch its own absence"},"repoArtefact":{"strength":"n/a","mechanism":null},"controlPlaneCheck":{"strength":"closes","mechanism":"Check the merged range"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Move the claim check into CI"},{"id":"PL-2C","layer":"provenance","evidence":"candidate","severity":"S2","failure":"Scope quietly expands mid-task","showsUpAs":"Files changed that nobody asked about","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Declare scope up front"},"repoArtefact":{"strength":"closes","mechanism":"Ticket states intended scope"},"controlPlaneCheck":{"strength":"closes","mechanism":"Diff touched files vs declared"},"outcome":"B detected","trigger":"every task","nextAction":"EVERY TASK — Declare the scope when you brief the task"},{"id":"PL-3A","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"No record written at all","showsUpAs":"The reasoning is gone the moment the turn ends","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"closes","mechanism":"Block the turn ending"},"repoArtefact":{"strength":"partial","mechanism":"Record is a committed file"},"controlPlaneCheck":{"strength":"partial","mechanism":"Assert a record exists"},"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Install the turn-ending block"},{"id":"PL-3B","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"Record omits the parts that matter","showsUpAs":"Reads fine, answers nothing you will ask later","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"closes","mechanism":"Required headings, validated"},"controlPlaneCheck":{"strength":"closes","mechanism":"Reject on missing sections"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Fix the record template, then validate it"},{"id":"PL-3C","layer":"provenance","evidence":"evidenced","severity":"S4","failure":"The doer writes its own success report","showsUpAs":"The record inherits the same blind spot","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"partial","mechanism":"Require SHAs and output, not prose"},"controlPlaneCheck":{"strength":"closes","mechanism":"Recompute rather than read"},"outcome":"B detected","trigger":"every record","nextAction":"EVERY RECORD — Require SHAs and output, not prose"},{"id":"PL-3D","layer":"provenance","evidence":"candidate","severity":"S4","failure":"Record edited after the fact","showsUpAs":"You review a tidied version of events","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Local append-only convention"},"repoArtefact":{"strength":"closes","mechanism":"Git history exposes the revision"},"controlPlaneCheck":{"strength":"closes","mechanism":"Diff history against the accepted record"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Add an external append-only store if edits must be refused"},{"id":"PL-3E","layer":"provenance","evidence":"evidenced","severity":"S4","failure":"The gate fails open and says nothing","showsUpAs":"A dead sensor is indistinguishable from a pass","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"nothing","mechanism":"It is the thing that failed"},"repoArtefact":{"strength":"n/a","mechanism":null},"controlPlaneCheck":{"strength":"closes","mechanism":"Assert the gate ran"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Assert in CI that the gate ran"},{"id":"PL-4A","layer":"provenance","evidence":"candidate","severity":"S3","failure":"Unlinked commit lands on a protected branch","showsUpAs":"Six months on, nobody knows why it changed","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Inject the ID on commit"},"repoArtefact":{"strength":"partial","mechanism":"ID carried in the message"},"controlPlaneCheck":{"strength":"closes","mechanism":"Reject an unlinked exact revision"},"outcome":"A prevented","trigger":"once","nextAction":"ONCE — Install the commit-ID landing gate"},{"id":"PL-4B","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"Commit linked to the wrong unit of work","showsUpAs":"Two sessions, one shared marker","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Per-session markers"},"repoArtefact":{"strength":"n/a","mechanism":null},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"C survives","trigger":"every session","nextAction":"EVERY SESSION — Give each session its own marker"},{"id":"PL-4C","layer":"provenance","evidence":"candidate","severity":"S2","failure":"Decision made in chat, written nowhere","showsUpAs":"Re-litigated next month from scratch","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Prompt for a log entry"},"repoArtefact":{"strength":"closes","mechanism":"Decision log is a file"},"controlPlaneCheck":{"strength":"partial","mechanism":"Require one per change"},"outcome":"B detected","trigger":"at every decision","nextAction":"AT EVERY DECISION — Write the decision down when you make it"},{"id":"PL-5A","layer":"provenance","evidence":"evidenced","severity":"S4","failure":"Done recorded on a branch that never landed","showsUpAs":"Shipped is asserted, never verified","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"partial","mechanism":"Board state on the target branch"},"controlPlaneCheck":{"strength":"closes","mechanism":"Check the artefact on target"},"outcome":"B detected","trigger":"at every merge","nextAction":"AT EVERY MERGE — Check the artefact on the target branch"},{"id":"PL-5B","layer":"provenance","evidence":"candidate","severity":"S3","failure":"Board diverges from the code","showsUpAs":"The tracker quietly becomes fiction","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"closes","mechanism":"Derive the board from the repo"},"controlPlaneCheck":{"strength":"partial","mechanism":"Diff derived vs published"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Derive the board from the repo"},{"id":"PL-5C","layer":"provenance","evidence":"evidenced","severity":"S4","failure":"Squash-merge breaks the ancestry","showsUpAs":"The provenance check answers the wrong question","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"n/a","mechanism":null},"controlPlaneCheck":{"strength":"closes","mechanism":"Test file existence, not ancestry"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Teach the check your merge strategy"},{"id":"PL-6A","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"Parent returns before its children finish","showsUpAs":"Completed work is stranded, then paid for twice","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"A synthesis stage that gathers"},"repoArtefact":{"strength":"n/a","mechanism":null},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"C survives","trigger":"every run","nextAction":"EVERY RUN — Add a gather stage to every fan-out"},{"id":"PL-6B","layer":"provenance","evidence":"evidenced","severity":"S3","failure":"Large artefact held in context, never written","showsUpAs":"Finished work dies with the context","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Save incrementally, not at the end"},"repoArtefact":{"strength":"closes","mechanism":"Partial work on disk is recoverable"},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"B detected","trigger":"every brief","nextAction":"EVERY BRIEF — Brief agents to save as they go"},{"id":"PL-6C","layer":"provenance","evidence":"evidenced","severity":"S4","failure":"Two agents conflict; one overwrites the other","showsUpAs":"A correct change silently disappears","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Advisory mutation lock"},"repoArtefact":{"strength":"partial","mechanism":"Atomic writes prevent torn files only"},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"C survives","trigger":"once","nextAction":"ONCE — Put every mutation behind an externally owned exclusive lock"},{"id":"PL-6D","layer":"provenance","evidence":"candidate","severity":"S2","failure":"Cannot tell which code an agent wrote","showsUpAs":"Review effort spread evenly over uneven risk","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Provenance trailer on commits"},"repoArtefact":{"strength":"closes","mechanism":"Trailer carried in history"},"controlPlaneCheck":{"strength":"partial","mechanism":"Require the trailer"},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Add the provenance trailer to commits"},{"id":"PL-6E","layer":"provenance","evidence":"evidenced","severity":"S2","failure":"Cannot tell which model produced it","showsUpAs":"A model-specific defect cannot be traced back","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"partial","mechanism":"Record the seat"},"repoArtefact":{"strength":"closes","mechanism":"Seat in the session record"},"controlPlaneCheck":{"strength":"n/a","mechanism":null},"outcome":"B detected","trigger":"once","nextAction":"ONCE — Record the model seat in the session record"},{"id":"PL-6F","layer":"provenance","evidence":"candidate","severity":"S1","failure":"Record invisible without a repo clone","showsUpAs":"Nobody outside the terminal can see the state","prevention":null,"catchPoint":null,"mechanism":null,"tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"harnessGate":{"strength":"n/a","mechanism":null},"repoArtefact":{"strength":"partial","mechanism":"Generated board file"},"controlPlaneCheck":{"strength":"partial","mechanism":"Publish a projection"},"outcome":"C survives","trigger":"weekly","nextAction":"WEEKLY — Publish the board projection"},{"id":"TL-01","layer":"truth","evidence":"candidate","severity":"S3","failure":"“The tests pass”","showsUpAs":"Test written to fit the code","prevention":null,"catchPoint":null,"mechanism":"CI test-write-protection check","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The tests pass”","cost":"Test written to fit the code","control":"CI test-write-protection check","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-02","layer":"truth","evidence":"evidenced","severity":"S2","failure":"“This is what I changed”","showsUpAs":"Account revised after the fact","prevention":null,"catchPoint":null,"mechanism":"Git diff and history check","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“This is what I changed”","cost":"Account revised after the fact","control":"Git diff and history check","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-04","layer":"truth","evidence":"evidenced","severity":"S4","failure":"“I verified it”","showsUpAs":"Never ran; the claim is the only proof","prevention":null,"catchPoint":null,"mechanism":"test:flows · pgTAP · test:unit","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“I verified it”","cost":"Never ran; the claim is the only proof","control":"test:flows · pgTAP · test:unit","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-05","layer":"truth","evidence":"evidenced","severity":"S3","failure":"“The generated file is current”","showsUpAs":"Stale artefact; downstream built on it","prevention":null,"catchPoint":null,"mechanism":"tokens:check · agents:check · types:check","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The generated file is current”","cost":"Stale artefact; downstream built on it","control":"tokens:check · agents:check · types:check","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-06","layer":"truth","evidence":"candidate","severity":"S4","failure":"“This wording is approved”","showsUpAs":"Unapproved claim ships to customers","prevention":null,"catchPoint":null,"mechanism":"claims:check","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“This wording is approved”","cost":"Unapproved claim ships to customers","control":"claims:check","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-07","layer":"truth","evidence":"candidate","severity":"S2","failure":"“The architecture is respected”","showsUpAs":"Boundary crossed; coupling sets in","prevention":null,"catchPoint":null,"mechanism":"deps:check · lint:i18n","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The architecture is respected”","cost":"Boundary crossed; coupling sets in","control":"deps:check · lint:i18n","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-08","layer":"truth","evidence":"candidate","severity":"S4","failure":"“The UI is accessible”","showsUpAs":"Keyboard and screen reader locked out","prevention":null,"catchPoint":null,"mechanism":"a11y:check (axe-core)","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The UI is accessible”","cost":"Keyboard and screen reader locked out","control":"a11y:check (axe-core)","status":"in force","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-09","layer":"truth","evidence":"evidenced","severity":"S4","failure":"“The tests are good”","showsUpAs":"Suite passes with the logic deleted","prevention":null,"catchPoint":null,"mechanism":"mutation + property testing","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The tests are good”","cost":"Suite passes with the logic deleted","control":"mutation + property testing","status":"not built","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-10","layer":"truth","evidence":"evidenced","severity":"S3","failure":"“I didn’t game the tests”","showsUpAs":"Optimised for the suite, not the job","prevention":null,"catchPoint":null,"mechanism":"Held-out suite","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“I didn’t game the tests”","cost":"Optimised for the suite, not the job","control":"Held-out suite","status":"not provisioned","class":"B checkable","outcome":"B detected","trigger":"next build","nextAction":"NEXT BUILD — Build or maintain the executable evidence"},{"id":"TL-03","layer":"truth","evidence":"evidenced","severity":"S4","failure":"“The audit was independent”","showsUpAs":"Same model graded its own work","prevention":null,"catchPoint":null,"mechanism":"Model-seat separation · partial","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The audit was independent”","cost":"Same model graded its own work","control":"Model-seat separation · partial","status":"not on","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"},{"id":"TL-11","layer":"truth","evidence":"evidenced","severity":"S3","failure":"“This finding is real”","showsUpAs":"Real defect dropped, phantom worked","prevention":null,"catchPoint":null,"mechanism":"Independent re-derivation","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“This finding is real”","cost":"Real defect dropped, phantom worked","control":"Independent re-derivation","status":"none","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"},{"id":"TL-12","layer":"truth","evidence":"candidate","severity":"S3","failure":"“The data model is right”","showsUpAs":"Wrong boundary; migrations compound","prevention":null,"catchPoint":null,"mechanism":"Independent re-derivation","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The data model is right”","cost":"Wrong boundary; migrations compound","control":"Independent re-derivation","status":"none","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"},{"id":"TL-13","layer":"truth","evidence":"candidate","severity":"S4","failure":"“The RLS design is sound”","showsUpAs":"Green tests on a policy that leaks","prevention":null,"catchPoint":null,"mechanism":"second-vendor audit · human review","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The RLS design is sound”","cost":"Green tests on a policy that leaks","control":"second-vendor audit · human review","status":"none","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"},{"id":"TL-14","layer":"truth","evidence":"evidenced","severity":"S4","failure":"“This claim is safe to make”","showsUpAs":"Unsupportable claim published","prevention":null,"catchPoint":null,"mechanism":"Independent re-derivation","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“This claim is safe to make”","cost":"Unsupportable claim published","control":"Independent re-derivation","status":"none","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"},{"id":"TL-15","layer":"truth","evidence":"candidate","severity":"S4","failure":"“The residual risk is acceptable”","showsUpAs":"Risk accepted that nobody chose","prevention":null,"catchPoint":null,"mechanism":"Independent re-derivation","tool":null,"runtime":null,"tier":null,"builtState":null,"authority":null,"claim":"“The residual risk is acceptable”","cost":"Risk accepted that nobody chose","control":"Independent re-derivation","status":"none","class":"C judgement","outcome":"C survives","trigger":"every decision","nextAction":"EVERY DECISION — Brief the judgement yourself"}]}</script>
+  <script>
+    const QUESTIONS = [
+      {
+        id: 'permission-denies',
+        title: 'Are permission deny rules set for paths and actions the agent must never touch?',
+        detail: 'Include production-sensitive paths and genuinely read-only passes.',
+        rowIds: ['RL-2A', 'AL-1B', 'AL-4C']
+      },
+      {
+        id: 'branch-protection',
+        title: 'Is branch protection enforced on the server, with direct push and force-push blocked and no owner bypass?',
+        detail: 'The deploy route and the destination branch must both be gated.',
+        rowIds: ['IL-4E', 'AL-3B', 'AL-4A', 'RL-4B', 'RL-2D']
+      },
+      {
+        id: 'evidence-protection',
+        title: 'Are test files protected from agent edits, with Git history used as the account of what changed?',
+        detail: 'The agent should not be able to rewrite the evidence behind its own claim.',
+        rowIds: ['TL-01', 'TL-02']
+      },
+      {
+        id: 'runtime-gates',
+        title: 'Do hooks gate tool use and the end of a turn?',
+        detail: 'Read before write or claim, destructive-command refusal, outbound confirmation, conversation capture and evidence checks.',
+        rowIds: ['IL-1B', 'IL-4C', 'CL-1A', 'CL-2A', 'CL-6B', 'RL-2C', 'RL-4E', 'PL-3A']
+      },
+      {
+        id: 'session-continuity',
+        title: 'Does work carry safely into a new session and survive compaction?',
+        detail: 'Claude reloads root instructions itself. Check the prior-work digest, critical open files and end-of-session compliance.',
+        rowIds: ['IL-5A', 'CL-2C', 'PL-1A', 'PL-1C']
+      },
+      {
+        id: 'ci-evidence',
+        title: 'Does CI require committed evidence and verify that its own checks ran?',
+        detail: 'Include test output, generated files, source-read evidence, merged-result checks and the missing stronger test suites.',
+        rowIds: ['IL-6B', 'CL-3C', 'CL-6B', 'PL-2B', 'PL-3E', 'PL-5C', 'TL-04', 'TL-05', 'TL-06', 'TL-07', 'TL-08', 'TL-09', 'TL-10']
+      },
+      {
+        id: 'work-record',
+        title: 'Is the work record append-only, complete, and linked to task, scope, commits and landing state?',
+        detail: 'The ticket and model seat should travel with the code, and the published view should derive from the repository.',
+        rowIds: ['IL-4D', 'PL-2A', 'PL-2C', 'PL-3B', 'PL-3C', 'PL-3D', 'PL-4A', 'PL-4D', 'PL-5A', 'PL-5B', 'PL-6D', 'PL-6E']
+      },
+      {
+        id: 'source-capture',
+        title: 'Are calls recorded and changing facts read live from their source?',
+        detail: 'Do not rely on memory, a discarded source, or a hand-maintained copy.',
+        rowIds: ['CL-1F', 'CL-1E', 'CL-5B']
+      },
+      {
+        id: 'recovery',
+        title: 'Is every change outside Claude’s direct edits protected by a usable restore path?',
+        detail: 'Claude checkpoints direct edits automatically. Cover shell changes, tracked working folders, migration snapshots, reversal scripts and snapshot age.',
+        rowIds: ['RL-1B', 'RL-1C', 'RL-1D', 'RL-4C', 'RL-4D', 'RL-6B', 'RL-6C']
+      },
+      {
+        id: 'agent-separation',
+        title: 'Are parallel writers isolated and independent review assigned to a different model seat?',
+        detail: 'Desktop sessions get separate worktrees automatically; CLI sessions and subagents need explicit isolation. Model-seat separation keeps the audit independent.',
+        rowIds: ['PL-6C', 'TL-03']
+      }
+    ];
+
+    const CLAUDE_CODE_DEFAULTS = [
+      {
+        id: 'root-instructions-at-start',
+        title: 'Project-root instructions load automatically',
+        detail: 'Claude Code loads the project-root CLAUDE.md and unscoped rules without a custom session-start hook.',
+        rowIds: ['IL-2A']
+      },
+      {
+        id: 'root-instructions-after-compaction',
+        title: 'Root instructions return after compaction',
+        detail: 'Claude Code re-injects the project-root CLAUDE.md and unscoped rules after compaction.',
+        rowIds: ['IL-2C']
+      },
+      {
+        id: 'direct-edit-checkpoints',
+        title: 'Direct file edits are checkpointed automatically',
+        detail: 'Claude Code creates prompt-level checkpoints for its direct file-editing tools. Shell, subagent and external changes still need Git or another restore path.',
+        rowIds: ['RL-1A']
+      }
+    ];
+
+    const INSTALL_GROUPS = [
+      { id: 'permission-denies', title: 'Permission deny rules', install: 'Set deny rules for the writable surface and standing don’ts.', rowIds: ['RL-2A', 'AL-1B'] },
+      { id: 'read-only-deny', title: 'Claude Code Plan Mode', install: 'Use Claude Code’s native Plan Mode for review-only work so the session can explore but cannot edit source files.', rowIds: ['AL-4C'] },
+      { id: 'branch-protection', title: 'Server-side branch protection', install: 'Protect the destination branch, block direct and force pushes, and remove owner bypass.', rowIds: ['IL-4E', 'AL-3B', 'AL-4A', 'RL-2D', 'RL-4B'] },
+      { id: 'destructive-hook', title: 'Hard block destructive commands', install: 'Add explicit deny rules or a PreToolUse hook for destructive project commands. This remains useful after a user has granted a standing Bash permission.', rowIds: ['RL-2C'] },
+      { id: 'outbound-confirm', title: 'Outbound-action confirmation', install: 'Put email, deploy, payment and other external side effects behind a human confirm gate.', rowIds: ['RL-4E'] },
+      { id: 'read-gates', title: 'Read-before-write and read-before-claim gates', install: 'Require a confirmed source read before a write or factual claim.', rowIds: ['IL-4C', 'CL-2A'] },
+      { id: 'capture-stop', title: 'Durable decision capture', install: 'Promote new rules, decisions and findings into durable project files at turn end. Claude’s local session transcript is useful history, but it is not the project’s system of record.', rowIds: ['IL-1B', 'CL-1A'] },
+      { id: 'reload', title: 'Post-compaction working-set check', install: 'Re-read critical open sources and trigger nested or path-scoped rules after compaction. Root-level instructions reload automatically.', rowIds: ['CL-2C'] },
+      { id: 'session-start', title: 'Cross-session handoff and end check', install: 'Carry a short prior-work digest into a new session or agent, then check compliance before the turn ends. Resuming the same Claude session restores its history automatically.', rowIds: ['IL-5A', 'PL-1A'] },
+      { id: 'scope-stop', title: 'Scope diff and turn-ending checks', install: 'Diff touched files against declared scope and prevent a turn ending without its required record.', rowIds: ['IL-4D', 'PL-3A'] },
+      { id: 'ci-evidence', title: 'Committed-evidence CI gates', install: 'Gate on committed test output, generated files, source reads, merged artefacts and proof that each gate ran.', rowIds: ['IL-6B', 'CL-3C', 'CL-6B', 'PL-2B', 'PL-3E', 'PL-5C'] },
+      { id: 'recording', title: 'Call recording and transcript capture', install: 'Turn on recording and file every transcript.', rowIds: ['CL-1F'] },
+      { id: 'live-source', title: 'Live source reads', install: 'Read changing facts from the live system instead of a copied figure.', rowIds: ['CL-5B'] },
+      { id: 'tracked-working-set', title: 'Tracked working folders', install: 'Bring every writable working path under version control.', rowIds: ['RL-1B'] },
+      { id: 'snapshot-alert', title: 'Snapshot freshness alert', install: 'Alert on the age of the last usable snapshot.', rowIds: ['RL-6B'] },
+      { id: 'recovery-ownership', title: 'Recovery scope and authority', install: 'Write down what each restore point covers and who has authority to call a rollback.', rowIds: ['RL-1D', 'RL-6C'] },
+      { id: 'work-provenance', title: 'Append-only task and commit record', install: 'Require a task, validate the record, preserve its history, link commits, and derive the published view from the repository.', rowIds: ['PL-2A', 'PL-3B', 'PL-3D', 'PL-4A', 'PL-4D', 'PL-5B', 'PL-6D', 'PL-6E'] },
+      { id: 'mutation-lock', title: 'Worktree isolation outside Desktop', install: 'Use --worktree for parallel CLI sessions and worktree isolation for subagents. Claude Code Desktop already gives each new session its own worktree.', rowIds: ['PL-6C'] },
+      { id: 'test-protection', title: 'Test-file write protection', install: 'Withhold test-file writes from the agent and preserve Git history as the record.', rowIds: ['TL-01', 'TL-02'] },
+      { id: 'model-seat', title: 'Independent model-seat separation', install: 'Assign the audit to a different model seat from the one that did the work.', rowIds: ['TL-03'] }
+    ];
+
+    const SETTING_SECTIONS = [
+      { id: 'agent', title: 'Agent permissions and hooks', groupIds: ['permission-denies', 'read-only-deny', 'destructive-hook', 'outbound-confirm', 'read-gates', 'capture-stop', 'reload', 'session-start'] },
+      { id: 'repository', title: 'Repository and CI', groupIds: ['branch-protection', 'scope-stop', 'ci-evidence'] },
+      { id: 'records', title: 'Records and evidence', groupIds: ['recording', 'live-source', 'work-provenance', 'test-protection'] },
+      { id: 'recovery', title: 'Recovery', groupIds: ['tracked-working-set', 'snapshot-alert', 'recovery-ownership'] },
+      { id: 'multi-agent', title: 'Multi-agent assurance', groupIds: ['mutation-lock', 'model-seat'] }
+    ];
+
+    const WORKFLOW_PHASES = [
+      { id: 'prepare', number: '01', title: 'Before you start' },
+      { id: 'work', number: '02', title: 'While the agent works' },
+      { id: 'verify', number: '03', title: 'Before you accept or ship' }
+    ];
+
+    const WORKFLOW_ACTIONS = [
+      {
+        id: 'brief-work', phase: 'prepare', title: 'Define the job and what will count as done',
+        instruction: 'State the goal, intended files, limits, whether examples are illustrative, and the evidence required for acceptance.',
+        doneWhen: 'The brief can be checked against the final diff and artefacts.',
+        rowIds: ['IL-3B', 'IL-3C', 'PL-2C']
+      },
+      {
+        id: 'load-sources', phase: 'prepare', title: 'Load the sources you expect the work to rely on',
+        instruction: 'Name where facts come from and show the search before treating an absence as a finding.',
+        doneWhen: 'The working sources and important caveats are explicit.',
+        rowIds: ['CL-3A', 'CL-3B']
+      },
+      {
+        id: 'bound-run', phase: 'prepare', title: 'Confirm access, workspace and other active writers',
+        instruction: 'Check the credential in use, keep permissions on, confirm the local client route, and give each session its own workspace and marker.',
+        doneWhen: 'You know what the session can reach and who else can write here.',
+        rowIds: ['AL-1A', 'AL-2A', 'AL-3A', 'AL-3C', 'RL-2B', 'PL-4B']
+      },
+      {
+        id: 'prepare-recovery', phase: 'prepare', title: 'Create the migration recovery path before changing data',
+        instruction: 'Take the snapshot, write the reversal, copy and verify before deleting, and decide the point where recovery should stop.',
+        doneWhen: 'A dated restore point and executable reversal both exist.',
+        appliesWhen: ['migration'], condition: 'Migration',
+        rowIds: ['RL-1C', 'RL-4C', 'RL-4D', 'RL-5C']
+      },
+      {
+        id: 'prepare-parallel', phase: 'prepare', title: 'Give each agent an isolated writable tree',
+        instruction: 'Allocate one worktree per writer before the fan-out begins.',
+        doneWhen: 'No two agents can write the same tree.',
+        appliesWhen: ['multi'], condition: 'Multiple agents',
+        rowIds: ['RL-1E']
+      },
+      {
+        id: 'ground-work', phase: 'work', title: 'Keep claims grounded and carry caveats forward',
+        instruction: 'Ask instead of estimating, and repeat confidence limits wherever a fact or finding travels.',
+        doneWhen: 'Every load-bearing claim has a source or is visibly marked unknown.',
+        rowIds: ['CL-4C', 'CL-4E']
+      },
+      {
+        id: 'record-decisions', phase: 'work', title: 'Record decisions and reasons while they are fresh',
+        instruction: 'Write the full decision, rationale, constraints and reopen condition into the durable work record as they happen.',
+        doneWhen: 'Someone reading the record later can tell what was decided, why and for which task.',
+        rowIds: ['IL-1E', 'IL-5C', 'CL-1B', 'AL-5C', 'PL-1B', 'PL-1C', 'PL-3C', 'PL-4C']
+      },
+      {
+        id: 'save-progress', phase: 'work', title: 'Save useful work incrementally',
+        instruction: 'Write partial results to disk, and feed completed output into a retry instead of starting again.',
+        doneWhen: 'A stopped or retried run would retain the work already completed.',
+        rowIds: ['RL-3D', 'RL-5D', 'PL-6B']
+      },
+      {
+        id: 'gather-parallel', phase: 'work', title: 'Gather every agent before the parent finishes',
+        instruction: 'Use a synthesis stage that waits for, reconciles and preserves every child result.',
+        doneWhen: 'No child output is stranded or silently overwritten.',
+        appliesWhen: ['multi'], condition: 'Multiple agents',
+        rowIds: ['PL-6A']
+      },
+      {
+        id: 'inspect-change', phase: 'verify', title: 'Inspect the real change, not the success report',
+        instruction: 'Read the repository diff and actual artefacts on the target branch, then compare them with the decision record.',
+        doneWhen: 'The accepted result is visible in the files and branch that will actually land.',
+        rowIds: ['AL-6B', 'AL-6C', 'RL-3A', 'RL-3C', 'RL-4A', 'PL-5A']
+      },
+      {
+        id: 'run-evidence', phase: 'verify', title: 'Run the evidence and keep its output',
+        instruction: 'Execute the relevant behavioural, generated-file, claim, architecture, accessibility and adversarial checks; add the regression test for a late bug.',
+        doneWhen: 'The output is committed or independently reproducible, not merely asserted.',
+        rowIds: ['RL-3B', 'TL-04', 'TL-05', 'TL-06', 'TL-07', 'TL-08', 'TL-09', 'TL-10']
+      },
+      {
+        id: 'confirm-recovery', phase: 'verify', title: 'Confirm the release can be reversed as one unit',
+        instruction: 'Check that code and data come back together before approving the release or external action.',
+        doneWhen: 'The rollback restores the whole system state, not only the code.',
+        appliesWhen: ['migration', 'release'], condition: 'Migration or release',
+        rowIds: ['RL-5A']
+      },
+      {
+        id: 'human-judgement', phase: 'verify', title: 'Make the judgement no tool can make for you',
+        instruction: 'Decide whether the finding, data model, security design, public claim and residual risk are genuinely acceptable.',
+        doneWhen: 'A named person has made and recorded each consequential judgement.',
+        rowIds: ['TL-11', 'TL-12', 'TL-13', 'TL-14', 'TL-15']
+      }
+    ];
+
+    const MAINTENANCE_ACTIONS = [
+      {
+        id: 'safeguard-maintenance', title: 'Update safeguards as rules and access change',
+        instruction: 'Change precedence, scope, expiry, lint rules, grant tests and known-bad cases together instead of letting the control drift.',
+        rowIds: ['IL-1C', 'IL-1D', 'IL-1F', 'IL-2B', 'IL-3A', 'IL-4A', 'IL-4B', 'IL-5B', 'IL-6A', 'AL-1C', 'AL-1D', 'AL-1E', 'AL-1F', 'AL-2B', 'AL-2C', 'AL-4B', 'AL-4D', 'AL-4E', 'AL-5A', 'AL-5B', 'AL-6A']
+      },
+      {
+        id: 'knowledge-maintenance', title: 'Keep sources current and retrievable',
+        instruction: 'File, date, supersede, archive and scope knowledge deliberately whenever its source or structure changes.',
+        rowIds: ['CL-1C', 'CL-1D', 'CL-1E', 'CL-2B', 'CL-4A', 'CL-4B', 'CL-4D', 'CL-5A', 'CL-5C', 'CL-6A']
+      },
+      {
+        id: 'assurance-maintenance', title: 'Schedule one assurance maintenance window',
+        instruction: 'Review rule load, promote repeat findings, publish the work view and rehearse restoration on a recurring schedule.',
+        rowIds: ['IL-1A', 'IL-6C', 'CL-6C', 'RL-5B', 'RL-6A', 'PL-6F']
+      }
+    ];
+
+    const CATCH_ORDER = ['on disk', 'session start', 'prompt', 'pre-tool', 'subagent', 'post-tool', 'compact', 'stop', 'pre-commit', 'CI', 'review'];
+    const answers = new Map();
+    const activeModifiers = new Set();
+    let registerData = null;
+    let currentResult = null;
+
+    function escapeHtml(value) {
+      return String(value ?? '').replaceAll('—', '–').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+    }
+
+    function sourceLink(id) {
+      return `<a href="#register/${encodeURIComponent(id)}" title="Open canonical source for ${escapeHtml(id)}">${escapeHtml(id)}</a>`;
+    }
+
+    function isJudgement(row) {
+      return (row.tool === 'none' && row.tier === 'process') || /^C\s/.test(row.outcome);
+    }
+
+    function effectiveCatch(row) {
+      if (row.catchPoint) return row.catchPoint;
+      if (row.harnessGate?.strength === 'closes') return 'pre-tool';
+      if (row.repoArtefact?.strength === 'closes') return 'pre-commit';
+      if (row.controlPlaneCheck?.strength === 'closes') return 'CI';
+      return 'review';
+    }
+
+    function rowRank(a, b) {
+      const severity = Number(b.severity.slice(1)) - Number(a.severity.slice(1));
+      if (severity) return severity;
+      const outcomeRank = row => row.outcome.startsWith('A ') ? 0 : (row.outcome.startsWith('B ') ? 1 : 2);
+      const outcome = outcomeRank(a) - outcomeRank(b);
+      if (outcome) return outcome;
+      return CATCH_ORDER.indexOf(effectiveCatch(a)) - CATCH_ORDER.indexOf(effectiveCatch(b));
+    }
+
+    function groupRank(a, b) {
+      const maximumSeverity = rows => Math.max(...rows.map(row => Number(row.severity.slice(1))));
+      const weakestOutcome = rows => Math.max(...rows.map(row => row.outcome.startsWith('A ') ? 0 : (row.outcome.startsWith('B ') ? 1 : 2)));
+      const earliestCatch = rows => Math.min(...rows.map(row => CATCH_ORDER.indexOf(effectiveCatch(row))));
+      return maximumSeverity(b.rows) - maximumSeverity(a.rows)
+        || weakestOutcome(a.rows) - weakestOutcome(b.rows)
+        || earliestCatch(a.rows) - earliestCatch(b.rows)
+        || a.order - b.order;
+    }
+
+    function bestRow(rows) {
+      return [...rows].sort(rowRank)[0];
+    }
+
+    function outcomeBenefit(rows) {
+      const labels = [];
+      const count = label => rows.filter(row => row.outcome.toLowerCase().includes(label)).length;
+      const prevented = count('prevented');
+      const detected = count('detected');
+      const recoverable = count('recoverable');
+      if (prevented) labels.push(`${prevented} ${prevented === 1 ? 'failure' : 'failures'} prevented`);
+      if (detected) labels.push(`${detected} ${detected === 1 ? 'failure' : 'failures'} detected every time`);
+      if (recoverable) labels.push(`${recoverable} ${recoverable === 1 ? 'change' : 'changes'} made recoverable`);
+      return labels.join('; ');
+    }
+
+    async function loadData() {
+      const fallback = JSON.parse(document.getElementById('register-data-fallback').textContent);
+      if (location.protocol === 'file:') return fallback;
+      try {
+        const response = await fetch('register-data.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      } catch (error) {
+        console.warn('Using inline source data:', error);
+        return fallback;
+      }
+    }
+
+    function renderQuestions() {
+      document.getElementById('questions').innerHTML = QUESTIONS.map((question, index) => `
+        <article class="question" data-question="${escapeHtml(question.id)}">
+          <div>
+            <h3>${index + 1}. ${escapeHtml(question.title)}</h3>
+            <p>${escapeHtml(question.detail)}</p>
+          </div>
+          <div class="binary" role="group" aria-label="Answer question ${index + 1}">
+            <button type="button" data-answer="yes" aria-pressed="false">Yes</button>
+            <button type="button" data-answer="no" aria-pressed="false">No</button>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-question] [data-answer]').forEach(button => {
+        button.addEventListener('click', () => {
+          const question = button.closest('[data-question]');
+          const value = button.dataset.answer === 'yes';
+          answers.set(question.dataset.question, value);
+          question.querySelectorAll('[data-answer]').forEach(peer => peer.setAttribute('aria-pressed', String(peer === button)));
+          updateProgress();
+        });
+      });
+    }
+
+    function updateProgress() {
+      const count = answers.size;
+      document.getElementById('progress-text').textContent = `${count} of ${QUESTIONS.length} answered`;
+      document.getElementById('progress-fill').style.width = `${count / QUESTIONS.length * 100}%`;
+      document.getElementById('run-check').disabled = count !== QUESTIONS.length;
+    }
+
+    function answerCoveredIds() {
+      return new Set(QUESTIONS.flatMap(question => answers.get(question.id) ? question.rowIds : []));
+    }
+
+    function platformCoveredIds() {
+      return new Set(CLAUDE_CODE_DEFAULTS.flatMap(item => item.rowIds));
+    }
+
+    function evaluate() {
+      const answerCovered = answerCoveredIds();
+      const platformCovered = platformCoveredIds();
+      const covered = new Set([...answerCovered, ...platformCovered]);
+      const answerCoveredRows = registerData.rows.filter(row => answerCovered.has(row.id));
+      const platformRows = registerData.rows.filter(row => platformCovered.has(row.id));
+      const coveredRows = registerData.rows.filter(row => covered.has(row.id));
+      const remainingRows = registerData.rows.filter(row => !covered.has(row.id));
+      const judgementRows = remainingRows.filter(isJudgement);
+      const exposedRows = remainingRows.filter(row => !isJudgement(row));
+      const settingRows = remainingRows.filter(row => row.trigger === 'once' || row.trigger.startsWith('done ·'));
+      const recurringRows = remainingRows.filter(row => !settingRows.includes(row));
+      return { answerCoveredRows, platformRows, coveredRows, exposedRows, judgementRows, settingRows, recurringRows };
+    }
+
+    function settingGroups(settingRows) {
+      const byId = new Map(settingRows.map(row => [row.id, row]));
+      return INSTALL_GROUPS
+        .map((group, order) => {
+          const rows = group.rowIds.map(id => byId.get(id)).filter(Boolean);
+          return rows.length ? { ...group, rows, order, lead: bestRow(rows) } : null;
+        })
+        .filter(Boolean)
+        .sort(groupRank);
+    }
+
+    function renderMaintenance(recurringRows) {
+      const actions = maintenanceActions(recurringRows);
+
+      document.getElementById('maintenance-grid').innerHTML = actions.map(action => `
+        <article class="maintenance-card">
+          <h5>${escapeHtml(action.title)}</h5>
+          <p>${escapeHtml(action.instruction)}</p>
+          <div class="source-ids">Covers ${action.rows.length} risks · ${action.rows.map(row => sourceLink(row.id)).join(' · ')}</div>
+        </article>
+      `).join('') || '<div class="empty">No safeguard-maintenance gaps remain from these answers.</div>';
+    }
+
+    function renderPlatformCoverage() {
+      const rowCount = CLAUDE_CODE_DEFAULTS.reduce((total, item) => total + item.rowIds.length, 0);
+      document.getElementById('platform-coverage-summary').textContent = `Already present in Claude Code · ${CLAUDE_CODE_DEFAULTS.length} controls covering ${rowCount} risks`;
+      document.getElementById('platform-coverage-list').innerHTML = CLAUDE_CODE_DEFAULTS.map(item => `
+        <div class="platform-coverage-item">
+          <strong>${escapeHtml(item.title)}</strong>
+          <p>${escapeHtml(item.detail)} <span class="source-ids">Counts for ${item.rowIds.map(sourceLink).join(' · ')}</span></p>
+        </div>
+      `).join('');
+    }
+
+    function maintenanceActions(recurringRows) {
+      const byId = new Map(recurringRows.map(row => [row.id, row]));
+      return MAINTENANCE_ACTIONS.map(action => ({
+        ...action,
+        rows: action.rowIds.map(id => byId.get(id)).filter(Boolean)
+      })).filter(action => action.rows.length);
+    }
+
+    function renderSettings(result) {
+      const groups = settingGroups(result.settingRows);
+      const byGroupId = new Map(groups.map(group => [group.id, group]));
+      const mapped = new Set(groups.flatMap(group => group.rows.map(row => row.id)));
+      const missing = result.settingRows.filter(row => !mapped.has(row.id));
+      document.getElementById('settings-count').textContent = `${groups.length} settings · ${result.settingRows.length} risks`;
+
+      const priorities = groups.slice(0, 3);
+      document.getElementById('priority-box').hidden = priorities.length === 0;
+      document.getElementById('priority-links').innerHTML = priorities.map(group => `<a class="priority-link" href="#setting-${escapeHtml(group.id)}">${escapeHtml(group.title)}</a>`).join('');
+
+      document.getElementById('setting-areas').innerHTML = SETTING_SECTIONS.map(section => {
+        const sectionGroups = section.groupIds.map(id => byGroupId.get(id)).filter(Boolean).sort(groupRank);
+        if (!sectionGroups.length) return '';
+        return `
+          <section class="setting-area" aria-labelledby="setting-area-${escapeHtml(section.id)}">
+            <div class="setting-area-head"><h4 id="setting-area-${escapeHtml(section.id)}">${escapeHtml(section.title)}</h4><span class="count-pill">${sectionGroups.length}</span></div>
+            <div class="setting-grid">
+              ${sectionGroups.map(group => `
+                <article class="setting-card" id="setting-${escapeHtml(group.id)}">
+                  <h5>${escapeHtml(group.title)}</h5>
+                  <p class="configure"><span class="detail-label">Configure</span>${escapeHtml(group.install)}</p>
+                  <p class="recognise">“${escapeHtml(group.lead.showsUpAs.replace(/^[“\"]|[”\"]$/g, ''))}”</p>
+                  <div class="setting-benefit">${escapeHtml(outcomeBenefit(group.rows))}. <span class="source-ids">${group.rows.map(row => sourceLink(row.id)).join(' · ')}</span></div>
+                </article>
+              `).join('')}
+            </div>
+          </section>`;
+      }).join('') || '<div class="empty">Your answers leave no one-off settings to configure.</div>';
+
+      if (missing.length) {
+        document.getElementById('setting-areas').insertAdjacentHTML('beforeend', `<div class="empty"><strong>EXCLUDED FROM V1:</strong> ${missing.map(row => sourceLink(row.id)).join(', ')} – no clean setting group.</div>`);
+      }
+      renderMaintenance(result.recurringRows);
+    }
+
+    function activeWorkflowActions(recurringRows) {
+      const byId = new Map(recurringRows.map(row => [row.id, row]));
+      return WORKFLOW_ACTIONS.map(action => ({
+        ...action,
+        rows: action.rowIds.map(id => byId.get(id)).filter(Boolean)
+      })).filter(action => {
+        if (!action.rows.length) return false;
+        return !action.appliesWhen || action.appliesWhen.some(modifier => activeModifiers.has(modifier));
+      });
+    }
+
+    function workflowContext() {
+      const modifierNames = {
+        review: 'read-only review', migration: 'migration or data change', release: 'release or external action', multi: 'multiple agents'
+      };
+      return activeModifiers.size ? [...activeModifiers].map(id => modifierNames[id]).join(', ') : 'a standard code change';
+    }
+
+    function renderWorkflow(result) {
+      const actions = activeWorkflowActions(result.recurringRows);
+      const visibleRisks = new Set(actions.flatMap(action => action.rows.map(row => row.id)));
+      const context = workflowContext();
+      document.getElementById('workflow-count').textContent = `${actions.length} actions`;
+      document.getElementById('workflow-summary').textContent = `${actions.length} actions for ${context}, consolidating ${visibleRisks.size} source risks into three moments.`;
+
+      document.getElementById('phase-grid').innerHTML = WORKFLOW_PHASES.map(phase => {
+        const phaseActions = actions.filter(action => action.phase === phase.id);
+        return `
+          <section class="phase" aria-labelledby="phase-${escapeHtml(phase.id)}">
+            <div class="phase-head">
+              <span class="phase-number">${escapeHtml(phase.number)}</span>
+              <div><h4 id="phase-${escapeHtml(phase.id)}">${escapeHtml(phase.title)}</h4><div class="phase-count">${phaseActions.length} actions</div></div>
+            </div>
+            <div class="workflow-actions">
+              ${phaseActions.map(action => `
+                <label class="workflow-action">
+                  <input type="checkbox" aria-label="Mark ${escapeHtml(action.title)} complete">
+                  <span>
+                    <h5>${escapeHtml(action.title)}</h5>
+                    <p>${escapeHtml(action.instruction)}</p>
+                    <p class="done-when"><strong>Done when:</strong> ${escapeHtml(action.doneWhen)}</p>
+                    <span class="action-meta"><span class="risk-count">Covers ${action.rows.length} risks</span>${action.condition ? `<span class="condition-tag">${escapeHtml(action.condition)}</span>` : ''}</span>
+                    <span class="workflow-sources">${action.rows.map(row => sourceLink(row.id)).join(' · ')}</span>
+                  </span>
+                </label>
+              `).join('') || '<div class="empty">No additional actions in this phase.</div>'}
+            </div>
+          </section>`;
+      }).join('');
+    }
+
+    function showResultScreen(name, shouldScroll = true) {
+      const settings = name === 'settings';
+      document.getElementById('settings-screen').hidden = !settings;
+      document.getElementById('workflow-screen').hidden = settings;
+      document.getElementById('settings-tab').setAttribute('aria-selected', String(settings));
+      document.getElementById('workflow-tab').setAttribute('aria-selected', String(!settings));
+      if (shouldScroll) document.getElementById('results-step').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function auditActionMapping() {
+      const mapped = new Set([
+        ...CLAUDE_CODE_DEFAULTS.flatMap(item => item.rowIds),
+        ...INSTALL_GROUPS.flatMap(group => group.rowIds),
+        ...WORKFLOW_ACTIONS.flatMap(action => action.rowIds),
+        ...MAINTENANCE_ACTIONS.flatMap(action => action.rowIds)
+      ]);
+      const missing = registerData.rows.filter(row => !mapped.has(row.id));
+      const footer = document.querySelector('.footer-line');
+      const scopeNote = 'Execution and capability — whether the work itself is correct — is <strong>not assessed</strong>. A clean result here does not mean the work is correct.';
+      footer.innerHTML = missing.length
+        ? `<strong>EXCLUDED FROM V1:</strong> ${scopeNote} Also unmapped: ${missing.map(row => sourceLink(row.id)).join(', ')} – no clean action mapping.`
+        : `<strong>EXCLUDED FROM V1:</strong> ${scopeNote} All 133 rows from the six registers map to Claude Code defaults, settings, workflow actions or safeguard maintenance.`;
+      return missing;
+    }
+
+    function markdownText(value) {
+      return String(value ?? '').replaceAll('—', '–').replace(/\s+/g, ' ').trim();
+    }
+
+    function sourceIds(rows) {
+      return rows.map(row => row.id).join(', ');
+    }
+
+    function buildRecommendationsMarkdown() {
+      if (!currentResult) return '';
+
+      const lines = [
+        '# Agent Trust Check implementation plan',
+        '',
+        '> Assessment family: Claude Code. These mechanisms were verified against Claude Code projects. If you are using another platform, adapt each mechanism explicitly and do not assume equivalent controls exist.',
+        '',
+        '## Instructions for the AI assistant',
+        '',
+        'Use this document as an implementation brief, not as evidence that anything is already configured.',
+        'The recommendations already exclude safeguards supplied automatically by Claude Code.',
+        '',
+        '1. Start with Settings and work through the open items one at a time.',
+        '2. Before changing anything, inspect the current configuration or ask me for the missing information.',
+        '3. Explain whether each action uses a native setting, a repository rule, a hook or an optional helper.',
+        '4. After each change, verify the actual configuration and show the evidence. Do not infer completion from this assessment.',
+        '5. Then help me place the Workflow checks into the durable instructions or checklist used by my AI platform.',
+        '6. Preserve the source IDs so each recommendation remains traceable.',
+        '',
+        '## Assessment summary',
+        '',
+        `- Known failure modes: ${registerData.rowCount}`,
+        `- Covered by Claude Code defaults: ${currentResult.platformRows.length}`,
+        `- Covered by my answers: ${currentResult.answerCoveredRows.length}`,
+        `- Tool-addressable gaps: ${currentResult.exposedRows.length}`,
+        `- Judgement-led gaps: ${currentResult.judgementRows.length}`,
+        ''
+      ];
+
+      lines.push(
+        '## My answers',
+        ''
+      );
+
+      QUESTIONS.forEach(question => {
+        lines.push(`- **${answers.get(question.id) ? 'Yes' : 'No'}** – ${markdownText(question.title)}`);
+      });
+
+      lines.push('', '## 1. Settings', '');
+      const groups = settingGroups(currentResult.settingRows);
+      const groupsById = new Map(groups.map(group => [group.id, group]));
+      const priorities = groups.slice(0, 3);
+      if (priorities.length) {
+        lines.push(`**Start here:** ${priorities.map(group => group.title).join(' → ')}`, '');
+      }
+
+      let settingCount = 0;
+      SETTING_SECTIONS.forEach(section => {
+        const sectionGroups = section.groupIds.map(id => groupsById.get(id)).filter(Boolean).sort(groupRank);
+        if (!sectionGroups.length) return;
+        lines.push(`### ${section.title}`, '');
+        sectionGroups.forEach(group => {
+          settingCount += 1;
+          const recognised = markdownText(group.lead.showsUpAs).replace(/^[“\"]|[”\"]$/g, '');
+          lines.push(
+            `- [ ] **${group.title}**`,
+            `  - Configure: ${markdownText(group.install)}`,
+            `  - Recognise the gap: “${recognised}”`,
+            `  - Expected result: ${markdownText(outcomeBenefit(group.rows))}.`,
+            `  - Source IDs: ${sourceIds(group.rows)}`
+          );
+        });
+        lines.push('');
+      });
+      if (!settingCount) lines.push('No one-off settings remain from these answers.', '');
+
+      const maintenance = maintenanceActions(currentResult.recurringRows);
+      lines.push('### Safeguard maintenance', '');
+      maintenance.forEach(action => {
+        lines.push(
+          `- [ ] **${action.title}**`,
+          `  - Action: ${markdownText(action.instruction)}`,
+          `  - Source IDs: ${sourceIds(action.rows)}`
+        );
+      });
+      if (!maintenance.length) lines.push('No safeguard-maintenance gaps remain from these answers.');
+
+      const workflowActions = activeWorkflowActions(currentResult.recurringRows);
+      lines.push('', '## 2. Workflow', '', `Run context: ${workflowContext()}.`, '');
+      WORKFLOW_PHASES.forEach((phase, phaseIndex) => {
+        const phaseActions = workflowActions.filter(action => action.phase === phase.id);
+        lines.push(`### ${phaseIndex + 1}. ${phase.title}`, '');
+        phaseActions.forEach(action => {
+          lines.push(
+            `- [ ] **${action.title}**`,
+            `  - Do: ${markdownText(action.instruction)}`,
+            `  - Done when: ${markdownText(action.doneWhen)}`,
+            ...(action.condition ? [`  - Applies when: ${action.condition}`] : []),
+            `  - Source IDs: ${sourceIds(action.rows)}`
+          );
+        });
+        if (!phaseActions.length) lines.push('No additional actions in this phase.');
+        lines.push('');
+      });
+
+      return `${lines.join('\n').trim()}\n`;
+    }
+
+    function legacyCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      textarea.remove();
+      if (!copied) throw new Error('Copy command was refused');
+    }
+
+    function copyRecommendations() {
+      const markdown = buildRecommendationsMarkdown();
+      if (!markdown) return;
+      const button = document.getElementById('copy-markdown');
+      const label = button.querySelector('span');
+      const status = document.getElementById('copy-status');
+
+      let copyOperation;
+      try {
+        if (location.protocol === 'file:' || !navigator.clipboard?.writeText) {
+          legacyCopy(markdown);
+          copyOperation = Promise.resolve();
+        } else {
+          copyOperation = navigator.clipboard.writeText(markdown).catch(() => legacyCopy(markdown));
+        }
+      } catch (error) {
+        copyOperation = Promise.reject(error);
+      }
+
+      copyOperation.then(() => {
+        label.textContent = 'Copied to clipboard';
+        status.textContent = 'Paste it into your AI assistant to begin the guided implementation.';
+        clearTimeout(window.copyLabelTimer);
+        window.copyLabelTimer = setTimeout(() => { label.textContent = 'Copy all recommendations as Markdown'; }, 2600);
+      }).catch(error => {
+        status.textContent = `Copy failed: ${error.message}`;
+      });
+    }
+
+    function runCheck() {
+      if (answers.size !== QUESTIONS.length || !registerData) return;
+      currentResult = evaluate();
+      document.getElementById('scoreboard').innerHTML = `Of the <strong>${registerData.rowCount}</strong> known failure modes, Claude Code covers <strong>${currentResult.platformRows.length}</strong> automatically and your answers cover another <strong>${currentResult.answerCoveredRows.length}</strong>. <strong>${currentResult.exposedRows.length}</strong> remain exposed, and <strong>${currentResult.judgementRows.length}</strong> need judgement no tool provides.`;
+      renderPlatformCoverage();
+      renderSettings(currentResult);
+      renderWorkflow(currentResult);
+      showResultScreen('settings', false);
+      const section = document.getElementById('results-step');
+      section.hidden = false;
+      section.focus({ preventScroll: true });
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('select-claude').addEventListener('click', event => {
+      event.currentTarget.setAttribute('aria-pressed', 'true');
+      document.getElementById('questions-step').hidden = false;
+      document.getElementById('questions-step').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('run-check').addEventListener('click', runCheck);
+    document.getElementById('copy-markdown').addEventListener('click', copyRecommendations);
+    document.getElementById('settings-tab').addEventListener('click', () => showResultScreen('settings'));
+    document.getElementById('workflow-tab').addEventListener('click', () => showResultScreen('workflow'));
+    document.getElementById('continue-workflow').addEventListener('click', () => showResultScreen('workflow'));
+    document.getElementById('back-settings').addEventListener('click', () => showResultScreen('settings'));
+    document.querySelectorAll('[data-modifier]').forEach(button => {
+      button.addEventListener('click', () => {
+        const modifier = button.dataset.modifier;
+        if (activeModifiers.has(modifier)) activeModifiers.delete(modifier);
+        else activeModifiers.add(modifier);
+        button.setAttribute('aria-pressed', String(activeModifiers.has(modifier)));
+        if (currentResult) renderWorkflow(currentResult);
+      });
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && answers.size === QUESTIONS.length && document.getElementById('results-step').hidden) {
+        event.preventDefault();
+        runCheck();
+      }
+    });
+
+    renderQuestions();
+    loadData().then(data => {
+      if (data.rowCount !== 133 || data.rows.length !== 133) throw new Error(`Expected 133 source rows, got ${data.rows.length}`);
+      registerData = data;
+      const missingMappings = auditActionMapping();
+      if (missingMappings.length) console.warn('Rows missing from the action model:', missingMappings.map(row => row.id));
+      window.TrustCheck = { QUESTIONS, CLAUDE_CODE_DEFAULTS, INSTALL_GROUPS, SETTING_SECTIONS, WORKFLOW_ACTIONS, MAINTENANCE_ACTIONS, evaluate, isJudgement, rowRank, auditActionMapping, buildRecommendationsMarkdown, data };
+    }).catch(error => {
+      document.getElementById('agent-step').insertAdjacentHTML('beforeend', `<p class="platform-note">The source data could not be loaded: ${escapeHtml(error.message)}</p>`);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+name: Report a failure
+description: Something your coding agent did that it should not have done, or did not do that it should have.
+title: "[incident] "
+labels: ["incident", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe what happened in your own words. There is one required box.
+
+        **You do not need to work out which part of the catalogue this belongs to.** Sorting that out is our job, and you cannot get it wrong here, because we are not asking you to.
+
+        It is worth reporting even if it seems obvious, even if it was arguably your own fault, and even if you have already fixed it.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you asked for, what the agent did, and how you found out. Rough notes are fine. Paste as much or as little as you like.
+      placeholder: |
+        I asked it to fix a failing test. It changed the test instead of the code, told me the suite was green, and it was – because the assertion was gone.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: doing-what
+    attributes:
+      label: What were you doing at the time?
+      description: Optional. Used only as a tie-break when two entries look similar.
+      options:
+        - Coding
+        - Research
+        - Writing
+        - Ops or infrastructure
+        - Something else
+        - Would rather not say
+    validations:
+      required: false
+
+  - type: input
+    id: harness
+    attributes:
+      label: Which agent or tool?
+      description: Optional. Name and rough version if you have it.
+      placeholder: Claude Code, Codex, Cursor, something else
+    validations:
+      required: false
+
+  - type: dropdown
+    id: recurrence
+    attributes:
+      label: Has this happened more than once?
+      description: Optional. A failure that recurs is treated differently from a one-off.
+      options:
+        - Just once
+        - A few times
+        - Regularly
+        - Not sure
+    validations:
+      required: false
+
+  - type: textarea
+    id: caught-it
+    attributes:
+      label: What caught it, if anything?
+      description: Optional, and one of the most useful boxes here. Did a test catch it, did CI, did you notice by hand, or did you only find out later?
+      placeholder: I only noticed three commits later when I read the diff.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Before you post:** please remove anything you cannot share publicly – customer names, credentials, internal hostnames, proprietary code. If the failure cannot be described without those, use the private channel in [SECURITY.md](../blob/main/SECURITY.md) instead.
+
+        **What happens next:** this thread gets a public verdict – a new entry in the catalogue, a pointer to the existing one, or an explanation of why it is not one. If it becomes a new entry, you are credited on it.

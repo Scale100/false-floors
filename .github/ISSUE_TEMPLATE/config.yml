@@ -1,0 +1,11 @@
+# blank_issues_enabled stays true on purpose. A reporter whose failure does not
+# fit any of the three templates should still be able to file it – the templates
+# exist to make reporting easier, never to gate it.
+blank_issues_enabled: true
+contact_links:
+  - name: Report privately
+    url: https://github.com/scale100/false-floors/blob/main/SECURITY.md
+    about: Your failure involves production details, customer data or credentials you cannot post in public. Use the private channel instead.
+  - name: Read the catalogue first
+    url: https://github.com/scale100/false-floors/tree/main/registers
+    about: Optional. You are not expected to look your failure up before reporting it.

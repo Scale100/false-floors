@@ -1,0 +1,46 @@
+# Triage labels. Create these before triaging the first issue.
+#   gh label create "<name>" --color <colour> --description "<description>"
+#
+# The four verdict labels are the public half of triage. Every incident gets
+# exactly one of them, plus a closing comment saying why. A closed incident
+# with no verdict is a maintainer error.
+
+- name: "incident"
+  color: "d73a4a"
+  description: "A reported failure, awaiting or undergoing triage"
+
+- name: "correction"
+  color: "fbca04"
+  description: "A published entry is disputed"
+
+- name: "question"
+  color: "0075ca"
+  description: "A question, not a failure report"
+
+- name: "needs triage"
+  color: "ededed"
+  description: "Not yet assessed"
+
+- name: "verdict: new row"
+  color: "0e8a16"
+  description: "Not covered by any existing entry. An entry is being added, and the reporter is credited on it."
+
+- name: "verdict: covered, fix exists"
+  color: "1d76db"
+  description: "Already catalogued, and a mechanism catches it. The thread points at the entry."
+
+- name: "verdict: covered, no fix"
+  color: "b60205"
+  description: "Already catalogued, and nothing available catches it completely. The entry says so."
+
+- name: "verdict: not an instance"
+  color: "c5def5"
+  description: "Not a failure of the kind this catalogue tracks. Reasoning given on the thread."
+
+- name: "credited"
+  color: "5319e7"
+  description: "Reporter is named on the entry this produced"
+
+- name: "recurrence"
+  color: "e99695"
+  description: "Reported independently more than once. Recurrence changes what is owed."

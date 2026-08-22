@@ -1,0 +1,54 @@
+name: Correct a published entry
+description: An entry in the catalogue is wrong, incomplete, or its mechanism does not do what it claims.
+title: "[correction] "
+labels: ["correction", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when you have read a specific entry and disagree with it. If you hit a failure and are not sure whether it is already catalogued, use **Report a failure** instead – you should not have to look it up first.
+
+  - type: input
+    id: row-id
+    attributes:
+      label: Which entry?
+      description: The row ID, for example IL-3B or RL-2C. If you are looking at more than one, list them.
+      placeholder: TL-01
+    validations:
+      required: true
+
+  - type: dropdown
+    id: what-is-wrong
+    attributes:
+      label: What is wrong with it?
+      options:
+        - The failure is described wrongly
+        - The mechanism does not actually catch it
+        - A better mechanism exists
+        - The residual is wrong – it covers more, or less, than it says
+        - The entry duplicates another one
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: What should it say instead?
+      description: If you are claiming a mechanism catches something the entry records as uncovered, say where that mechanism runs and what invokes it. A control nothing calls does not close anything.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How do you know?
+      description: Optional but persuasive. A run that demonstrates it, a link, or a description of when you saw it.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        Entry IDs are permanent. A correction can reword an entry, change its mechanism or supersede it, but the ID stays pointed at the same failure – things outside this repository cite them. If your correction changes what an entry claims, you are credited on it.
