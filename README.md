@@ -36,8 +36,8 @@ Every incident gets a public verdict on the thread:
 | Verdict | What it means |
 |---|---|
 | `verdict: new row` | Nothing in the catalogue owned this. A row is being added, and you are credited on it. |
-| `verdict: covered, fix exists` | Already catalogued, and there is a mechanism that catches it. The thread will point you at the row. |
-| `verdict: covered, no fix` | Already catalogued, and nothing available catches it completely. The row says so. |
+| `verdict: covered – fix exists` | Already catalogued, and there is a mechanism that catches it. The thread will point you at the row. |
+| `verdict: covered – no fix` | Already catalogued, and nothing available catches it completely. The row says so. |
 | `verdict: not an instance` | Reasoning given on the thread. Sometimes the answer is that the agent did what it was told. |
 
 If your failure involves production details you cannot post in public, see [SECURITY.md](SECURITY.md) for the private channel.

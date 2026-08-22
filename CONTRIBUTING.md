@@ -41,8 +41,8 @@ Every incident gets one of four public verdicts, as a label plus a closing comme
 | Verdict | Meaning |
 |---|---|
 | `verdict: new row` | Not covered. A row is being added; you are credited. |
-| `verdict: covered, fix exists` | Already catalogued, with a mechanism that catches it. |
-| `verdict: covered, no fix` | Already catalogued; nothing available catches it completely. |
+| `verdict: covered – fix exists` | Already catalogued, with a mechanism that catches it. |
+| `verdict: covered – no fix` | Already catalogued; nothing available catches it completely. |
 | `verdict: not an instance` | Not a failure of the kind this catalogue tracks. Reasoning on the thread. |
 
 Verdicts are public so the catalogue's coverage can be argued with. A closed issue with no verdict is a maintainer error – reopen it.
