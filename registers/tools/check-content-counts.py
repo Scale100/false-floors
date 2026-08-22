@@ -452,17 +452,21 @@ def main():
     root = (Path(args[args.index("--root") + 1]).resolve() if "--root" in args
             else PROJECT / "content")
     files = sorted(root.rglob("*.md"))
-    if not files:
-        sys.exit(f"FATAL: no markdown found under {root}")
     # The registers' METHODOLOGY.md states counts as its whole job, and
     # OPERATIONS.md may state them in passing, so the default run scans both
     # alongside content/ (METHODOLOGY added 2026-08-21 with D-107;
-    # OPERATIONS 2026-08-22 with D-110).
+    # OPERATIONS 2026-08-22 with D-110). Appended BEFORE the empty check below —
+    # the public False Floors repo carries registers/METHODOLOGY.md and
+    # registers/OPERATIONS.md but never content/ (public-repo/README.md's copy
+    # boundary), so an empty content/ must not be FATAL when those two governed
+    # files are the real, in-scope thing to scan there.
     if "--root" not in args:
         for name in ("METHODOLOGY.md", "OPERATIONS.md"):
             governed = PROJECT / "registers" / name
             if governed.exists():
                 files.append(governed)
+    if not files:
+        sys.exit(f"FATAL: no markdown found under {root}")
 
     def _disp(p):
         try:
