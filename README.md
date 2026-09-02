@@ -16,7 +16,7 @@ The last part is the point. Most published guidance tells you what to do. This t
 
 | | |
 |---|---|
-| `registers/*-layer.md` | The catalogue itself, as markdown. Seven questions, one register each. Six are published; the seventh, execution and capability, is a stub with no rows yet and is marked as such. |
+| `registers/*-layer.md` | The catalogue itself, as markdown. Six registers, one per question. A seventh question – execution and capability – has a register still in derivation; it is not included in this release, and it is counted in nothing here. |
 | `registers/README.md` | How to read a row: the columns, the class letters, the evidence labels, and the two registers that read their class words differently. |
 | `METHODOLOGY.md` | How the rows were derived, what a row has to prove before it is counted, how the set has been tested, the prediction record, and what we already know is wrong with it. |
 
