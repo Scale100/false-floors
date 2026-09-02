@@ -25,7 +25,7 @@ body:
         - The failure is described wrongly
         - The mechanism does not actually catch it
         - A better mechanism exists
-        - The residual is wrong – it covers more, or less, than it says
+        - The gap is wrong – it covers more, or less, than it says
         - The entry duplicates another one
         - Something else
     validations:

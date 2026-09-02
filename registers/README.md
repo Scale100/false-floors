@@ -2,23 +2,23 @@
 
 **These files are canon. The Figma diagrams are generated views.** Any scan, correction, or new row lands here first; the diagram is then re-derived (or hand-synced and verified) from the register. Never edit a diagram and leave the register behind — a register/diagram mismatch is a defect in the diagram.
 
-Figma file: `KDkIqr0lzbcAUvJLGAcExk` (HullKey UI Kit · Design System), page **Pathways**, frame **Agent Layers** (`1274:20994`).
+Figma file: `9KIzmsPS1EzWNQiOFKjWzX` (**Diagrams**), page **Page 1**, frame **LIVE Register Diagrams** (`1:2`). Moved out of the HullKey design-system file on 2026-08-22 — the diagrams were never HullKey's, and they are kept in their own file rather than the Scale100 design system because their palette is stop-light indicator colours (reds, ambers, greens) that the Scale100 scheme does not carry. Resolve every reference through assets.md's Figma table by stable name; the node IDs below are the current values, not addresses to copy elsewhere.
 
 | Register | Question it asks | Unit of life | Prefix | Figma node | Rows | Evidenced · candidate | State (A·B·C) |
 |---|---|---|---|---|---|---|---|
-| [[instruction-layer]] | Did it do what it was told? | a rule | IL | `1358:139` (rev 3) | 22 | 8 · 14 | 2 · 12 · 8 |
-| [[context-layer]] | Did it know what it needed to know? | a fact | CL | `1386:139` (rev 2) | 22 | 11 · 11 | 0 · 14 · 8 |
-| [[authority-access-layer]] | What could it reach? | a permission | AL | `1379:139` (rev 2) | 23 | 16 · 7 | 2 · 14 · 7 |
-| [[recovery-layer]] | Can you get it back? | a change | RL | `1389:139` (rev 2) | 24 | 11 · 13 | 5 · 10 · 9 |
-| [[provenance-layer]] | Is the record of what was done trustworthy? | a unit of work | PL | `1395:139` (rev 2) | 22 | 12 · 10 | 3 · 14 · 5 |
-| [[truth-layer]] | Can its claims about its own work be trusted? | a claim | TL | `1392:139` (rev 2) | 15 | 8 · 7 | 0 · 9 · 6 |
-| [[execution-capability-layer]] | Which required properties were violated or absent, and what was observed? | an execution-property assessment | EC | none | 4 | *n/a – incident-derived by construction* | *n/a – no class letters* |
+| [instruction-layer](instruction-layer.md) | Did it do what it was told? | a rule | IL | `1:2930` (rev 3) | 22 | 8 · 14 | 2 · 12 · 8 |
+| [context-layer](context-layer.md) | Did it know what it needed to know? | a fact | CL | `1:3839` (rev 2) | 22 | 11 · 11 | 0 · 14 · 8 |
+| [authority-access-layer](authority-access-layer.md) | What could it reach? | a permission | AL | `1:3386` (rev 2) | 23 | 16 · 7 | 2 · 14 · 7 |
+| [recovery-layer](recovery-layer.md) | Can you get it back? | a change | RL | `1:4294` (rev 2) | 24 | 11 · 13 | 5 · 10 · 9 |
+| [provenance-layer](provenance-layer.md) | Is the record of what was done trustworthy? | a unit of work | PL | `1:5011` (rev 2) | 22 | 12 · 10 | 3 · 14 · 5 |
+| [truth-layer](truth-layer.md) | Can its claims about its own work be trusted? | a claim | TL | `1:4767` (rev 2) | 15 | 8 · 7 | 0 · 9 · 6 |
+| execution-capability-layer | Which required properties were violated or absent, and what was observed? | an execution-property assessment | EC | none | 4 | *n/a – incident-derived by construction* | *n/a – no class letters* |
 
 **The State column is A · B · C for every row of this table**, so the six are comparable and the column sums. Read each register's own words off the class-reading table below: Recovery's B · C are recoverable · irreversible, and the other five are detected · survives. The six registers hold 128 rows in total: 12 Class A · 73 Class B · 43 Class C – stated in letters, because no single register's words are true of all six. (Before the D-106 retirement pass of 2026-08-21 the total read 134: six rows were retired or merged, each recorded in its register's own Retired rows section.)
 
-**The headline count is 66 evidenced rows — never 128 (D-107).** Every row carries an evidence status, and the split per register is the Evidenced · candidate column above: **66 evidenced · 62 candidate** across the six. A published count of the framework's failure modes counts the evidenced rows only; candidates are published and labelled, and stated alongside, never inside, the headline number. `check-registers.py` derives the receipts and fails on any row whose marker disagrees with them.
+**The headline count is 67 evidenced rows — never 128 (D-107).** Every row carries an evidence status, and the split per register is the Evidenced · candidate column above: **67 evidenced · 61 candidate** across the six. A published count of the framework's failure modes counts the evidenced rows only; candidates are published and labelled, and stated alongside, never inside, the headline number. `check-registers.py` derives the receipts and fails on any row whose marker disagrees with them.
 
-**The seventh register is no longer a stub, and its four rows are deliberately outside that 134.** [[execution-capability-layer]] carries `EC-06` and `EC-07`, derived on 2026-08-19, and `EC-08` and `EC-09`, derived on 2026-08-21 — two live incidents, coded against the contract's own row schema. **They are not addable to any total or distribution on this page.** The contract's schema has no class letter, no outcome class, no catch point and no tool tier, so there is nothing for the A · B · C column to hold and nothing for the cross-register sum to absorb; its State cell reads *n/a* rather than a dash, so that no later reader takes an empty cell for an unfilled one. Its own `result` and `residual` vocabulary is defined in the contract, not here, and its `EC-01` to `EC-05` remain calibration cases in the contract rather than rows.
+**The seventh register is no longer a stub, and its four rows are deliberately outside that 134.** execution-capability-layer carries `EC-06` and `EC-07`, derived on 2026-08-19, and `EC-08` and `EC-09`, derived on 2026-08-21 — two live incidents, coded against the contract's own row schema. **They are not addable to any total or distribution on this page.** The contract's schema has no class letter, no outcome class, no catch point and no tool tier, so there is nothing for the A · B · C column to hold and nothing for the cross-register sum to absorb; its State cell reads *n/a* rather than a dash, so that no later reader takes an empty cell for an unfilled one. Its own `result` and `gap` vocabulary is defined in the contract, not here, and its `EC-01` to `EC-05` remain calibration cases in the contract rather than rows.
 
 ## Row ID rules
 
@@ -49,28 +49,35 @@ Figma file: `KDkIqr0lzbcAUvJLGAcExk` (HullKey UI Kit · Design System), page **P
 1. **A cross-register total is stated in letters, never in one register's words.** "77 Class B", not "77 detected" – 11 of those 77 are Recovery's *recoverable*, and 9 of the 44 Class C are its *irreversible*.
 2. **A register's own count may use its own words**, because inside one register the word is unambiguous and is the more useful thing to read.
 
-What this does **not** fix: severity is still two incompatible scales sharing one name (C-08), the catch ladder still mixes four kinds of position (C-11), and lifecycle stage still has no classification rule (C-12). Those are separate rows and stay open. "The registers share one vocabulary" remains an overclaim.
+What this does **not** fix: the catch ladder still mixes four kinds of position (C-11), and lifecycle stage still has no classification rule (C-12). Those are separate rows and stay open. (Severity was a third such row — C-08, two incompatible scales sharing one name — and was repaired on 28 August 2026 under D-205; see the Severity entry below.) "The registers share one vocabulary" remains an overclaim.
 
 **Evidence** (added D-107, 21 August 2026) — whether reality has confirmed the row, and the field that sets what a headline count may claim:
 
-- **evidenced** — at least one receipt exists. Three receipt types count, and nothing else does: a first-party incident mapped in the Corrections Register with an `⟪instance-of⟫` marker; a corpus-coded finding from the 262-item calibration pass ([[../research/22-register-calibration-pass-2026-08-09|run 22]]) graded exact or variant; or a verifiable public field case with a dated, checkable citation filed in the vault.
+- **evidenced** — at least one receipt exists. Three receipt types count, and nothing else does: a first-party incident mapped in the Corrections Register with an `⟪instance-of⟫` marker; a corpus-coded finding from the 262-item calibration pass (run 22) graded exact or variant; or a verifiable public field case with a dated, checkable citation filed in the vault.
 - **candidate** — enumerated in advance, no receipt yet. Still a row: published, classed, graded, labelled. Not counted in any headline.
 
 Three rules follow, all enforced or exercised by `check-registers.py`:
 
-1. **Headline counts count evidenced rows only.** On the receipts as at 2026-08-21 that is 66 evidenced · 62 candidate. The evidenced number moves only when a receipt lands or a row retires, so it is grounded by construction.
+1. **Headline counts count evidenced rows only.** On the receipts as at 2026-08-25 that is 67 evidenced · 61 candidate. The evidenced number moves only when a receipt lands or a row retires, so it is grounded by construction.
 2. **The marker is derived, not asserted.** The checker re-derives the receipt sets from the Corrections Register and the run-22 table on every run and fails on any row whose Evidence cell disagrees — in either direction, because an understated 66 is as wrong as an overstated one.
-3. **Promotion and decay.** A candidate is promoted by its first receipt. A candidate that a stated review window passes over with no instance, no corpus match and no field case is retired to the candidate pen ([[truth-layer]], "Candidate rows, not yet evidenced" — the pen holds gaps that are not yet rows, which is one step below a published candidate row).
+3. **Promotion and decay.** A candidate is promoted by its first receipt. A candidate that a stated review window passes over with no instance, no corpus match and no field case is retired to the candidate pen ([truth-layer](truth-layer.md), "Candidate rows, not yet evidenced" — the pen holds gaps that are not yet rows, which is one step below a published candidate row).
 
-Enumeration is thereby demoted from row source to hypothesis source: it proposes candidates, and its track record is published — of the 113 rows standing as unconfirmed predictions at enumeration, 23 (about one in five) were confirmed by a first dated incident within eleven days, in the derivation environment ([[METHODOLOGY]] section 4 carries the denominator, the dates and the scope caveats). It never again sets a published total. Full rationale and the decision: [[METHODOLOGY]] and D-107.
+Enumeration is thereby demoted from row source to hypothesis source: it proposes candidates, and its track record is published — of the 113 rows standing as unconfirmed predictions at enumeration, 23 (about one in five) were confirmed by a first dated incident within eleven days, in the derivation environment ([METHODOLOGY](../METHODOLOGY.md) section 4 carries the denominator, the dates and the scope caveats). It never again sets a published total. Full rationale and the decision: [METHODOLOGY](../METHODOLOGY.md) and D-107.
 
-**Severity** — cost multiplied by how silently it fails; a judgement, not a measurement:
-- **S1** — a round trip, noticed at once
-- **S2** — rework you catch at review
-- **S3** — real rework or a wrong outcome, found late
-- **S4** — ships or reverses something, and you never find out
+**Severity** — the cost of the failure multiplied by how silently it fails; a judgement, not a measurement. **One construct, two domain readings** (D-205, 28 August 2026 — the C-08 repair, built on C-06's precedent): every register multiplies by silence, and they differ only in what *cost* reads as.
 
-The recovery layer grades the same scale by cost-to-undo: S1 undone in seconds · S2 undone with effort · S3 undone only by rebuilding by hand · S4 cannot be undone at any price.
+| Grade | Five aligned registers read cost as **the wrong outcome** | Recovery reads cost as **getting back** |
+|---|---|---|
+| **S1** | a round trip, noticed at once | undone in seconds |
+| **S2** | rework you catch at review | undone with effort |
+| **S3** | real rework or a wrong outcome, found late | undone only by rebuilding by hand |
+| **S4** | it ships, and you never find out | cannot be undone at any price |
+
+**The grade travels; the cost term is local.** This is the same standing the outcome letter has: an S4 anywhere means *this register's most expensive failure, arriving in silence*, so S-grades sort and rank across registers. What never travels is the cost term itself — Recovery's S4 is not "a worse Instruction S4", it is the same grade of a different cost.
+
+**Two limits, both load-bearing.** It is a judgement, not a measurement, so **no count, total or published claim may rest on it** — the rationale removed severity from the diagram views for exactly this reason and reserved it for filtering and sorting. And it is not derived by any checker: `check-registers.py` does not validate severity, so a wrong S-grade is caught by reading, not by running.
+
+*What this repaired.* Until 28 August this section read *"The recovery layer grades the same scale by cost-to-undo"*, which named one scale and described two — cost × silence in five registers, cost-to-undo alone in Recovery — so an S3 could not be compared across the boundary. That was **C-08**. The repair is a correction to this file only: [recovery-layer](recovery-layer.md) itself already read *"the cost of getting back multiplied by how quietly the change goes unnoticed"*, and so did the published Recovery spoke. This summary was the only surface still carrying the broken definition, which makes C-08 an instance of C-50's class — the README drifting from the register it summarises.
 
 **Tool tier** — prefer a tool that maintains itself, over a tool you maintain, over a process you remember:
 - **automatic** — runs itself, nothing to maintain
@@ -87,7 +94,7 @@ Two rules make `built` comparable across layers, both settled 9 August 2026 afte
 1. **A row that names no mechanism takes built state `none`, never `designed`.** There is nothing to design. Authority and Recovery carried twelve rows reading `none · … · designed` — and one reading `none · … · built`, which asserted that the nothing was installed. Both are now `none`.
 2. **The headline count is `designed` over *tooled rows*, not over all rows** — for example Instruction now reads "12 of the 21", where 21 excludes the process-only rows because they have no mechanism to build. The four row registers previously used three different denominators in identical language (21 tooled, 23 all, 25 all), which made the most quotable number in the framework non-comparable between its own layers. A benchmark or a vendor scorecard needs `built` to mean one thing (D-053, D-054); this is what makes that true.
 
-**Residual** (added D-061) — what is actually true about the failure today, given everything in place. **This is not `built`.** `built` is a fact about the *named* mechanism; residual is a fact about the *failure*, and the two come apart in both directions — IL-3C's mechanism is built and the row still survives, while IL-1F's named mechanism was never built and the failure is largely closed by a gate the row did not name.
+**Gap** (added D-061 as *residual*; renamed to Gap under D-217, 2026-09-01 — Sholto retired the residue/residual family from framework vocabulary, and Gap is the framework's own established word for it, per the messaging framework's "get back your gaps") — what is actually true about the failure today, given everything in place. **This is not `built`.** `built` is a fact about the *named* mechanism; gap is a fact about the *failure*, and the two come apart in both directions — IL-3C's mechanism is built and the row still survives, while IL-1F's named mechanism was never built and the failure is largely closed by a gate the row did not name.
 - **closed** — the failure is treated; nothing further is owed
 - **closed by substitute** — a mechanism this row does not name closes it. **This is a compensating control** in the sense security, SOC 2 and ISO assessors already use the term: a different control, standing in for the specified one, carrying its own evidence. The framework's own name for the field is kept because the register grades failure modes rather than requirements, but the two mean the same thing and the audit term is the one to reach for when explaining it (added 2026-08-11)
 - **partially closed** — one part is closed and another is not; the boundary must be named
@@ -98,11 +105,11 @@ Two rules that make the field honest rather than decorative:
 1. **A substitute carries its own catch point; it never inherits the named mechanism's.** IL-1F's named schema lint sat at `on disk` while the gate that actually closes it runs in CI, which moved the layer's catch-point distribution and two phase totals. A substitute that inherited would silently corrupt the most load-bearing column in the framework.
 2. **A substitute or partial claim needs a receipt, not an assertion** — identifier, its own catch point, one line on why it closes the failure and where it stops, and the date observed. **Two further fields, added 2026-08-11, borrowed from the compensating-control worksheets the audit standards already publish**, because they are the two that stop a substitute quietly rotting: the **constraint** (why the row's named mechanism cannot be used, which is what makes a substitute legitimate rather than merely convenient) and the **maintenance owner** (who re-checks that the substitute still closes the failure, and on what trigger). A substitute with no stated constraint is an unexamined preference; one with no maintenance owner is a control nobody is watching.
 
-**One declared exception: the provenance layer derives residual from its own cell strengths, gated on install state.** Because a provenance row has three control positions rather than one named mechanism, its rule is: **a row whose next action is a `ONCE —` install reads `open`** — the control it names is not switched on, so it closes nothing today; otherwise any `closes` reads `closed`, otherwise any `partial` reads `partially closed`, otherwise `open`. That legitimately produces `C survives · partially closed` — PL-4B, PL-6A and PL-6F — which the global rule below forbids. The exception is declared here rather than only in [[provenance-layer]], because a rule stated in two places without one of them naming the other is how the two drift apart.
+**One declared exception: the provenance layer derives gap from its own cell strengths, gated on install state.** Because a provenance row has three control positions rather than one named mechanism, its rule is: **a row whose next action is a `ONCE —` install reads `open`** — the control it names is not switched on, so it closes nothing today; otherwise any `closes` reads `closed`, otherwise any `partial` reads `partially closed`, otherwise `open`. That legitimately produces `C survives · partially closed` — PL-4B, PL-6A and PL-6F — which the global rule below forbids. The exception is declared here rather than only in [provenance-layer](provenance-layer.md), because a rule stated in two places without one of them naming the other is how the two drift apart.
 
-The install gate was added 2026-08-10 to correct C-02. Provenance has no `built` field, so cell strength alone described what a control was *designed* to do and nothing recorded whether it existed; 14 of the layer's then-24 rows read `closed` while their own next action said to install the mechanism. The `ONCE —` next action is the de facto state field until the layer gains a real one. Residual now reads 6 closed · 3 partially closed · 13 open (22 rows since the D-106 retirements).
+The install gate was added 2026-08-10 to correct C-02. Provenance has no `built` field, so cell strength alone described what a control was *designed* to do and nothing recorded whether it existed; 14 of the layer's then-24 rows read `closed` while their own next action said to install the mechanism. The `ONCE —` next action is the de facto state field until the layer gains a real one. Gap now reads 6 closed · 3 partially closed · 13 open (22 rows since the D-106 retirements).
 
-**How far to trust a residual value.** Most values today are *derived*, not observed: outside the provenance exception above, `survives`/`irreversible` is always `open`; `prevented`/`detected` on a `built` mechanism reads `closed`; anything whose named mechanism is `designed` or `none` reads `open` unless a substitute is recorded. A derived value is only as good as its register's own `verified:` stamp, so residual on a design-only register is a restatement of an unverified build state, not evidence. `closed by substitute` and `partially closed` are never derived — they are entered by hand against evidence. Full argument: [[register-view-design-rationale]] section 7.
+**How far to trust a gap value.** Most values today are *derived*, not observed: outside the provenance exception above, `survives`/`irreversible` is always `open`; `prevented`/`detected` on a `built` mechanism reads `closed`; anything whose named mechanism is `designed` or `none` reads `open` unless a substitute is recorded. A derived value is only as good as its register's own `verified:` stamp, so gap on a design-only register is a restatement of an unverified build state, not evidence. `closed by substitute` and `partially closed` are never derived — they are entered by hand against evidence. Full argument: register-view-design-rationale section 7.
 
 **Authority** — who can switch the control off:
 - **unbypassable** — runs where the agent cannot reach it
@@ -120,8 +127,12 @@ Each register carries its own `verified:` state in frontmatter. As of 7 August 2
 
 ## Why the views look the way they do
 
-[[register-view-design-rationale]] holds the argument behind the presentation: which columns earn a place in a diagram, what each colour and marker encodes, and which encodings were removed and why. Vocabulary is not duplicated there — this file remains the single definition source. Decisions are logged as D-057.
+register-view-design-rationale holds the argument behind the presentation: which columns earn a place in a diagram, what each colour and marker encodes, and which encodings were removed and why. Vocabulary is not duplicated there — this file remains the single definition source. Decisions are logged as D-057.
 
 ## Downstream views derived from these files
 
 The Figma frames; the cross-layer trigger checklist (group all rows by `trigger`); the install list (all `once` rows, ordered by what each buys); the catch-point map (row counts per position per layer); the tool coverage matrix (tools × the rows they hold).
+
+---
+
+*False Floors is a trade mark of Digital First Pty Ltd, trading as Scale100 (AU application AMCZ-2616155657). This content is CC BY 4.0; the name is not part of that licence. Citing, mapping to, or claiming conformance with the catalogue needs no permission – see `LICENSE-CONTENT`.*

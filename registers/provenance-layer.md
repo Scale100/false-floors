@@ -6,8 +6,8 @@ prefix: PL
 title: Agent Provenance Layer — The Record of What Was Done
 question: Is the record of what was done trustworthy?
 unit: a unit of work
-figma-node: "1395:139"
-figma-file: KDkIqr0lzbcAUvJLGAcExk
+figma-node: "1:5011"
+figma-file: 9KIzmsPS1EzWNQiOFKjWzX
 rows: 22
 class-a: 3
 class-b: 14
@@ -18,7 +18,7 @@ class-c-reads: survives
 evidenced: 12
 candidate: 10
 verified: describes the HullKey control set; row IDs are assigned by this register — the diagram adopted them at rev 2 on 9 August 2026, having predated the ID scheme
-residual-basis: derived from cell strength gated on install state, corrected 2026-08-10 (C-02) — a `ONCE —` next action means the control is not switched on and the row reads open; otherwise any `closes` reads closed, else any `partial` reads partially closed, else open. This layer has no `built` field; the `ONCE —` next action is what stands in for one. Supersedes the "outcome x built state" basis recorded 2026-08-09 (D-061), which named a built state this layer never carried (C-03)
+gap-basis: derived from cell strength gated on install state, corrected 2026-08-10 (C-02) — a `ONCE —` next action means the control is not switched on and the row reads open; otherwise any `closes` reads closed, else any `partial` reads partially closed, else open. This layer has no `built` field; the `ONCE —` next action is what stands in for one. Supersedes the "outcome x built state" basis recorded 2026-08-09 (D-061), which named a built state this layer never carried (C-03)
 date: 2026-08-07
 last-updated: 2026-08-21
 ---
@@ -27,20 +27,20 @@ last-updated: 2026-08-21
 
 What breaks in the record of a unit of work, what it costs, and which layer can close it. Independent of any particular tracker.
 
-**This file is canon; the Figma frame `1395:139` (rev 2) is a generated view.** Shared vocabulary: [[README|registers README]].
+**This file is canon; the Figma frame `1:5011` (rev 2) is a generated view.** Shared vocabulary: [registers README](README.md).
 
-This layer uses its own three control positions instead of the eleven catch points — **harness gate** (at the moment of work), **repo artefact** (committed with the code), **control-plane check** (on the commit). Cell strength: **closes** — refuses or catches it every time · **partial** — conditional, or not switched on · **nothing** — nothing here closes it · **n/a** — not this layer's job. A row's class is set by its strongest cell, which is this register's instance of the shared rule that the letter grades how complete the remedy is ([[README|registers README]]) – the remedy here is the union of what the three positions do, so the strongest cell is the completeness of the best one available. **This register reads B as *detected* and C as *survives***. Its **residual** is derived from the same cells, but gated on install state first: **a row whose next action is a `ONCE —` install reads open**, because the control it names has not been switched on and therefore closes nothing today. For every other row, any `closes` reads closed, otherwise any `partial` reads partially closed, otherwise open. The install gate is what stops a cell describing control *design* from being read as control *state* — the defect that had 14 of these 24 rows reading closed on mechanisms nobody had turned on (C-02, corrected 2026-08-10). **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [[README|registers README]]). **Residual** says what is actually true about the failure today, which is not the same as whether the named mechanism exists — see [[README|registers README]].
+This layer uses its own three control positions instead of the eleven catch points — **harness gate** (at the moment of work), **repo artefact** (committed with the code), **control-plane check** (on the commit). Cell strength: **closes** — refuses or catches it every time · **partial** — conditional, or not switched on · **nothing** — nothing here closes it · **n/a** — not this layer's job. A row's class is set by its strongest cell, which is this register's instance of the shared rule that the letter grades how complete the remedy is ([registers README](README.md)) – the remedy here is the union of what the three positions do, so the strongest cell is the completeness of the best one available. **This register reads B as *detected* and C as *survives***. Its **gap** is derived from the same cells, but gated on install state first: **a row whose next action is a `ONCE —` install reads open**, because the control it names has not been switched on and therefore closes nothing today. For every other row, any `closes` reads closed, otherwise any `partial` reads partially closed, otherwise open. The install gate is what stops a cell describing control *design* from being read as control *state* — the defect that had 14 of these 24 rows reading closed on mechanisms nobody had turned on (C-02, corrected 2026-08-10). **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [registers README](README.md)). **Gap** says what is actually true about the failure today, which is not the same as whether the named mechanism exists — see [registers README](README.md).
 
 ## 1 · Orientation and continuity (0 prevented · 1 detected · 1 survives)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-1A | evidenced | S3 | Agent starts blind to prior work | Redoes finished work, or reverses last session’s decision | partial — Session-start digest | partial — Open questions in the record | n/a | C survives | open | ONCE — Install the session-start digest |
 | PL-1C | candidate | S4 | Compaction drops a decision held only in context — or a constraint agreed in turn 3 is gone by turn 30 | Silently reverts to a default you ruled out | partial — Checkpoint before compaction; re-inject, not just recall | closes — Decision log entry; constraints as files, not chat | n/a | B detected | closed | AT EVERY DECISION — Log the decision before compaction |
 
 ## 2 · Claiming the work (1 prevented · 2 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-2A | candidate | S2 | Work done with no unit of work attached | Nobody can say later what it was for | closes — Require an active ticket | partial — Ticket committed with the code | partial — Assert every range has one | A prevented | open | ONCE — Require a ticket before work starts |
 | PL-2B | candidate | S4 | The gate only fires once a ticket is claimed | Never engaging reads as a clean pass | nothing — Cannot catch its own absence | n/a | closes — Check the merged range | B detected | open | ONCE — Move the claim check into CI |
@@ -48,7 +48,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 
 ## 3 · The record itself (1 prevented · 4 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-3A | evidenced | S3 | No record written at all | The reasoning is gone the moment the turn ends | closes — Block the turn ending | partial — Record is a committed file | partial — Assert a record exists | A prevented | open | ONCE — Install the turn-ending block |
 | PL-3B | evidenced | S3 | Record omits the parts that matter | Reads fine, answers nothing you will ask later | n/a | closes — Required headings, validated | closes — Reject on missing sections | B detected | open | ONCE — Fix the record template, then validate it |
@@ -58,7 +58,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 
 ## 4 · Linking intent to code (1 prevented · 1 detected · 1 survives)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-4A | candidate | S3 | Unlinked commit lands on a protected branch | Six months on, nobody knows why it changed | partial — Inject the ID on commit | partial — ID carried in the message | closes — Reject an unlinked exact revision | A prevented | open | ONCE — Install the commit-ID landing gate |
 | PL-4B | evidenced | S3 | Commit linked to the wrong unit of work | Two sessions, one shared marker | partial — Per-session markers | n/a | n/a | C survives | partially closed | EVERY SESSION — Give each session its own marker |
@@ -66,7 +66,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 
 ## 5 · Landing (0 prevented · 3 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-5A | evidenced | S4 | Done recorded on a branch that never landed | Shipped is asserted, never verified | n/a | partial — Board state on the target branch | closes — Check the artefact on target | B detected | closed | AT EVERY MERGE — Check the artefact on the target branch |
 | PL-5B | candidate | S3 | Board diverges from the code | The tracker quietly becomes fiction | n/a | closes — Derive the board from the repo | partial — Diff derived vs published | B detected | open | ONCE — Derive the board from the repo |
@@ -74,7 +74,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 
 ## 6 · Many agents, and who did what (0 prevented · 3 detected · 3 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Residual | Next action |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-6A | evidenced | S3 | Parent returns before its children finish | Completed work is stranded, then paid for twice | partial — A synthesis stage that gathers | n/a | n/a | C survives | partially closed | EVERY RUN — Add a gather stage to every fan-out |
 | PL-6B | evidenced | S3 | Large artefact held in context, never written | Finished work dies with the context | partial — Save incrementally, not at the end | closes — Partial work on disk is recoverable | n/a | B detected | closed | EVERY BRIEF — Brief agents to save as they go |
@@ -83,7 +83,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 | PL-6E | evidenced | S2 | Cannot tell which model produced it | A model-specific defect cannot be traced back | partial — Record the seat | closes — Seat in the session record | n/a | B detected | open | ONCE — Record the model seat in the session record |
 | PL-6F | candidate | S1 | Record invisible without a repo clone | Nobody outside the terminal can see the state | n/a | partial — Generated board file | partial — Publish a projection | C survives | partially closed | WEEKLY — Publish the board projection |
 
-**PL-6C is one of three rows on concurrent writes.** Atomic writes prevent torn files, not last-writer-wins, and an advisory lock does not constrain a writer that can ignore or remove it. [[recovery-layer|RL-1E]] covers fan-out worktree separation; [[authority-access-layer|AL-3C]] covers an ambient second session. All three remain open until every mutation is mediated by an externally owned lock or isolated write surface.
+**PL-6C is one of three rows on concurrent writes.** Atomic writes prevent torn files, not last-writer-wins, and an advisory lock does not constrain a writer that can ignore or remove it. [RL-1E](recovery-layer.md) covers fan-out worktree separation; [AL-3C](authority-access-layer.md) covers an ambient second session. All three remain open until every mutation is mediated by an externally owned lock or isolated write surface.
 
 ## Where it closes
 
@@ -123,7 +123,11 @@ Severity is cost multiplied by how silently it fails — a judgement, not a meas
 
 ## Retired rows
 
-Retired IDs are never reused and never renumbered (row ID rule 1). Each retirement carries its reason and its date; the full audit behind the pass is [[../framework-reviews/2026-08-21-framework-review-02-row-provenance|framework review 02]] and the decision is D-106.
+Retired IDs are never reused and never renumbered (row ID rule 1). Each retirement carries its reason and its date; the full audit behind the pass is framework review 02 and the decision is D-106.
 
-- `PL-1B` — *earlier constraints not carried forward* — retired 2026-08-21, merged into `PL-1C`. The two rows shared one failure (session state silently lost between turn 3 and turn 30), one repair (write it to a file, not chat) and one class; PL-1B's distinct wording added a scenario, not a unit, and it carried no recorded incident. PL-1C's cells now carry the constraint case alongside the decision case. The instruction-shaped and context-shaped twins ([[instruction-layer|IL-1B]], [[context-layer|CL-1A]]) are unaffected — CL-1A is the copy with the recorded incident (D-084).
+- `PL-1B` — *earlier constraints not carried forward* — retired 2026-08-21, merged into `PL-1C`. The two rows shared one failure (session state silently lost between turn 3 and turn 30), one repair (write it to a file, not chat) and one class; PL-1B's distinct wording added a scenario, not a unit, and it carried no recorded incident. PL-1C's cells now carry the constraint case alongside the decision case. The instruction-shaped and context-shaped twins ([IL-1B](instruction-layer.md), [CL-1A](context-layer.md)) are unaffected — CL-1A is the copy with the recorded incident (D-084).
 - `PL-4D` — *ticket text changed since the work* — retired 2026-08-21. The narrowest row in the register: a real audit concern (requirements edited after the fact) but one whose named mechanism is an architecture choice (move the tracker into the repo) rather than a control, with no recorded incident and no path to one while the tracker already lives in the repo here. The after-the-fact-editing class this row gestured at is carried by `PL-3D`, which is corpus-backed.
+
+---
+
+*False Floors is a trade mark of Digital First Pty Ltd, trading as Scale100 (AU application AMCZ-2616155657). This content is CC BY 4.0; the name is not part of that licence. Citing, mapping to, or claiming conformance with the catalogue needs no permission – see `LICENSE-CONTENT`.*

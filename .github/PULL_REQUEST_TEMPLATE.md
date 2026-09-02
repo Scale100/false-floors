@@ -14,10 +14,8 @@ carry evidence rules that are easier to settle in discussion than in review.
 
 - [ ] **Entry IDs unchanged.** No entry renumbered, and no ID re-pointed at a different failure. IDs are cited outside this repository.
 - [ ] **Mechanisms say where they run.** Any mechanism added or changed states what invokes it. A control nothing calls is not a control.
-- [ ] **Residuals updated.** If a mechanism changed, what the entry still does not cover changed with it, or deliberately did not.
-- [ ] **No counts stated in prose.** Totals live in the registers and are checked by a build script.
-- [ ] **Generated files not hand-edited.** `register-data.json` comes from the extraction script.
-- [ ] Checkers run and passing locally.
+- [ ] **Gaps updated.** If a mechanism changed, what the entry still does not cover changed with it, or deliberately did not.
+- [ ] **No counts stated in prose.** Totals live in the registers; a document that disagrees with them is wrong.
 
 ## Licensing
 

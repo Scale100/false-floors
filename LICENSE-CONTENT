@@ -10,11 +10,11 @@ Plain summary:    https://creativecommons.org/licenses/by/4.0/
 
 WHAT THIS COVERS
 
-The catalogue entries themselves, the register markdown files,
-`register-data.json`, and documentation derived from them.
+The catalogue entries themselves, the register markdown files, METHODOLOGY.md,
+and documentation derived from them. In this release that is everything here.
 
-The CODE in this repository – checker scripts, the extraction script and the
-trust-check tool – is licensed separately under the MIT licence. See LICENSE.
+Any CODE published in this repository – checker scripts, extraction scripts,
+tools – is licensed separately under the MIT licence. See LICENSE.
 
 WHAT YOU MAY DO
 
@@ -44,3 +44,25 @@ NO ENDORSEMENT, NO CERTIFICATION
 Attribution is not endorsement. Using this catalogue does not make a product,
 an assessment or an organisation certified, accredited, approved or verified by
 Scale100, and nothing in this repository may be presented as though it does.
+
+THE NAME
+
+The catalogue content is CC BY 4.0. The name False Floors is not part of
+that grant - Creative Commons licences do not license trade marks.
+
+You may use the name False Floors to refer to this catalogue: to cite it
+or its rows in research, in your own tools, in training material, in
+vendor documentation, or in a conformance claim about your own work. No
+permission is needed.
+
+"A false floor" - lowercase, singular - describes a failure, belongs to
+nobody, and may be used as freely as you would describe a race condition.
+
+What needs permission is using False Floors as the name of your own
+product or service, or in a way that suggests this project endorses,
+certifies or accredits you. The NO ENDORSEMENT section above governs the
+second of those.
+
+False Floors is a trade mark of Digital First Pty Ltd, trading as
+Scale100, and is the subject of Australian trade mark application
+AMCZ-2616155657.

@@ -22,10 +22,12 @@ SOFTWARE.
 
 ---
 
-This licence covers the CODE in this repository: the checker scripts, the
-extraction script, the trust-check tool and any other executable or source
-file.
+This licence covers any CODE in this repository: checker scripts, extraction
+scripts, tools and any other executable or source file.
 
-The REGISTER CONTENT – the catalogue entries themselves, `register-data.json`,
-and documentation derived from them – is licensed separately under Creative
-Commons Attribution 4.0 International. See LICENSE-CONTENT.
+No code is published in this release. The licence is stated in advance so that
+it is settled before the first script lands, not negotiated afterwards.
+
+The REGISTER CONTENT – the catalogue entries themselves and documentation
+derived from them – is licensed separately under Creative Commons Attribution
+4.0 International. See LICENSE-CONTENT.

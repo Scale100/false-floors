@@ -24,9 +24,8 @@ For typos, broken links, clearer wording and mechanism details, a pull request i
 
 1. **Row IDs are stable and permanent.** `IL-3B` means the same failure for ever. A row can be reworded, re-mechanised or superseded, but never renumbered and never re-pointed at a different failure. Things outside this repository cite these IDs.
 2. **A mechanism claim needs to say where it runs.** "Add a rule to your instructions file" is not a mechanism unless something checks the rule was followed. A control nobody invokes catches nothing, and the catalogue treats asserted wiring and absent wiring as the same thing.
-3. **Say what is left over.** Every row states its residual – what it still does not cover. A change that improves a mechanism without updating the residual is incomplete.
-4. **Do not state counts in prose.** Totals live in the registers and are checked by a build script. A page that states a count the registers disagree with fails the build, which is deliberate.
-5. **Generated files are generated.** `register-data.json` is produced from the registers by the extraction script. Edit the registers; never edit the JSON.
+3. **Say what is left over.** Every row states its gap – what it still does not cover. A change that improves a mechanism without updating the gap is incomplete.
+4. **Do not state counts in prose.** Totals live in the registers, and a document that states a count the registers disagree with is wrong by definition – the registers are the source. We check this with a script on our side; it is not in this repository yet, so for now the rule is a rule rather than a build failure.
 
 ## Credit
 
