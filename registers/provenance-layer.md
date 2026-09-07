@@ -3,10 +3,15 @@ type: register
 project: agent-trust-framework
 layer: provenance
 prefix: PL
+# The column holding the failure title. Declared rather than inferred from
+# position: C-117 shipped a gate that took the column after `Sev`, and a metadata
+# column inserted between the two silently replaced every title while the gate
+# reported ok. Identity survives insertion and reordering; adjacency does not.
+title-column: What breaks
 title: Agent Provenance Layer — The Record of What Was Done
 question: Is the record of what was done trustworthy?
 unit: a unit of work
-figma-node: "1:5011"
+figma-node: "124:2"
 figma-file: 9KIzmsPS1EzWNQiOFKjWzX
 rows: 22
 class-a: 3
@@ -17,7 +22,7 @@ class-b-reads: detected
 class-c-reads: survives
 evidenced: 12
 candidate: 10
-verified: describes the HullKey control set; row IDs are assigned by this register — the diagram adopted them at rev 2 on 9 August 2026, having predated the ID scheme
+derived: 2026-08-06 — rows describe project-alpha’s control set; row IDs are assigned by this register, and the diagram adopted them at rev 2 on 2026-08-09, having predated the ID scheme
 gap-basis: derived from cell strength gated on install state, corrected 2026-08-10 (C-02) — a `ONCE —` next action means the control is not switched on and the row reads open; otherwise any `closes` reads closed, else any `partial` reads partially closed, else open. This layer has no `built` field; the `ONCE —` next action is what stands in for one. Supersedes the "outcome x built state" basis recorded 2026-08-09 (D-061), which named a built state this layer never carried (C-03)
 date: 2026-08-07
 last-updated: 2026-08-21
@@ -29,59 +34,61 @@ What breaks in the record of a unit of work, what it costs, and which layer can 
 
 **This file is canon; the Figma frame `1:5011` (rev 2) is a generated view.** Shared vocabulary: [registers README](README.md).
 
-This layer uses its own three control positions instead of the eleven catch points — **harness gate** (at the moment of work), **repo artefact** (committed with the code), **control-plane check** (on the commit). Cell strength: **closes** — refuses or catches it every time · **partial** — conditional, or not switched on · **nothing** — nothing here closes it · **n/a** — not this layer's job. A row's class is set by its strongest cell, which is this register's instance of the shared rule that the letter grades how complete the remedy is ([registers README](README.md)) – the remedy here is the union of what the three positions do, so the strongest cell is the completeness of the best one available. **This register reads B as *detected* and C as *survives***. Its **gap** is derived from the same cells, but gated on install state first: **a row whose next action is a `ONCE —` install reads open**, because the control it names has not been switched on and therefore closes nothing today. For every other row, any `closes` reads closed, otherwise any `partial` reads partially closed, otherwise open. The install gate is what stops a cell describing control *design* from being read as control *state* — the defect that had 14 of these 24 rows reading closed on mechanisms nobody had turned on (C-02, corrected 2026-08-10). **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [registers README](README.md)). **Gap** says what is actually true about the failure today, which is not the same as whether the named mechanism exists — see [registers README](README.md).
+This layer uses its own three control positions instead of the eleven catch points — **harness gate** (at the moment of work), **repo artefact** (committed with the code), **control-plane check** (on the commit). Cell strength: **closes** — refuses or catches it every time · **partial** — conditional, or not switched on · **nothing** — nothing here closes it · **n/a** — not this layer's job. A row's class is set by its strongest cell, which is this register's instance of the shared rule that the letter grades how complete the remedy is ([registers README](README.md)) – the remedy here is the union of what the three positions do, so the strongest cell is the completeness of the best one available. **This register reads B as *detected* and C as *survives***. Its **gap** is derived from the same cells, but gated on install state first: **a row whose next action is a `ONCE —` install reads open**, because the control it names has not been switched on and therefore closes nothing today. For every other row, any `closes` reads closed, otherwise any `partial` reads partially closed, otherwise open. The install gate is what stops a cell describing control *design* from being read as control *state* — the defect that had 14 of these 24 rows reading closed on mechanisms nobody had turned on (C-02, corrected 2026-08-10). **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [registers README](README.md)). **Availability** says whether a control of the named shape exists at all — `available` · `none` · `withdrawn` — and never whether one is switched on anywhere, which is an assessment fact and lives in `../assessments/` (D-263). See [registers README](README.md).
 
 ## 1 · Orientation and continuity (0 prevented · 1 detected · 1 survives)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-1A | evidenced | S3 | Agent starts blind to prior work | Redoes finished work, or reverses last session’s decision | partial — Session-start digest | partial — Open questions in the record | n/a | C survives | open | ONCE — Install the session-start digest |
-| PL-1C | candidate | S4 | Compaction drops a decision held only in context — or a constraint agreed in turn 3 is gone by turn 30 | Silently reverts to a default you ruled out | partial — Checkpoint before compaction; re-inject, not just recall | closes — Decision log entry; constraints as files, not chat | n/a | B detected | closed | AT EVERY DECISION — Log the decision before compaction |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-1A | evidenced | S3 | Agent starts blind to prior work | Redoes finished work, or reverses last session’s decision | partial — Session-start digest | partial — Open questions in the record | n/a | C survives |
+| PL-1C | candidate | S4 | Compaction drops a context-only decision | Silently reverts to a default you ruled out | partial — Checkpoint before compaction, then re-inject | closes — Decision log; constraints as files, not chat | n/a | B detected |
+
+**PL-1C is about the turn-30 problem, which its cell no longer has room to state.** The failure is not only that compaction drops a decision held solely in the context window. It is the ordinary shape that takes: a constraint agreed in turn 3 is gone by turn 30, and nothing in the session announces its departure, so the agent proceeds fluently on a rule it no longer holds. The clause moved here on 2026-09-07 when canon became the single wording for the register and the diagram; at 102 characters it wrapped its 374px column. The harness-gate cell shortened in the same pass, and "then re-inject" carries the point the longer wording spelled out: recalling the decision is not the same as putting it back in front of the agent.
 
 ## 2 · Claiming the work (1 prevented · 2 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-2A | candidate | S2 | Work done with no unit of work attached | Nobody can say later what it was for | closes — Require an active ticket | partial — Ticket committed with the code | partial — Assert every range has one | A prevented | open | ONCE — Require a ticket before work starts |
-| PL-2B | candidate | S4 | The gate only fires once a ticket is claimed | Never engaging reads as a clean pass | nothing — Cannot catch its own absence | n/a | closes — Check the merged range | B detected | open | ONCE — Move the claim check into CI |
-| PL-2C | candidate | S2 | Scope quietly expands mid-task | Files changed that nobody asked about | partial — Declare scope up front | closes — Ticket states intended scope | closes — Diff touched files vs declared | B detected | closed | EVERY TASK — Declare the scope when you brief the task |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-2A | candidate | S2 | Work done with no unit of work attached | Nobody can say later what it was for | closes — Require an active ticket | partial — Ticket committed with the code | partial — Assert every range has one | A prevented |
+| PL-2B | candidate | S4 | The gate only fires once a ticket is claimed | Never engaging reads as a clean pass | nothing — Cannot catch its own absence | n/a | closes — Check the merged range | B detected |
+| PL-2C | candidate | S2 | Scope quietly expands mid-task | Files changed that nobody asked about | partial — Declare scope up front | closes — Ticket states intended scope | closes — Diff touched files vs declared | B detected |
 
 ## 3 · The record itself (1 prevented · 4 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-3A | evidenced | S3 | No record written at all | The reasoning is gone the moment the turn ends | closes — Block the turn ending | partial — Record is a committed file | partial — Assert a record exists | A prevented | open | ONCE — Install the turn-ending block |
-| PL-3B | evidenced | S3 | Record omits the parts that matter | Reads fine, answers nothing you will ask later | n/a | closes — Required headings, validated | closes — Reject on missing sections | B detected | open | ONCE — Fix the record template, then validate it |
-| PL-3C | evidenced | S4 | The doer writes its own success report | The record inherits the same blind spot | n/a | partial — Require SHAs and output, not prose | closes — Recompute rather than read | B detected | closed | EVERY RECORD — Require SHAs and output, not prose |
-| PL-3D | candidate | S4 | Record edited after the fact | You review a tidied version of events | partial — Local append-only convention | closes — Git history exposes the revision | closes — Diff history against the accepted record | B detected | open | ONCE — Add an external append-only store if edits must be refused |
-| PL-3E | evidenced | S4 | The gate fails open and says nothing | A dead sensor is indistinguishable from a pass | nothing — It is the thing that failed | n/a | closes — Assert the gate ran | B detected | open | ONCE — Assert in CI that the gate ran |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-3A | evidenced | S3 | No record written at all | The reasoning is gone the moment the turn ends | closes — Block the turn ending | partial — Record is a committed file | partial — Assert a record exists | A prevented |
+| PL-3B | evidenced | S3 | Record omits the parts that matter | Reads fine, answers nothing you will ask later | n/a | closes — Required headings, validated | closes — Reject on missing sections | B detected |
+| PL-3C | evidenced | S4 | The doer writes its own success report | The record inherits the same blind spot | n/a | partial — Require SHAs and output, not prose | closes — Recompute rather than read | B detected |
+| PL-3D | candidate | S4 | Record edited after the fact | You review a tidied version of events | partial — Local append-only convention | closes — Git history exposes the revision | closes — Diff history against the accepted record | B detected |
+| PL-3E | evidenced | S4 | The gate fails open and says nothing | A dead sensor is indistinguishable from a pass | nothing — It is the thing that failed | n/a | closes — Assert the gate ran | B detected |
 
 ## 4 · Linking intent to code (1 prevented · 1 detected · 1 survives)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-4A | candidate | S3 | Unlinked commit lands on a protected branch | Six months on, nobody knows why it changed | partial — Inject the ID on commit | partial — ID carried in the message | closes — Reject an unlinked exact revision | A prevented | open | ONCE — Install the commit-ID landing gate |
-| PL-4B | evidenced | S3 | Commit linked to the wrong unit of work | Two sessions, one shared marker | partial — Per-session markers | n/a | n/a | C survives | partially closed | EVERY SESSION — Give each session its own marker |
-| PL-4C | candidate | S2 | Decision made in chat, written nowhere | Re-litigated next month from scratch | partial — Prompt for a log entry | closes — Decision log is a file | partial — Require one per change | B detected | closed | AT EVERY DECISION — Write the decision down when you make it |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-4A | candidate | S3 | Unlinked commit lands on a protected branch | Six months on, nobody knows why it changed | partial — Inject the ID on commit | partial — ID carried in the message | closes — Reject an unlinked exact revision | A prevented |
+| PL-4B | evidenced | S3 | Commit linked to the wrong unit of work | Two sessions, one shared marker | partial — Per-session markers | n/a | n/a | C survives |
+| PL-4C | candidate | S2 | Decision made in chat, written nowhere | Re-litigated next month from scratch | partial — Prompt for a log entry | closes — Decision log is a file | partial — Require one per change | B detected |
 
 ## 5 · Landing (0 prevented · 3 detected · 0 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-5A | evidenced | S4 | Done recorded on a branch that never landed | Shipped is asserted, never verified | n/a | partial — Board state on the target branch | closes — Check the artefact on target | B detected | closed | AT EVERY MERGE — Check the artefact on the target branch |
-| PL-5B | candidate | S3 | Board diverges from the code | The tracker quietly becomes fiction | n/a | closes — Derive the board from the repo | partial — Diff derived vs published | B detected | open | ONCE — Derive the board from the repo |
-| PL-5C | evidenced | S4 | Squash-merge breaks the ancestry | The provenance check answers the wrong question | n/a | n/a | closes — Test file existence, not ancestry | B detected | open | ONCE — Teach the check your merge strategy |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-5A | evidenced | S4 | Done recorded on a branch that never landed | Shipped is asserted, never verified | n/a | partial — Board state on the target branch | closes — Check the artefact on target | B detected |
+| PL-5B | candidate | S3 | Board diverges from the code | The tracker quietly becomes fiction | n/a | closes — Derive the board from the repo | partial — Diff derived vs published | B detected |
+| PL-5C | evidenced | S4 | Squash-merge breaks the ancestry | The provenance check answers the wrong question | n/a | n/a | closes — Test file existence, not ancestry | B detected |
 
 ## 6 · Many agents, and who did what (0 prevented · 3 detected · 3 survive)
 
-| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome | Gap | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PL-6A | evidenced | S3 | Parent returns before its children finish | Completed work is stranded, then paid for twice | partial — A synthesis stage that gathers | n/a | n/a | C survives | partially closed | EVERY RUN — Add a gather stage to every fan-out |
-| PL-6B | evidenced | S3 | Large artefact held in context, never written | Finished work dies with the context | partial — Save incrementally, not at the end | closes — Partial work on disk is recoverable | n/a | B detected | closed | EVERY BRIEF — Brief agents to save as they go |
-| PL-6C | evidenced | S4 | Two agents conflict; one overwrites the other | A correct change silently disappears | partial — Advisory mutation lock | partial — Atomic writes prevent torn files only | n/a | C survives | open | ONCE — Put every mutation behind an externally owned exclusive lock |
-| PL-6D | candidate | S2 | Cannot tell which code an agent wrote | Review effort spread evenly over uneven risk | partial — Provenance trailer on commits | closes — Trailer carried in history | partial — Require the trailer | B detected | open | ONCE — Add the provenance trailer to commits |
-| PL-6E | evidenced | S2 | Cannot tell which model produced it | A model-specific defect cannot be traced back | partial — Record the seat | closes — Seat in the session record | n/a | B detected | open | ONCE — Record the model seat in the session record |
-| PL-6F | candidate | S1 | Record invisible without a repo clone | Nobody outside the terminal can see the state | n/a | partial — Generated board file | partial — Publish a projection | C survives | partially closed | WEEKLY — Publish the board projection |
+| ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PL-6A | evidenced | S3 | Parent returns before its children finish | Completed work is stranded, then paid for twice | partial — A synthesis stage that gathers | n/a | n/a | C survives |
+| PL-6B | evidenced | S3 | Large artefact held in context, never written | Finished work dies with the context | partial — Save incrementally, not at the end | closes — Partial work on disk is recoverable | n/a | B detected |
+| PL-6C | evidenced | S4 | Two agents conflict; one overwrites the other | A correct change silently disappears | partial — Advisory mutation lock | partial — Atomic writes prevent torn files only | n/a | C survives |
+| PL-6D | candidate | S2 | Cannot tell which code an agent wrote | Review effort spread evenly over uneven risk | partial — Provenance trailer on commits | closes — Trailer carried in history | partial — Require the trailer | B detected |
+| PL-6E | evidenced | S2 | Cannot tell which model produced it | A model-specific defect cannot be traced back | partial — Record the seat | closes — Seat in the session record | n/a | B detected |
+| PL-6F | candidate | S1 | Record invisible without a repo clone | Nobody outside the terminal can see the state | n/a | partial — Generated board file | partial — Publish a projection | C survives |
 
 **PL-6C is one of three rows on concurrent writes.** Atomic writes prevent torn files, not last-writer-wins, and an advisory lock does not constrain a writer that can ignore or remove it. [RL-1E](recovery-layer.md) covers fan-out worktree separation; [AL-3C](authority-access-layer.md) covers an ambient second session. All three remain open until every mutation is mediated by an externally owned lock or isolated write surface.
 

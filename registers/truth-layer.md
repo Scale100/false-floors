@@ -3,10 +3,15 @@ type: register
 project: agent-trust-framework
 layer: truth
 prefix: TL
+# The column holding the failure title. Declared rather than inferred from
+# position: C-117 shipped a gate that took the column after `Sev`, and a metadata
+# column inserted between the two silently replaced every title while the gate
+# reported ok. Identity survives insertion and reordering; adjacency does not.
+title-column: Claim
 title: Agent Truth Layer — Claims, Costs, Controls and Resolution
 question: Can its claims about its own work be trusted?
 unit: a claim
-figma-node: "1:4767"
+figma-node: "71:2"
 figma-file: 9KIzmsPS1EzWNQiOFKjWzX
 rows: 15
 class-a: 0
@@ -17,7 +22,7 @@ class-b-reads: detected
 class-c-reads: survives
 evidenced: 8
 candidate: 7
-verified: describes the HullKey repo's check suite; row IDs are assigned by this register — the diagram adopted the TL-prefixed IDs at rev 2 on 9 August 2026, replacing its 1–15 claim numbers
+derived: 2026-08-06 — rows describe project-alpha’s check suite; row IDs are assigned by this register, and the diagram adopted the TL-prefixed IDs at rev 2 on 2026-08-09, replacing its 1–15 claim numbers
 gap-basis: derived from outcome x built state on 2026-08-09 (D-061); substitutes and partial closures entered by hand only where evidenced
 date: 2026-08-07
 last-updated: 2026-08-23
@@ -29,7 +34,7 @@ Every claim an agent makes about its own work — what it costs if the claim is 
 
 **This file is canon; the Figma frame `1:4767` (rev 2) is a generated view.** Shared vocabulary: [registers README](README.md).
 
-**Class grades how complete the remedy is**, on the shared definition in [registers README](README.md): A the failure cannot occur, B it occurs and something handles it completely, C it occurs and no remedy is complete. **This register reads B as *detected* and C as *survives***, the same words as Instruction, Context, Authority and Provenance – its section titles (*By construction*, *Checkable*, *Judgement*) name the classes but are not the outcome vocabulary, and must not be quoted as if they were. Class is therefore a property of a claim **once a control has been applied**, not a property of the tool: the same assertion sits in a different class depending on what was withheld, executed or diffed, because what changes is the completeness of the remedy available to it. Control status — five values, and the register uses all five: **in force** — control in force today · **not on** — built or designed, not switched on · **not built** — the mechanism does not exist yet · **not provisioned** — designed, and the resource it needs has not been created · **none** — no control exists, judgement only. **Gap** is derived from status: `in force` reads closed (or partially closed where the control itself is marked partial); **every other value reads open**. Until 2026-08-10 this note declared only three of the five while TL-09 used `not built` and TL-10 used `not provisioned` (C-04); the vocabulary is now declared to match the rows, and `check-registers.py` enforces both the enum and the derivation. **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [registers README](README.md)). Evidence status here: 8 of the 15 claims are evidenced, 7 are candidates — a high share for a register this size, which follows from its construction: the rows were inventoried from a live CI suite rather than enumerated. **Gap** says what is actually true about the failure today, which is not the same as whether the named mechanism exists — see [registers README](README.md).
+**Class grades how complete the remedy is**, on the shared definition in [registers README](README.md): A the failure cannot occur, B it occurs and something handles it completely, C it occurs and no remedy is complete. **This register reads B as *detected* and C as *survives***, the same words as Instruction, Context, Authority and Provenance – its section titles (*By construction*, *Checkable*, *Judgement*) name the classes but are not the outcome vocabulary, and must not be quoted as if they were. Class is therefore a property of a claim **once a control has been applied**, not a property of the tool: the same assertion sits in a different class depending on what was withheld, executed or diffed, because what changes is the completeness of the remedy available to it. Control status — five values, and the register uses all five: **in force** — control in force today · **not on** — built or designed, not switched on · **not built** — the mechanism does not exist yet · **not provisioned** — designed, and the resource it needs has not been created · **none** — no control exists, judgement only. **Availability** says whether a control of the named shape exists at all — `available` · `none` · `withdrawn`. Until 2026-09-07 this column was `Status`, five values deep, and four of them (`in force` · `not on` · `not built` · `not provisioned`) described whether the control was switched on in the codebase these rows were derived from. That is one environment on one date, it went stale silently — `TL-09` published `not built` while mutation and property testing were running in that codebase's CI — and under D-263 it moved to an assessment. What survives here is the claim about the world: a control of this shape exists, or none does. **Evidence** — `evidenced` (a receipt exists: a first-party incident mapping, a corpus-coded finding, or a filed public case) or `candidate` (enumerated in advance, no receipt yet); headline counts count evidenced rows only (D-107, [registers README](README.md)). Evidence status here: 8 of the 15 claims are evidenced, 7 are candidates — a high share for a register this size, which follows from its construction: the rows were inventoried from a live CI suite rather than enumerated.
 
 ## Class A · By construction (0 claims)
 
@@ -41,34 +46,34 @@ No current claim has a verified withholding control that prevents the claimed fa
 
 Conversion: **execute it, then diff it** — commit the output, not the claim. Outcome: **detected — CI fails on every commit.** Gap owner: **CI** — you read the red, not the code.
 
-| ID | Evidence | Sev | Claim | What it costs if it’s wrong | Control applied | Status | Gap |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| TL-01 | candidate | S3 | “The tests pass” | Test written to fit the code | CI test-write-protection check | in force | closed |
-| TL-02 | evidenced | S2 | “This is what I changed” | Account revised after the fact | Git diff and history check | in force | closed |
-| TL-04 | evidenced | S4 | “I verified it” | Never ran; the claim is the only proof | test:flows · pgTAP · test:unit | in force | closed |
-| TL-05 | evidenced | S3 | “The generated file is current” | Stale artefact; downstream built on it | tokens:check · agents:check · types:check | in force | closed |
-| TL-06 | candidate | S4 | “This wording is approved” | Unapproved claim ships to customers | claims:check | in force | closed |
-| TL-07 | candidate | S2 | “The architecture is respected” | Boundary crossed; coupling sets in | deps:check · lint:i18n | in force | closed |
-| TL-08 | candidate | S4 | “The UI is accessible” | Keyboard and screen reader locked out | a11y:check (axe-core) | in force | closed |
-| TL-09 | evidenced | S4 | “The tests are good” | Suite passes with the logic deleted | mutation + property testing | not built | open |
-| TL-10 | evidenced | S3 | “I didn’t game the tests” | Optimised for the suite, not the job | Held-out suite | not provisioned | open |
+| ID | Evidence | Sev | Claim | What it costs if it’s wrong | Control applied | Availability |
+| --- | --- | --- | --- | --- | --- | --- |
+| TL-01 | candidate | S3 | “The tests pass” | Test written to fit the code | CI test-write-protection check | available |
+| TL-02 | evidenced | S2 | “This is what I changed” | Account revised after the fact | Git diff and history check | available |
+| TL-04 | evidenced | S4 | “I verified it” | Never ran; the claim is the only proof | End-to-end · unit · pgTAP database tests | available |
+| TL-05 | evidenced | S3 | “The generated file is current” | Stale artefact; downstream built on it | Regenerate-and-byte-diff on generated files | available |
+| TL-06 | candidate | S4 | “This wording is approved” | Unapproved claim ships to customers | Approved-claims check on published wording | available |
+| TL-07 | candidate | S2 | “The architecture is respected” | Boundary crossed; coupling sets in | Dependency-boundary and i18n lint | available |
+| TL-08 | candidate | S4 | “The UI is accessible” | Keyboard and screen reader locked out | Automated accessibility scan (axe-core) | available |
+| TL-09 | evidenced | S4 | “The tests are good” | Suite passes with the logic deleted | mutation + property testing | available |
+| TL-10 | evidenced | S3 | “I didn’t game the tests” | Optimised for the suite, not the job | Held-out suite | available |
 
-Next action: NEXT BUILD — build the two missing suites: property tests; provision the held-out suite. Catches drift and regression on every commit. Proves that behaviour was executed, never that the design was the right one.
+What this class buys, and what it does not: executable evidence catches drift and regression on every commit, and proves that behaviour was executed — never that the design was the right one. Which of these suites exists in any particular environment is an assessment, not a property of the class.
 
 ## Class C · Judgement (6 claims · no complete control · judgement remains)
 
 Conversion: **nothing converts it** — independent re-derivation (second-vendor audit, independent human review) reduces the risk without retiring it. Outcome: **survives — no tool retires it.** Gap owner: **you** — brief it decision by decision.
 
-| ID | Evidence | Sev | Claim | What it costs if it’s wrong | Control applied | Status | Gap |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| TL-03 | evidenced | S4 | “The audit was independent” | Same model graded its own work | Model-seat separation · partial | not on | open |
-| TL-11 | evidenced | S3 | “This finding is real” | Real defect dropped, phantom worked | Independent re-derivation | none | open |
-| TL-12 | candidate | S3 | “The data model is right” | Wrong boundary; migrations compound | Independent re-derivation | none | open |
-| TL-13 | candidate | S4 | “The RLS design is sound” | Green tests on a policy that leaks | second-vendor audit · human review | none | open |
-| TL-14 | evidenced | S4 | “This claim is safe to make” | Unsupportable claim published | Independent re-derivation | none | open |
-| TL-15 | candidate | S4 | “The remaining risk is acceptable” | Risk accepted that nobody chose | Independent re-derivation | none | open |
+| ID | Evidence | Sev | Claim | What it costs if it’s wrong | Control applied | Availability |
+| --- | --- | --- | --- | --- | --- | --- |
+| TL-03 | evidenced | S4 | “The audit was independent” | Same model graded its own work | Model-seat separation · partial | available |
+| TL-11 | evidenced | S3 | “This finding is real” | Real defect dropped, phantom worked | Independent re-derivation | none |
+| TL-12 | candidate | S3 | “The data model is right” | Wrong boundary; migrations compound | Independent re-derivation | none |
+| TL-13 | candidate | S4 | “The RLS design is sound” | Green tests on a policy that leaks | second-vendor audit · human review | none |
+| TL-14 | evidenced | S4 | “This claim is safe to make” | Unsupportable claim published | Independent re-derivation | none |
+| TL-15 | candidate | S4 | “The remaining risk is acceptable” | Risk accepted that nobody chose | Independent re-derivation | none |
 
-Next action: EVERY DECISION — brief it yourself: six claims, one judgement each. Class C is not a backlog. It is the part of the work that was never delegable. Verifying these needs independent judgement and, for TL-03, an externally enforced seat assignment before any narrower by-construction claim can be made.
+Each of these claims needs a judgement of its own, at every decision, briefed rather than delegated. Class C is not a backlog. It is the part of the work that was never delegable. Verifying these needs independent judgement and, for TL-03, an externally enforced seat assignment before any narrower by-construction claim can be made.
 
 ## The catch — an assertion and its evidence read identically
 

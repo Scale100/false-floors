@@ -24,7 +24,7 @@ For typos, broken links, clearer wording and mechanism details, a pull request i
 
 1. **Row IDs are stable and permanent.** `IL-3B` means the same failure for ever. A row can be reworded, re-mechanised or superseded, but never renumbered and never re-pointed at a different failure. Things outside this repository cite these IDs.
 2. **A mechanism claim needs to say where it runs.** "Add a rule to your instructions file" is not a mechanism unless something checks the rule was followed. A control nobody invokes catches nothing, and the catalogue treats asserted wiring and absent wiring as the same thing.
-3. **Say what is left over.** Every row states its gap – what it still does not cover. A change that improves a mechanism without updating the gap is incomplete.
+3. **Say what a control does not close.** A mechanism that improves a failure without closing it is the normal case, and the row has to be honest about the part that survives – that is what the outcome class grades, and a change that improves a mechanism without revisiting the class is incomplete. **What the catalogue does not carry is whether any of this is switched on in a particular environment.** That is a fact about one place on one date, it goes stale silently, and it belongs in an assessment rather than in a row.
 4. **Do not state counts in prose.** Totals live in the registers, and a document that states a count the registers disagree with is wrong by definition – the registers are the source. We check this with a script on our side; it is not in this repository yet, so for now the rule is a rule rather than a build failure.
 
 ## Credit
