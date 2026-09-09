@@ -4,7 +4,7 @@ project: agent-trust-framework
 title: Controls reference — what each named check asserts
 status: published
 date: 2026-09-06
-last-updated: 2026-09-06
+last-updated: 2026-09-09
 ---
 
 # Controls reference
@@ -46,6 +46,37 @@ pgTAP is a public open-source Postgres testing framework, not project code.
 | `verify:fast` | The fast pre-commit verification suite, into which individual gates are wired | Anything not wired into it — a gate that exists but is not called is C-34 |
 
 axe-core is a public open-source accessibility engine, not project code.
+
+## Human-control checks
+
+These controls apply only when an operator relies on human approval to constrain agent-produced software work. They are relevant to the **Regulated Delivery** applicability profile in D-271; a present control is not evidence that it is staffed, invoked or effective in a particular environment.
+
+| Control shape | Asserts | Does not catch |
+|---|---|---|
+| Decision-specific qualification check | The assigned reviewer's documented qualification matches the decision's declared technical and risk scope | Whether the reviewer understood the evidence or exercised competent judgement in this decision |
+| Decision-point evidence bundle | The reviewer received the declared change, test, risk and provenance evidence before the approval counts | Whether the supplied evidence is sufficient or correctly interpreted |
+| Protected qualified-capacity gate | Admitted work stays within the declared qualified reviewers and minimum inspection time for its risk class | Whether a reviewer uses the reserved time well or becomes unavailable later |
+| Override-authority check | The approval workflow affirmatively verifies that the assigned reviewer holds both reject and require-change permission | Whether another action route ignores that decision |
+| Decision-enforcement gate | Every release or mutation route reads the human decision and refuses a rejected or unresolved change | Whether the reviewer identifies the defect or has the competence to judge it |
+
+The same family enriches existing rows without duplicating them: code-labelling supports [PL-6D](provenance-layer.md); approval-policy completeness supports [IL-1E](instruction-layer.md); named reviewer availability supports [AL-4E](authority-access-layer.md); and decomposed confidence or oversight metrics support [TL-11](truth-layer.md). Four residual mechanisms are in the accepted row queue: decision-specific competence (TL-16 proposed), evidence at the decision point (PL-3G proposed), protected qualified capacity (AL-4H proposed) and effective override authority (AL-4I proposed). A fifth application, causal stop/change enforcement, is already covered by [IL-4E](instruction-layer.md) and [AL-4A](authority-access-layer.md): their destination-side gate is the mechanism that makes a recorded human decision bind every route.
+
+## Execution and Capability control patterns
+
+These controls are oracle-shaped. A named pattern is not evidence until it runs against the declared unit and conditions.
+
+| EC rows | Control pattern | Receipt must show | Does not establish |
+|---|---|---|---|
+| EC-06, EC-07 | Time bound plus workflow enumeration | Declared bound, wedge result and enumerated job set | Functional correctness of a completed job |
+| EC-08, EC-15 | Capability and configuration preflight | Required capability or configuration contract and refusal or hermetic-start result | The later functional postcondition |
+| EC-09 | Environment-health sentinel | Dependency failure, invalid-run marker and refusal to emit a product result | Normal dependency health |
+| EC-10, EC-11 | Executable postcondition and adversarial invariant tests | Requirement or invariant, test input and observed effect | Completeness of an unspecified requirement |
+| EC-12 | Resource budget and load test | Budget, load shape and observed time, memory, quota and concurrency | Fleet allocation policy |
+| EC-13, EC-14 | Contract and boundary-validation tests | Interface semantics or invalid inputs, version and effect result | Trustworthiness of an external source |
+| EC-16 | Sequenced delivery test | Seed order, consumer observations and loss, duplicate and ordering verdict | Whether the delivery policy was complete |
+| EC-17, EC-18 | Dependency-permutation and conflict tests | Dependency graph or isolation predicate and concurrent trace | A business-level postcondition not included in the predicate |
+| EC-19 | Freshness or version fence | Observation version, delay or supersession fault and refusal or re-read | Freshness of a claim about a verifier report |
+| EC-20 | Retry and amplification budget test | Injected fault, attempt and effect identifiers and bounded count | Ordinary single-attempt delivery ordering |
 
 ## How to read an `available` row
 

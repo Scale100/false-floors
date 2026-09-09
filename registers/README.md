@@ -6,19 +6,25 @@ Figma file: `9KIzmsPS1EzWNQiOFKjWzX` (**Diagrams**), page **Page 1**, frame **LI
 
 | Register | Question it asks | Unit of life | Prefix | Figma node | Rows | Evidenced · candidate | State (A·B·C) |
 |---|---|---|---|---|---|---|---|
-| [instruction-layer](instruction-layer.md) | Did it do what it was told? | a rule | IL | `1:2930` (rev 3) | 22 | 8 · 14 | 2 · 12 · 8 |
-| [context-layer](context-layer.md) | Did it know what it needed to know? | a fact | CL | `1:3839` (rev 2) | 22 | 12 · 10 | 0 · 14 · 8 |
-| [authority-access-layer](authority-access-layer.md) | What could it reach? | a permission | AL | `1:3386` (rev 2) | 23 | 16 · 7 | 2 · 14 · 7 |
-| [recovery-layer](recovery-layer.md) | Can you get it back? | a change | RL | `1:4294` (rev 2) | 24 | 11 · 13 | 4 · 10 · 10 |
-| [provenance-layer](provenance-layer.md) | Is the record of what was done trustworthy? | a unit of work | PL | `1:5011` (rev 2) | 22 | 12 · 10 | 3 · 14 · 5 |
-| [truth-layer](truth-layer.md) | Can its claims about its own work be trusted? | a claim | TL | `1:4767` (rev 2) | 15 | 8 · 7 | 0 · 9 · 6 |
-| execution-capability-layer | Which required properties were violated or absent, and what was observed? | an execution-property assessment | EC | none | 4 | *n/a – incident-derived by construction* | *n/a – no class letters* |
+| [instruction-layer](instruction-layer.md) | Did it do what it was told? | a rule | IL | `1:2930` (rev 3) | 23 | 15 · 8 | 2 · 12 · 9 |
+| [context-layer](context-layer.md) | Did it know what it needed to know? | a fact | CL | `1:3839` (rev 2) | 23 | 16 · 7 | 0 · 14 · 9 |
+| [authority-access-layer](authority-access-layer.md) | What could it reach? | a permission | AL | `1:3386` (rev 2) | 24 | 22 · 2 | 2 · 14 · 8 |
+| [recovery-layer](recovery-layer.md) | Can you get it back? | a change | RL | `1:4294` (rev 2) | 24 | 19 · 5 | 3 · 10 · 11 |
+| [provenance-layer](provenance-layer.md) | Is the record of what was done trustworthy? | a unit of work | PL | `1:5011` (rev 2) | 22 | 14 · 8 | 3 · 14 · 5 |
+| [truth-layer](truth-layer.md) | Can its claims about its own work be trusted? | a claim | TL | `1:4767` (rev 2) | 15 | 10 · 5 | 0 · 9 · 6 |
+| execution-capability-layer | Do declared software properties hold? | a testable execution property of a declared software unit | EC | none | 15 | 4 · 11 | *n/a – property outcomes are oracle-specific* |
 
-**The State column is A · B · C for every row of this table**, so the six are comparable and the column sums. Read each register's own words off the class-reading table below: Recovery's B · C are recoverable · irreversible, and the other five are detected · survives. The six registers hold 128 rows in total: 11 Class A · 73 Class B · 44 Class C – stated in letters, because no single register's words are true of all six. (Before the D-106 retirement pass of 2026-08-21 the total read 134: six rows were retired or merged, each recorded in its register's own Retired rows section.)
+**The State column is A · B · C for every row of this table**, so the six are comparable and the column sums. Read each register's own words off the class-reading table below: Recovery's B · C are recoverable · irreversible, and the other five are detected · survives. The six registers hold 131 rows in total: 10 Class A · 73 Class B · 48 Class C – stated in letters, because no single register's words are true of all six. (Before the D-106 retirement pass of 2026-08-21 the total read 134: six rows were retired or merged, each recorded in its register's own Retired rows section.)
 
-**The headline count is 67 evidenced rows — never 128 (D-107).** Every row carries an evidence status, and the split per register is the Evidenced · candidate column above: **67 evidenced · 61 candidate** across the six. A published count of the framework's failure modes counts the evidenced rows only; candidates are published and labelled, and stated alongside, never inside, the headline number. `check-registers.py` derives the receipts and fails on any row whose marker disagrees with them.
+**The headline count is 96 evidenced rows — never 131 (D-107).** Every row carries an evidence status, and the split per register is the Evidenced · candidate column above: **96 evidenced · 35 candidate** across the six. A published count of the framework's failure modes counts the evidenced rows only; candidates are published and labelled, and stated alongside, never inside, the headline number. `check-registers.py` derives the receipts and fails on any row whose marker disagrees with them.
 
-**The seventh register is no longer a stub, and its four rows are deliberately outside that 128.** execution-capability-layer carries `EC-06` and `EC-07`, derived on 2026-08-19, and `EC-08` and `EC-09`, derived on 2026-08-21 — two live incidents, coded against the contract's own row schema. **They are not addable to any total or distribution on this page.** The contract's schema has no class letter, no outcome class, no catch point and no tool tier, so there is nothing for the A · B · C column to hold and nothing for the cross-register sum to absorb; its State cell reads *n/a* rather than a dash, so that no later reader takes an empty cell for an unfilled one. Its own `result` and `gap` vocabulary is defined in the contract, not here, and its `EC-01` to `EC-05` remain calibration cases in the contract rather than rows.
+**The seventh register is a declared-property taxonomy and remains outside the 131-row Class A/B/C total.** execution-capability-layer carries the four receipt-backed incident properties `EC-06` to `EC-09` and eleven oracle-defined candidates `EC-10` to `EC-20`. EC outcomes are property-specific, so they are not added to the aligned registers' remedy distribution. `EC-01` to `EC-05` remain calibration cases in the historical contract, not register rows. Applicability and its denominator are defined in applicability-profiles.
+
+## Adjacent candidate category: Component Integrity
+
+`component-integrity-candidate.json` holds a compact category with the unit **a declared component-to-runtime binding**. It contains two independently reviewed, still-unaccepted row applications: runtime component identity mismatch and missing artifact-provenance authentication. Both apply to the Connected Coding profile under D-271. A third proposal, component contract drift, was rejected from this category and referred to Execution and Capability.
+
+This is not an eighth register. It has no final row IDs, no catalogue version and no denominator. Its checker fails if a proposed row is promoted without a receipt, if its Execution and Capability boundary disappears, or if candidate IDs leak into generated or public catalogue surfaces. The exact applications, enumeration and review receipt are in research 97.
 
 ## Row ID rules
 
@@ -29,7 +35,7 @@ Figma file: `9KIzmsPS1EzWNQiOFKjWzX` (**Diagrams**), page **Page 1**, frame **LI
 
 Rows and prose here cite identifiers of the form **`C-nn`** and **`D-nnn`**. They are entries in this project's **Corrections Register** (its own defect list) and **Decision Log**, and **neither of those files is published**. They are cited so that every claim in these registers has a checkable provenance on our side; they are not links, and following them is not possible from the published catalogue.
 
-They are kept rather than stripped because a claim whose origin is named is more honest than one asserted flat, even when the reader cannot open the source. Where the substance matters to an outside reader it is stated in the row itself, not left to the citation. `EC-nn` refers to the Execution and Capability register, also unpublished — see the note above on why it is held back.
+They are kept rather than stripped because a claim whose origin is named is more honest than one asserted flat, even when the reader cannot open the source. Where the substance matters to an outside reader it is stated in the row itself, not left to the citation. `EC-nn` refers to the public Execution and Capability register; its detailed incident evidence, row applications, miss reasons and oracle receipts remain internal.
 
 ## Shared vocabulary
 
@@ -64,7 +70,7 @@ What this does **not** fix: the catch ladder still mixes four kinds of position 
 
 Three rules follow, all enforced or exercised by `check-registers.py`:
 
-1. **Headline counts count evidenced rows only.** On the receipts as at 2026-08-25 that is 67 evidenced · 61 candidate. The evidenced number moves only when a receipt lands or a row retires, so it is grounded by construction.
+1. **Headline counts count evidenced rows only.** On the receipts as at 2026-09-10 that is 96 evidenced · 35 candidate, of which 29 rest on a public field case filed in `research/98-public-field-cases-2026-09-09.md` and derived from its `⟪field-case⟫` markers. The evidenced number moves only when a receipt lands or a row retires, so it is grounded by construction.
 2. **The marker is derived, not asserted.** The checker re-derives the receipt sets from the Corrections Register and the run-22 table on every run and fails on any row whose Evidence cell disagrees — in either direction, because an understated 66 is as wrong as an overstated one.
 3. **Promotion and decay.** A candidate is promoted by its first receipt. A candidate that a stated review window passes over with no instance, no corpus match and no field case is retired to the candidate pen ([truth-layer](truth-layer.md), "Candidate rows, not yet evidenced" — the pen holds gaps that are not yet rows, which is one step below a published candidate row).
 

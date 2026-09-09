@@ -16,7 +16,7 @@ The last part is the point. Most published guidance tells you what to do. This t
 
 | | |
 |---|---|
-| `registers/*-layer.md` | The catalogue itself, as markdown. Six registers, one per question. A seventh question – execution and capability – has a register still in derivation; it is not included in this release, and it is counted in nothing here. |
+| `registers/*-layer.md` | The catalogue itself, as markdown. Six registers classify failure mechanisms by remedy; Execution and Capability is a seventh property register with its own oracle and applicability vocabulary. |
 | `registers/README.md` | How to read a row: the columns, the class letters, the evidence labels, and the two registers that read their class words differently. |
 | `METHODOLOGY.md` | How the rows were derived, what a row has to prove before it is counted, how the set has been tested, the prediction record, and what we already know is wrong with it. |
 
@@ -58,6 +58,7 @@ Two licences, because code and catalogue get reused differently.
 - **It is not a certification, a score, or a pass mark.** There is no badge that says you are safe.
 - **The evidence base is stated per row, not asserted in general.** Rows record whether a failure has actually been seen and recorded, or is derived. Do not read an entry as a field-frequency claim.
 - **Counts are in the registers, not in this file**, on purpose. Numbers copied by hand between documents go stale, and this catalogue has been bitten by exactly that. The registers are the source; a page that disagrees with them is a defect in the page.
+- **Component and supply-chain integrity is under review, not yet a row.** Tool poisoning and a compromised MCP server sit there. Two candidate mechanisms have been named. No row has been written. No date is promised.
 
 ---
 

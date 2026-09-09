@@ -13,15 +13,15 @@ question: Did it know what it needed to know?
 unit: a fact
 figma-node: "115:2"
 figma-file: 9KIzmsPS1EzWNQiOFKjWzX
-rows: 22
+rows: 23
 class-a: 0
 class-b: 14
-class-c: 8
+class-c: 9
 class-a-reads: prevented
 class-b-reads: detected
 class-c-reads: survives
-evidenced: 12
-candidate: 10
+evidenced: 16
+candidate: 7
 derived: 2026-08-06 — rows enumerated against one coding-agent harness and one production codebase (project-alpha); this register is an enumeration rather than an incident inventory, and its evidence column says which rows have since been confirmed
 gap-basis: derived from outcome x built state on 2026-08-09 (D-061); substitutes and partial closures entered by hand only where evidenced
 date: 2026-08-07
@@ -53,15 +53,16 @@ Column key: **Evidence** — `evidenced` (at least one receipt: a first-party in
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CL-2A | evidenced | S4 | Nobody looked; the answer came from training | “Confident answer, no file opened” | Ground every factual answer in a read | pre-tool | A prior read cannot bind a natural-language claim to evidence | Claude Code · Claude Code · automatic · available | C survives |
 | CL-2B | evidenced | S3 | The search terms did not match the wording | “The note exists and was never found” | Index the old names, not only the current ones | on disk | Naming changelog resolves every retired path | Alias index · any runtime · maintained · available | B detected |
-| CL-2C | candidate | S3 | Retrieved, then compacted away | “Cited it early, contradicted it late” | Re-inject the working set after compaction | compact | PostCompact hook re-reads the open files | Claude Code · Claude Code · automatic · available | B detected |
+| CL-2C | evidenced | S3 | Retrieved, then compacted away | “Cited it early, contradicted it late” | Re-inject the working set after compaction | compact | PostCompact hook re-reads the open files | Claude Code · Claude Code · automatic · available | B detected |
 
-## Stage 3 · TRUSTED — is what came back actually true? (0 prevented · 1 detected · 2 survive)
+## Stage 3 · TRUSTED — is what came back actually true? (0 prevented · 1 detected · 3 survive)
 
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CL-3A | evidenced | S3 | Someone’s claim was read as established fact | “Quoted a vendor’s framing as a finding” | Every claim carries who said it, and when | prompt | Source-attribution convention inside the note | none · any runtime · process · none | C survives |
 | CL-3B | evidenced | S4 | An absence was reported as a finding | “Nothing covers this” — one grep settles it | Prove a negative before you relay it | prompt | Show-the-search convention: name where you looked | none · any runtime · process · none | C survives |
 | CL-3C | evidenced | S3 | The index was checked instead of the artefact | “The register row was right, the file was wrong” | Verify the work, not the thing describing it | CI | CI diffs the register against the files it names | CI · any runtime · maintained · available | B detected |
+| CL-3D | evidenced | S4 | Durable memory accepted a write whose content origin or integrity was not verified | “The next session trusted a note an untrusted document wrote” | Verify the origin of what is persisted, and its integrity, before persistence | pre-tool | Memory-write admission checks source lineage, integrity, not summaries | signed memory store with origin tagging · connected runtimes · maintained · available | C survives |
 
 ## Stage 4 · USED — did it change what was produced? (0 prevented · 3 detected · 2 survive)
 
@@ -69,7 +70,7 @@ Column key: **Evidence** — `evidenced` (at least one receipt: a first-party in
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CL-4A | candidate | S3 | The right file was read and then ignored | “Opened it, then wrote something else” | Make the output cite the file it used | CI | Citation check on every generated document | CI · any runtime · maintained · available | B detected |
 | CL-4B | evidenced | S3 | A trained default overrode the retrieved fact | “Used the standard figure, not yours” | Name the specific wrong value to block | pre-commit | Banned-value grep gate, run pre-commit | Grep gate · any runtime · maintained · available | B detected |
-| CL-4C | candidate | S4 | A gap was filled by inference, not a question | “Plausible number, no source” | Mark unknowns; never estimate silently | prompt | Unsourced-figure convention in the draft | none · any runtime · process · none | C survives |
+| CL-4C | evidenced | S4 | A gap was filled by inference, not a question | “Plausible number, no source” | Mark unknowns; never estimate silently | prompt | Unsourced-figure convention in the draft | none · any runtime · process · none | C survives |
 | CL-4D | candidate | S3 | Context from one project leaked into another | “Applied one client’s rule to another” | Scope the knowledge, and test the boundary | on disk | Directory-scoped context files | Rule file · most runtimes · maintained · available | B detected |
 | CL-4E | candidate | S4 | A qualified finding was used without its caveat | “The hedge was dropped on the way through” | Carry the confidence marker with the fact | on disk | Verification status travels with the claim | none · any runtime · process · none | C survives |
 
@@ -88,15 +89,15 @@ Not a sixth step. This band applies across stages 1 to 5 — each row asks wheth
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CL-6A | evidenced | S4 | The wrong fact is invisible in the output | “Reads perfectly, is factually wrong” | A check per load-bearing fact, or accept none | on disk | Schema finds facts with no check, not wrong facts | Schema lint · any runtime · maintained · available | C survives |
-| CL-6B | candidate | S4 | It reports a source it never opened | “Cited a file that was never read” | Compare citations against the read log | stop | Cited files diffed against the session read log | CI · Claude Code · automatic · available | B detected |
+| CL-6B | evidenced | S4 | It reports a source it never opened | “Cited a file that was never read” | Compare citations against the read log | stop | Cited files diffed against the session read log | CI · Claude Code · automatic · available | B detected |
 
 ## Catch-point distribution
 
-Before it starts 11 · before the change 4 · still in the session 3 · after the session 4.
+Before it starts 11 · before the change 5 · still in the session 3 · after the session 4.
 
 | on disk | session start | prompt | pre-tool | subagent | post-tool | compact | stop | pre-commit | CI | review |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 10 | 1 | 3 | 1 | 0 | 0 | 1 | 2 | 2 | 2 | 0 |
+| 10 | 1 | 3 | 2 | 0 | 0 | 1 | 2 | 2 | 2 | 0 |
 
 Read left to right: how much has already happened by the time the failure is caught. The work is to move each row left.
 
@@ -112,24 +113,27 @@ Read left to right: how much has already happened by the time the failure is cau
 
 ## What that buys
 
-Of 22 failures: none are prevented, 14 are detected, and 8 survive. 17 name a tool or an automated check; five are convention only. Naming a mechanism is not installing it, and whether it is installed anywhere is not a fact this catalogue carries. Install state is an assessment fact — one environment, on a date — and lives in `../assessments/` (D-263). A live connection being available does not force the agent to use its result, which is why availability and outcome are separate columns here.
+Of 23 failures: none are prevented, 14 are detected, and 9 survive. 18 name a tool or an automated check; five are convention only. Naming a mechanism is not installing it, and whether it is installed anywhere is not a fact this catalogue carries. Install state is an assessment fact — one environment, on a date — and lives in `../assessments/` (D-263). A live connection being available does not force the agent to use its result, which is why availability and outcome are separate columns here.
 
 Evidence status (D-107): 12 of the 22 are evidenced — a recorded incident or corpus-coded finding has landed on the row — and 10 are candidates, enumerated in advance and still waiting for their receipt.
 
-## The eight that still reach you
+## The nine that still reach you
 
 - CL-1D — a rule for which of two notes is current
 - CL-2A — a claim channel that binds an assertion to the evidence for it
 - CL-3A — a check that a claim carries its source
 - CL-3B — a check that an absence was actually searched
+- CL-3D — a check that persisted content's origin and integrity were verified before it was trusted
 - CL-4C — a check that a figure came from somewhere
 - CL-4E — a check that a caveat travelled with the fact
 - CL-5B — a generated view bound to the system of record, not a copy of it
 - CL-6A — a check that fires on a fact that is simply wrong
 
-Five are conventions you have to remember — nothing runs. Two need a mechanism that does not exist yet: a claim channel that carries its evidence, and a view bound to the live source rather than to a copy of it. The eighth has a check that watches a proxy: it finds facts with no check, never a fact that is wrong.
+Five are conventions you have to remember — nothing runs. Three need a mechanism that does not exist yet: a claim channel that carries its evidence, a memory write that verifies what it is persisting, and a view bound to the live source rather than to a copy of it. The ninth has a check that watches a proxy: it finds facts with no check, never a fact that is wrong.
 
 *This section listed six until 2026-09-05, omitting CL-2A and CL-5B. Both moved to `C survives` when a prior read was found not to bind a claim to its evidence, and an available connector was found not to force its use. Same drift as the authority register's own list, corrected the same day: the rows moved and the summary did not.*
+
+*CL-3D added 2026-09-10, FF-2026.3: regraded from the queue's proposed `A prevented` to `C survives` before drain and widened from unauthenticated-or-tampered writes to content origin or integrity, because every published memory-poisoning case is the product's own memory tool persisting injected content (row queue, D-274, D-275).*
 
 ## Reading notes
 

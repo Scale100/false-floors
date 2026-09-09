@@ -20,8 +20,8 @@ class-c: 6
 class-a-reads: prevented
 class-b-reads: detected
 class-c-reads: survives
-evidenced: 8
-candidate: 7
+evidenced: 10
+candidate: 5
 derived: 2026-08-06 — rows describe project-alpha’s check suite; row IDs are assigned by this register, and the diagram adopted the TL-prefixed IDs at rev 2 on 2026-08-09, replacing its 1–15 claim numbers
 gap-basis: derived from outcome x built state on 2026-08-09 (D-061); substitutes and partial closures entered by hand only where evidenced
 date: 2026-08-07
@@ -52,7 +52,7 @@ Conversion: **execute it, then diff it** — commit the output, not the claim. O
 | TL-02 | evidenced | S2 | “This is what I changed” | Account revised after the fact | Git diff and history check | available |
 | TL-04 | evidenced | S4 | “I verified it” | Never ran; the claim is the only proof | End-to-end · unit · pgTAP database tests | available |
 | TL-05 | evidenced | S3 | “The generated file is current” | Stale artefact; downstream built on it | Regenerate-and-byte-diff on generated files | available |
-| TL-06 | candidate | S4 | “This wording is approved” | Unapproved claim ships to customers | Approved-claims check on published wording | available |
+| TL-06 | evidenced | S4 | “This wording is approved” | Unapproved claim ships to customers | Approved-claims check on published wording | available |
 | TL-07 | candidate | S2 | “The architecture is respected” | Boundary crossed; coupling sets in | Dependency-boundary and i18n lint | available |
 | TL-08 | candidate | S4 | “The UI is accessible” | Keyboard and screen reader locked out | Automated accessibility scan (axe-core) | available |
 | TL-09 | evidenced | S4 | “The tests are good” | Suite passes with the logic deleted | mutation + property testing | available |
@@ -69,7 +69,7 @@ Conversion: **nothing converts it** — independent re-derivation (second-vendor
 | TL-03 | evidenced | S4 | “The audit was independent” | Same model graded its own work | Model-seat separation · partial | available |
 | TL-11 | evidenced | S3 | “This finding is real” | Real defect dropped, phantom worked | Independent re-derivation | none |
 | TL-12 | candidate | S3 | “The data model is right” | Wrong boundary; migrations compound | Independent re-derivation | none |
-| TL-13 | candidate | S4 | “The RLS design is sound” | Green tests on a policy that leaks | second-vendor audit · human review | none |
+| TL-13 | evidenced | S4 | “The RLS design is sound” | Green tests on a policy that leaks | second-vendor audit · human review | none |
 | TL-14 | evidenced | S4 | “This claim is safe to make” | Unsupportable claim published | Independent re-derivation | none |
 | TL-15 | candidate | S4 | “The remaining risk is acceptable” | Risk accepted that nobody chose | Independent re-derivation | none |
 

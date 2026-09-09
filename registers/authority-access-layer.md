@@ -13,15 +13,15 @@ question: What could it reach?
 unit: a permission
 figma-node: "98:2"
 figma-file: 9KIzmsPS1EzWNQiOFKjWzX
-rows: 23
+rows: 24
 class-a: 2
 class-b: 14
-class-c: 7
+class-c: 8
 class-a-reads: prevented
 class-b-reads: detected
 class-c-reads: survives
-evidenced: 16
-candidate: 7
+evidenced: 22
+candidate: 2
 derived: 2026-08-06 — rows read from project-alpha’s security register; every row either happened there once or is a control gap recorded against it
 gap-basis: derived from outcome x built state on 2026-08-09 (D-061); substitutes and partial closures entered by hand only where evidenced
 date: 2026-08-07
@@ -40,8 +40,8 @@ This layer adds the **authority** column: unbypassable means the control runs be
 
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Authority | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AL-1A | candidate | S4 | Nobody listed what the session can reach | “It had the token because you were logged in” | Inventory every credential a local process can use | on disk | Nothing reads what this machine is logged in to | none | none · any runtime · process · none | C survives |
-| AL-1B | candidate | S2 | The limit lives in the prompt, not in a policy | “I told it not to touch production” | Put every “do not touch” beyond the writable surface | pre-tool | A deny rule in a file the agent can edit is not a boundary | bypassable | Claude Code · Claude Code · automatic · available | C survives |
+| AL-1A | evidenced | S4 | Nobody listed what the session can reach | “It had the token because you were logged in” | Inventory every credential a local process can use | on disk | Nothing reads what this machine is logged in to | none | none · any runtime · process · none | C survives |
+| AL-1B | evidenced | S2 | The limit lives in the prompt, not in a policy | “I told it not to touch production” | Put every “do not touch” beyond the writable surface | pre-tool | A deny rule in a file the agent can edit is not a boundary | bypassable | Claude Code · Claude Code · automatic · available | C survives |
 | AL-1C | evidenced | S3 | The comment and the grant say different things | “The comment says service_role only” | Generate the doc from the grant; never restate it | CI | CI diffs the stated grant against the shipped one | unbypassable | CI · any runtime · maintained · available | B detected |
 | AL-1D | evidenced | S1 | A default grant nobody chose | “PUBLIC could run it the day it was created” | Revoke explicitly; never rely on a default | pre-commit | Lint fails a new function with no explicit revoke | unbypassable | Grant lint · any runtime · automatic · available | B detected |
 | AL-1E | evidenced | S3 | It runs as its author, so policy is not the judge | “Row security never gets a say in this call” | List every definer function and who may call it | CI | CI lists definer functions and their grantees | unbypassable | Grant lint · any runtime · automatic · available | B detected |
@@ -52,7 +52,7 @@ This layer adds the **authority** column: unbypassable means the control runs be
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Authority | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AL-2A | evidenced | S4 | The session holds more than the task needs | “Read-only work, write-capable credentials” | Issue the narrowest credential the task can use | session start | Nothing checks which key the session picked up | none | none · any runtime · process · none | C survives |
-| AL-2B | candidate | S4 | One admin flag bypasses the whole rule | “Admin can, so the rule does not apply” | Write the exception as a policy, not a bypass | CI | A test asserts admin cannot reverse a one-way step | unbypassable | pgTAP · any runtime · automatic · available | B detected |
+| AL-2B | evidenced | S4 | One admin flag bypasses the whole rule | “Admin can, so the rule does not apply” | Write the exception as a policy, not a bypass | CI | A test asserts admin cannot reverse a one-way step | unbypassable | pgTAP · any runtime · automatic · available | B detected |
 | AL-2C | evidenced | S4 | A reach path across tenants nobody tested | “Descent reaches further than you thought” | Prove every reach path, including assumed ones | CI | The isolation matrix has a cell for every path | unbypassable | pgTAP · any runtime · automatic · available | B detected |
 
 ## Stage 3 · REACHABLE — is there a route around the gate? (1 prevented · 1 detected · 1 survives)
@@ -67,22 +67,23 @@ This layer adds the **authority** column: unbypassable means the control runs be
 
 *Until 2026-09-06 this paragraph said RL-1E reads `A prevented · closed` and used that as the contrast with AL-3C. D-080 moved RL-1E to `C irreversible · open` on 10 August 2026 and explicitly narrowed D-074's worktree claim; [recovery-layer](recovery-layer.md) and [provenance-layer](provenance-layer.md) were both updated to say all three remain open, and this note was not. The distinction between the three rows was never the verdict — it is which question each register asks.*
 
-## Stage 4 · ENFORCED — will anything actually refuse it? (1 prevented · 2 detected · 2 survive)
+## Stage 4 · ENFORCED — will anything actually refuse it? (1 prevented · 2 detected · 3 survive)
 
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Authority | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AL-4A | evidenced | S4 | The gate runs on the route it did not take | “Straight to main, so nothing ran” | Gate the destination, not the polite route to it | pre-commit | Required checks sit on the branch, not on the PR | unbypassable | GitHub · any runtime · automatic · available | A prevented |
 | AL-4B | evidenced | S4 | The check asks a different question | “It shipped a test with it, so it passed” | An authorisation control must check authorisation | CI | The guard reads the diff for policy and grant changes | unbypassable | CI guard · any runtime · automatic · available | B detected |
-| AL-4C | candidate | S3 | Asked for a report, it edited the repository | “You asked for a report; it wrote a migration” | Deny the write; do not request restraint | pre-tool | A prompt asks for restraint; nothing refuses the write | bypassable | Claude Code · Claude Code · automatic · available | C survives |
+| AL-4C | evidenced | S3 | Asked for a report, it edited the repository | “You asked for a report; it wrote a migration” | Deny the write; do not request restraint | pre-tool | A prompt asks for restraint; nothing refuses the write | bypassable | Claude Code · Claude Code · automatic · available | C survives |
 | AL-4D | evidenced | S4 | The log’s guard can be dropped by what it logs | “An owner can drop the trigger” | Ship the log off the platform that writes it | review | The audit trail is defended by the thing it audits | bypassable | none · any runtime · process · none | C survives |
 | AL-4E | candidate | S2 | The approval gate with nobody to approve | “Review required, zero reviewers required” | Say plainly which gates are structural only | pre-commit | A pull request is required; a second reader is not | bypassable | GitHub · any runtime · automatic · available | B detected |
+| AL-4F | evidenced | S4 | A permitted read became an unauthorised disclosure | “It could read the record, then pasted it somewhere else” | Authorise output destinations as well as reads | pre-tool | Egress policy rejects known recipients, fields, shapes off-grant | unbypassable | DLP/egress policy · connected runtimes · maintained · available | C survives |
 
 ## Stage 5 · HELD — does the boundary survive the session? (0 prevented · 3 detected · 0 survive)
 
 | ID | Evidence | Sev | Failure | Shows up as | Prevention | Catch | Mechanism | Authority | Tool | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AL-5A | evidenced | S3 | The grant outlives the reason for it | “Still visible long after they left” | Bound each grant to the window that justifies it | CI | A test asserts the grant expires with the window | unbypassable | pgTAP · any runtime · automatic · available | B detected |
-| AL-5B | candidate | S2 | A subagent inherits more than its brief | “The child could write what the parent could” | Give the child its own tools, not the parent’s | subagent | The tool list is a file the agent can also edit | bypassable | Claude Code · Claude Code · automatic · available | B detected |
+| AL-5B | evidenced | S2 | A subagent inherits more than its brief | “The child could write what the parent could” | Give the child its own tools, not the parent’s | subagent | The tool list is a file the agent can also edit | bypassable | Claude Code · Claude Code · automatic · available | B detected |
 | AL-5C | candidate | S3 | An accepted risk becomes a forgotten one | “We decided to live with it, once” | Every acceptance carries a named reopen trigger | review | A register field, only as good as the reading of it | bypassable | Register · any runtime · maintained · available | B detected |
 
 ## Assurance · CHECKED — would you find out that it crossed? (0 prevented · 2 detected · 1 survives)
@@ -97,11 +98,11 @@ Not a sixth step. This band applies across stages 1 to 5 — each row asks wheth
 
 ## Catch-point distribution
 
-Before it starts 4 · before the change 3 · still in the session 0 · after the session 16.
+Before it starts 4 · before the change 4 · still in the session 0 · after the session 16.
 
 | on disk | session start | prompt | pre-tool | subagent | post-tool | compact | stop | pre-commit | CI | review |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 3 | 0 | 2 | 1 | 0 | 0 | 0 | 4 | 8 | 4 |
+| 1 | 3 | 0 | 3 | 1 | 0 | 0 | 0 | 4 | 8 | 4 |
 
 Nothing in this layer is caught while the session is still running — authority is settled before the agent starts, or discovered after it has finished. The work is to move each row left.
 
@@ -118,11 +119,11 @@ Nothing in this layer is caught while the session is still running — authority
 
 ## What that buys
 
-Of 23 failures: 2 are prevented, 14 are detected, and 7 survive. 18 name a tool or an automated check; five are process only. Naming a mechanism is not installing it, and whether it is installed anywhere is not a fact this catalogue carries. Install state is an assessment fact — one environment, on a date — and lives in `../assessments/` (D-263).
+Of 24 failures: 2 are prevented, 14 are detected, and 8 survive. 19 name a tool or an automated check; five are process only. Naming a mechanism is not installing it, and whether it is installed anywhere is not a fact this catalogue carries. Install state is an assessment fact — one environment, on a date — and lives in `../assessments/` (D-263).
 
 Evidence status (D-107): 16 of the 23 are evidenced — a recorded incident or corpus-coded finding has landed on the row — and 7 are candidates, enumerated in advance and still waiting for their receipt. This register carries the highest evidenced share of the six, which follows from its construction: every row was read off a live security register in the first place.
 
-## The seven that still reach you
+## The eight that still reach you
 
 - AL-1A — an inventory of what this machine can reach
 - AL-1B — a standing limit enforced outside the agent's writable surface
@@ -130,11 +131,14 @@ Evidence status (D-107): 16 of the 23 are evidenced — a recorded incident or c
 - AL-3C — a lock between two sessions writing one repository
 - AL-4C — a deny rule for a read-only pass, not a request for restraint
 - AL-4D — an audit log the audited system cannot drop
+- AL-4F — a policy that authorises where a permitted read may go, not only that the read happened
 - AL-6C — a way to tell a sanctioned change from a breach
 
-Five are about limiting what the agent can reach before it acts. Two are about telling afterwards what it did — an audit log it cannot drop, and a sanctioned change from a breach.
+Five are about limiting what the agent can reach before it acts. Three are about telling afterwards what it did, or where it sent what it read — an audit log it cannot drop, a permitted read's destination, and a sanctioned change from a breach.
 
 *This section listed six until 2026-09-05, omitting AL-1B, which moved to `C survives` when its deny rule was recorded as living in a file the agent can edit. The published spoke was corrected on 2026-08-17 and this register was not — the same register/summary drift class as C-50, in the opposite direction. AL-1B and AL-4C share one fix: a deny rule beyond the writable surface.*
+
+*AL-4F added 2026-09-10, FF-2026.3: regraded from the queue's proposed `A prevented` to `C survives` before drain, because an egress policy has nothing to refuse when the destination is a repository the agent legitimately writes to — the FC-01 GitHub MCP shape (row queue, D-274, D-275).*
 
 ## Reading notes
 

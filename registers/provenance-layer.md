@@ -20,8 +20,8 @@ class-c: 5
 class-a-reads: prevented
 class-b-reads: detected
 class-c-reads: survives
-evidenced: 12
-candidate: 10
+evidenced: 14
+candidate: 8
 derived: 2026-08-06 — rows describe project-alpha’s control set; row IDs are assigned by this register, and the diagram adopted them at rev 2 on 2026-08-09, having predated the ID scheme
 gap-basis: derived from cell strength gated on install state, corrected 2026-08-10 (C-02) — a `ONCE —` next action means the control is not switched on and the row reads open; otherwise any `closes` reads closed, else any `partial` reads partially closed, else open. This layer has no `built` field; the `ONCE —` next action is what stands in for one. Supersedes the "outcome x built state" basis recorded 2026-08-09 (D-061), which named a built state this layer never carried (C-03)
 date: 2026-08-07
@@ -41,7 +41,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 | ID | Evidence | Sev | What breaks | What it costs | Harness gate | Repo artefact | Control-plane check | Outcome |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-1A | evidenced | S3 | Agent starts blind to prior work | Redoes finished work, or reverses last session’s decision | partial — Session-start digest | partial — Open questions in the record | n/a | C survives |
-| PL-1C | candidate | S4 | Compaction drops a context-only decision | Silently reverts to a default you ruled out | partial — Checkpoint before compaction, then re-inject | closes — Decision log; constraints as files, not chat | n/a | B detected |
+| PL-1C | evidenced | S4 | Compaction drops a context-only decision | Silently reverts to a default you ruled out | partial — Checkpoint before compaction, then re-inject | closes — Decision log; constraints as files, not chat | n/a | B detected |
 
 **PL-1C is about the turn-30 problem, which its cell no longer has room to state.** The failure is not only that compaction drops a decision held solely in the context window. It is the ordinary shape that takes: a constraint agreed in turn 3 is gone by turn 30, and nothing in the session announces its departure, so the agent proceeds fluently on a rule it no longer holds. The clause moved here on 2026-09-07 when canon became the single wording for the register and the diagram; at 102 characters it wrapped its 374px column. The harness-gate cell shortened in the same pass, and "then re-inject" carries the point the longer wording spelled out: recalling the decision is not the same as putting it back in front of the agent.
 
@@ -51,7 +51,7 @@ This layer uses its own three control positions instead of the eleven catch poin
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PL-2A | candidate | S2 | Work done with no unit of work attached | Nobody can say later what it was for | closes — Require an active ticket | partial — Ticket committed with the code | partial — Assert every range has one | A prevented |
 | PL-2B | candidate | S4 | The gate only fires once a ticket is claimed | Never engaging reads as a clean pass | nothing — Cannot catch its own absence | n/a | closes — Check the merged range | B detected |
-| PL-2C | candidate | S2 | Scope quietly expands mid-task | Files changed that nobody asked about | partial — Declare scope up front | closes — Ticket states intended scope | closes — Diff touched files vs declared | B detected |
+| PL-2C | evidenced | S2 | Scope quietly expands mid-task | Files changed that nobody asked about | partial — Declare scope up front | closes — Ticket states intended scope | closes — Diff touched files vs declared | B detected |
 
 ## 3 · The record itself (1 prevented · 4 detected · 0 survive)
 
