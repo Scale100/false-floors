@@ -1,0 +1,42 @@
+{
+  "scheme": "FF-YYYY.N",
+  "schemeNote": "A catalogue version names a PUBLISHED SNAPSHOT of the catalogue, not the state of live canon. FF is the catalogue (False Floors), YYYY is the calendar year the release was cut, N is the release serial within that year, starting at 1 and never reset for any other reason. A version is allocated when a release is cut and is never re-allocated, re-dated or re-pointed. There is no major/minor split: the digits carry no claim about how much changed, because the diff between two versions is computed from the two snapshots and is exact, where a significance grade would be a judgement with no checker behind it.",
+  "unreleasedSuffix": "+",
+  "unreleasedNote": "Canon that is not itself a release cut stamps the most recent listed version with a trailing '+' — FF-2026.1+ reads 'not a release; the most recent release is FF-2026.1'. It is a statement about this file, NOT an ancestry claim about the commit: squash merges, rebases and deleted branches all break ancestry tests, which is the same reasoning that put canonBlobs alongside generatedFrom in extract-registers.mjs.",
+  "releases": [
+    {
+      "version": "FF-2026.1",
+      "date": "2026-09-02",
+      "commit": null,
+      "commitNote": "NOT RECORDED at the time, and not reconstructed from the vault log. false-floors/release-record.md says Release 1 was cut from vault main 'at the commit named in the assembly run', and that commit was not written down. A candidate is derivable from the log and is deliberately not entered as the pin: a derived commit presented as a record is the unfounded claim this file exists to prevent. WHAT THIS DOES AND DOES NOT COST. It does not lose the row set. The published repository is the durable copy — the six registers as shipped are readable at repoCommit, and 128 row IDs were recovered from them on 2026-09-07 (22 IL, 22 CL, 23 AL, 24 RL, 22 PL, 15 TL), matching canon's count exactly. What is lost is the ability to regenerate the normalised snapshot from OUR OWN history at that state, because register-data.json was held back from Release 1 (D-231) and no vault commit names the canon it was cut from. So diff-catalogue.py refuses --from FF-2026.1 rather than guessing, and the recovery path is to read the published registers at repoCommit — a one-off, not a standing capability.",
+      "repoCommit": "5cf20d5",
+      "note": "The catalogue and its method. Six published registers, registers/README.md, METHODOLOGY.md and the repository furniture — 19 files. Tooling, the trust-check tool, OPERATIONS.md, the view rationale and the Execution and Capability register all held back (D-231).",
+      "recoverableFrom": "github.com/Scale100/false-floors at repoCommit — the registers as shipped"
+    },
+    {
+      "version": "FF-2026.2",
+      "date": "2026-09-08",
+      "commit": "6c9b08e423a11e004de48cd6789e19805205ebb6",
+      "repoCommit": "b144178",
+      "repoCommitNote": "Full: b144178bd36c4068edf2f6579bebe39ce283f8a3. Tagged FF-2026.2 in the published repository.",
+      "note": "The first release cut from sanitised canon and from the catalogue/assessment split (D-262, D-263). The derivation codebase is no longer named anywhere in the published tree; the registers carry Availability rather than install state, and no Gap or Next action column; controls-reference.md ships for the first time. 20 files."
+    },
+    {
+      "version": "FF-2026.3",
+      "date": "2026-09-10",
+      "commit": "b1808ceda0bb3f485e4070d5ee0bccb994bc9fe4",
+      "repoCommit": "281b6b6c18b740170e49064c8ec9e76771260c05",
+      "repoCommitNote": "Tagged FF-2026.3 in the published repository.",
+      "note": "Small credibility release (D-275): drains three regraded rows — IL-6D (untrusted content accepted as an instruction), AL-4F (a permitted read became an unauthorised disclosure), CL-3D (durable memory accepted an unverified write) — plus the RL-1A and IL-5B repairs from the launch review. 128 rows -> 131 (10 A / 73 B / 48 C). Execution and Capability remains internal (D-275); assemble.sh no longer ships it unconditionally, a live risk flagged in S-0072 and fixed as part of this cut. 13 files (unchanged from FF-2026.2's shape, minus the EC listing that was never meant to ship)."
+    }
+  ],
+  "pendingForNextReleaseNote": "Work that is DONE IN CANON and not yet in a reader's hands. An entry here is discharged by setting dischargedIn to the version that published it — never by deleting the row, which is how the obligation would disappear silently. check-catalogue-version.py refuses a release dated after an undischarged entry's `raised` date, so the check fires at the moment of the next cut rather than sitting in prose somebody has to remember to read.",
+  "pendingForNextRelease": [
+    {
+      "id": "C-133",
+      "raised": "2026-09-10",
+      "dischargedIn": null,
+      "note": "The Figma file key was stripped from canon (registers/README.md and the figma-file: frontmatter of all six registers) but the LIVE published files still carry it, because canon changes do not reach a reader until a release is cut. Sholto deferred the cut to next week's Execution and Capability release rather than publishing twice in one day. Nothing further is owed in canon — assemble.sh's `figma file key` sweep assertion already refuses a build containing it, so the next release drops it by construction. This entry exists so the release is not cut without anyone noticing that is what it does."
+    }
+  ]
+}

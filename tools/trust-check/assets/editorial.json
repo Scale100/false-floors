@@ -1,0 +1,500 @@
+{
+  "QUESTIONS": [
+    {
+      "id": "permission-denies",
+      "title": "Are permission deny rules set for paths and actions the agent must never touch?",
+      "detail": "Include production-sensitive paths and genuinely read-only passes.",
+      "rowIds": [
+        "RL-2A",
+        "AL-1B",
+        "AL-4C"
+      ]
+    },
+    {
+      "id": "branch-protection",
+      "title": "Is branch protection enforced on the server, with direct push and force-push blocked and no owner bypass?",
+      "detail": "The deploy route and the destination branch must both be gated.",
+      "rowIds": [
+        "IL-4E",
+        "AL-3B",
+        "AL-4A",
+        "RL-4B",
+        "RL-2D"
+      ]
+    },
+    {
+      "id": "evidence-protection",
+      "title": "Are test files protected from agent edits, with Git history used as the account of what changed?",
+      "detail": "The agent should not be able to rewrite the evidence behind its own claim.",
+      "rowIds": [
+        "TL-01",
+        "TL-02"
+      ]
+    },
+    {
+      "id": "runtime-gates",
+      "title": "Do hooks gate tool use and the end of a turn?",
+      "detail": "Read before write or claim, destructive-command refusal, outbound confirmation, conversation capture and evidence checks.",
+      "rowIds": [
+        "IL-1B",
+        "IL-4C",
+        "CL-1A",
+        "CL-2A",
+        "CL-6B",
+        "RL-2C",
+        "RL-4E",
+        "PL-3A"
+      ]
+    },
+    {
+      "id": "session-continuity",
+      "title": "Does work carry safely into a new session and survive compaction?",
+      "detail": "Claude reloads root instructions itself. Check the prior-work digest, critical open files and end-of-session compliance.",
+      "rowIds": [
+        "IL-5A",
+        "CL-2C",
+        "PL-1A",
+        "PL-1C"
+      ]
+    },
+    {
+      "id": "ci-evidence",
+      "title": "Does CI require committed evidence and verify that its own checks ran?",
+      "detail": "Include test output, generated files, source-read evidence, merged-result checks and the missing stronger test suites.",
+      "rowIds": [
+        "IL-6B",
+        "CL-3C",
+        "CL-6B",
+        "PL-2B",
+        "PL-3E",
+        "PL-5C",
+        "TL-04",
+        "TL-05",
+        "TL-06",
+        "TL-07",
+        "TL-08",
+        "TL-09",
+        "TL-10"
+      ]
+    },
+    {
+      "id": "work-record",
+      "title": "Is the work record append-only, complete, and linked to task, scope, commits and landing state?",
+      "detail": "The ticket and model seat should travel with the code, and the published view should derive from the repository.",
+      "rowIds": [
+        "IL-4D",
+        "PL-2A",
+        "PL-2C",
+        "PL-3B",
+        "PL-3C",
+        "PL-3D",
+        "PL-4A",
+        "PL-5A",
+        "PL-5B",
+        "PL-6D",
+        "PL-6E"
+      ]
+    },
+    {
+      "id": "source-capture",
+      "title": "Are calls recorded and changing facts read live from their source?",
+      "detail": "Do not rely on memory, a discarded source, or a hand-maintained copy.",
+      "rowIds": [
+        "CL-1F",
+        "CL-1E",
+        "CL-5B"
+      ]
+    },
+    {
+      "id": "recovery",
+      "title": "Is every change outside Claude’s direct edits protected by a usable restore path?",
+      "detail": "Claude checkpoints direct edits automatically. Cover shell changes, tracked working folders, migration snapshots, reversal scripts and snapshot age.",
+      "rowIds": [
+        "RL-1B",
+        "RL-1C",
+        "RL-1D",
+        "RL-4C",
+        "RL-4D",
+        "RL-6B",
+        "RL-6C"
+      ]
+    },
+    {
+      "id": "agent-separation",
+      "title": "Are parallel writers isolated and independent review assigned to a different model seat?",
+      "detail": "Desktop sessions get separate worktrees automatically; CLI sessions and subagents need explicit isolation. Model-seat separation keeps the audit independent.",
+      "rowIds": [
+        "PL-6C",
+        "TL-03"
+      ]
+    }
+  ],
+  "INSTALL_GROUPS": [
+    {
+      "id": "permission-denies",
+      "title": "Permission deny rules",
+      "install": "Set deny rules for the writable surface and standing don’ts.",
+      "rowIds": [
+        "RL-2A",
+        "AL-1B"
+      ]
+    },
+    {
+      "id": "read-only-deny",
+      "title": "Claude Code Plan Mode",
+      "install": "Use Claude Code’s native Plan Mode for review-only work so the session can explore but cannot edit source files.",
+      "rowIds": [
+        "AL-4C"
+      ]
+    },
+    {
+      "id": "branch-protection",
+      "title": "Server-side branch protection",
+      "install": "Protect the destination branch, block direct and force pushes, and remove owner bypass.",
+      "rowIds": [
+        "IL-4E",
+        "AL-3B",
+        "AL-4A",
+        "RL-2D",
+        "RL-4B"
+      ]
+    },
+    {
+      "id": "destructive-hook",
+      "title": "Hard block destructive commands",
+      "install": "Add explicit deny rules or a PreToolUse hook for destructive project commands. This remains useful after a user has granted a standing Bash permission.",
+      "rowIds": [
+        "RL-2C"
+      ]
+    },
+    {
+      "id": "outbound-confirm",
+      "title": "Outbound-action confirmation",
+      "install": "Put email, deploy, payment and other external side effects behind a human confirm gate.",
+      "rowIds": [
+        "RL-4E"
+      ]
+    },
+    {
+      "id": "read-gates",
+      "title": "Read-before-write and read-before-claim gates",
+      "install": "Require a confirmed source read before a write or factual claim.",
+      "rowIds": [
+        "IL-4C",
+        "CL-2A"
+      ]
+    },
+    {
+      "id": "capture-stop",
+      "title": "Durable decision capture",
+      "install": "Promote new rules, decisions and findings into durable project files at turn end. Claude’s local session transcript is useful history, but it is not the project’s system of record.",
+      "rowIds": [
+        "IL-1B",
+        "CL-1A"
+      ]
+    },
+    {
+      "id": "reload",
+      "title": "Post-compaction working-set check",
+      "install": "Re-read critical open sources and trigger nested or path-scoped rules after compaction. Root-level instructions reload automatically.",
+      "rowIds": [
+        "CL-2C"
+      ]
+    },
+    {
+      "id": "session-start",
+      "title": "Cross-session handoff and end check",
+      "install": "Carry a short prior-work digest into a new session or agent, then check compliance before the turn ends. Resuming the same Claude session restores its history automatically.",
+      "rowIds": [
+        "IL-5A",
+        "PL-1A"
+      ]
+    },
+    {
+      "id": "scope-stop",
+      "title": "Scope diff and turn-ending checks",
+      "install": "Diff touched files against declared scope and prevent a turn ending without its required record.",
+      "rowIds": [
+        "IL-4D",
+        "PL-3A"
+      ]
+    },
+    {
+      "id": "ci-evidence",
+      "title": "Committed-evidence CI gates",
+      "install": "Gate on committed test output, generated files, source reads, merged artefacts and proof that each gate ran.",
+      "rowIds": [
+        "IL-6B",
+        "CL-3C",
+        "CL-6B",
+        "PL-2B",
+        "PL-3E",
+        "PL-5C"
+      ]
+    },
+    {
+      "id": "recording",
+      "title": "Call recording and transcript capture",
+      "install": "Turn on recording and file every transcript.",
+      "rowIds": [
+        "CL-1F"
+      ]
+    },
+    {
+      "id": "live-source",
+      "title": "Live source reads",
+      "install": "Read changing facts from the live system instead of a copied figure.",
+      "rowIds": [
+        "CL-5B"
+      ]
+    },
+    {
+      "id": "tracked-working-set",
+      "title": "Tracked working folders",
+      "install": "Bring every writable working path under version control.",
+      "rowIds": [
+        "RL-1B"
+      ]
+    },
+    {
+      "id": "snapshot-alert",
+      "title": "Snapshot freshness alert",
+      "install": "Alert on the age of the last usable snapshot.",
+      "rowIds": [
+        "RL-6B"
+      ]
+    },
+    {
+      "id": "recovery-ownership",
+      "title": "Recovery scope and authority",
+      "install": "Write down what each restore point covers and who has authority to call a rollback.",
+      "rowIds": [
+        "RL-1D",
+        "RL-6C"
+      ]
+    },
+    {
+      "id": "work-provenance",
+      "title": "Append-only task and commit record",
+      "install": "Require a task, validate the record, preserve its history, link commits, and derive the published view from the repository.",
+      "rowIds": [
+        "PL-2A",
+        "PL-3B",
+        "PL-3D",
+        "PL-4A",
+        "PL-5B",
+        "PL-6D",
+        "PL-6E"
+      ]
+    },
+    {
+      "id": "mutation-lock",
+      "title": "Worktree isolation outside Desktop",
+      "install": "Use --worktree for parallel CLI sessions and worktree isolation for subagents. Claude Code Desktop already gives each new session its own worktree.",
+      "rowIds": [
+        "PL-6C"
+      ]
+    },
+    {
+      "id": "test-protection",
+      "title": "Test-file write protection",
+      "install": "Withhold test-file writes from the agent and preserve Git history as the record.",
+      "rowIds": [
+        "TL-01",
+        "TL-02"
+      ]
+    },
+    {
+      "id": "model-seat",
+      "title": "Independent model-seat separation",
+      "install": "Assign the audit to a different model seat from the one that did the work.",
+      "rowIds": [
+        "TL-03"
+      ]
+    }
+  ],
+  "WORKFLOW_ACTIONS": [
+    {
+      "id": "brief-work",
+      "phase": "prepare",
+      "title": "Define the job and what will count as done",
+      "instruction": "State the goal, intended files, limits, whether examples are illustrative, and the evidence required for acceptance.",
+      "doneWhen": "The brief can be checked against the final diff and artefacts.",
+      "rowIds": [
+        "IL-3A",
+        "IL-3C",
+        "PL-2C"
+      ]
+    },
+    {
+      "id": "load-sources",
+      "phase": "prepare",
+      "title": "Load the sources you expect the work to rely on",
+      "instruction": "Name where facts come from and show the search before treating an absence as a finding.",
+      "doneWhen": "The working sources and important caveats are explicit.",
+      "rowIds": [
+        "CL-3A",
+        "CL-3B"
+      ]
+    },
+    {
+      "id": "bound-run",
+      "phase": "prepare",
+      "title": "Confirm access, workspace and other active writers",
+      "instruction": "Check the credential in use, keep permissions on, confirm the local client route, and give each session its own workspace and marker.",
+      "doneWhen": "You know what the session can reach and who else can write here.",
+      "rowIds": [
+        "AL-1A",
+        "AL-2A",
+        "AL-3A",
+        "AL-3C",
+        "RL-2B",
+        "PL-4B"
+      ]
+    },
+    {
+      "id": "prepare-recovery",
+      "phase": "prepare",
+      "title": "Create the migration recovery path before changing data",
+      "instruction": "Take the snapshot, write the reversal, copy and verify before deleting, and decide the point where recovery should stop.",
+      "doneWhen": "A dated restore point and executable reversal both exist.",
+      "appliesWhen": [
+        "migration"
+      ],
+      "condition": "Migration",
+      "rowIds": [
+        "RL-1C",
+        "RL-4C",
+        "RL-4D"
+      ]
+    },
+    {
+      "id": "prepare-parallel",
+      "phase": "prepare",
+      "title": "Give each agent an isolated writable tree",
+      "instruction": "Allocate one worktree per writer before the fan-out begins.",
+      "doneWhen": "No two agents can write the same tree.",
+      "appliesWhen": [
+        "multi"
+      ],
+      "condition": "Multiple agents",
+      "rowIds": [
+        "RL-1E"
+      ]
+    },
+    {
+      "id": "ground-work",
+      "phase": "work",
+      "title": "Keep claims grounded and carry caveats forward",
+      "instruction": "Ask instead of estimating, and repeat confidence limits wherever a fact or finding travels.",
+      "doneWhen": "Every load-bearing claim has a source or is visibly marked unknown.",
+      "rowIds": [
+        "CL-4C",
+        "CL-4E"
+      ]
+    },
+    {
+      "id": "record-decisions",
+      "phase": "work",
+      "title": "Record decisions and reasons while they are fresh",
+      "instruction": "Write the full decision, rationale, constraints and reopen condition into the durable work record as they happen.",
+      "doneWhen": "Someone reading the record later can tell what was decided, why and for which task.",
+      "rowIds": [
+        "IL-1E",
+        "IL-5C",
+        "CL-1B",
+        "AL-5C",
+        "PL-1C",
+        "PL-3C",
+        "PL-4C"
+      ]
+    },
+    {
+      "id": "save-progress",
+      "phase": "work",
+      "title": "Save useful work incrementally",
+      "instruction": "Write partial results to disk, and feed completed output into a retry instead of starting again.",
+      "doneWhen": "A stopped or retried run would retain the work already completed.",
+      "rowIds": [
+        "RL-3D",
+        "RL-5D",
+        "PL-6B"
+      ]
+    },
+    {
+      "id": "gather-parallel",
+      "phase": "work",
+      "title": "Gather every agent before the parent finishes",
+      "instruction": "Use a synthesis stage that waits for, reconciles and preserves every child result.",
+      "doneWhen": "No child output is stranded or silently overwritten.",
+      "appliesWhen": [
+        "multi"
+      ],
+      "condition": "Multiple agents",
+      "rowIds": [
+        "PL-6A"
+      ]
+    },
+    {
+      "id": "inspect-change",
+      "phase": "verify",
+      "title": "Inspect the real change, not the success report",
+      "instruction": "Read the repository diff and actual artefacts on the target branch, then compare them with the decision record.",
+      "doneWhen": "The accepted result is visible in the files and branch that will actually land.",
+      "rowIds": [
+        "AL-6B",
+        "AL-6C",
+        "RL-3A",
+        "RL-3C",
+        "RL-4A",
+        "PL-5A"
+      ]
+    },
+    {
+      "id": "run-evidence",
+      "phase": "verify",
+      "title": "Run the evidence and keep its output",
+      "instruction": "Execute the relevant behavioural, generated-file, claim, architecture, accessibility and adversarial checks; add the regression test for a late bug.",
+      "doneWhen": "The output is committed or independently reproducible, not merely asserted.",
+      "rowIds": [
+        "RL-3B",
+        "TL-04",
+        "TL-05",
+        "TL-06",
+        "TL-07",
+        "TL-08",
+        "TL-09",
+        "TL-10"
+      ]
+    },
+    {
+      "id": "confirm-recovery",
+      "phase": "verify",
+      "title": "Confirm the release can be reversed as one unit",
+      "instruction": "Check that code and data come back together before approving the release or external action.",
+      "doneWhen": "The rollback restores the whole system state, not only the code.",
+      "appliesWhen": [
+        "migration",
+        "release"
+      ],
+      "condition": "Migration or release",
+      "rowIds": [
+        "RL-5A"
+      ]
+    },
+    {
+      "id": "human-judgement",
+      "phase": "verify",
+      "title": "Make the judgement no tool can make for you",
+      "instruction": "Decide whether the finding, data model, security design, public claim and remaining risk are genuinely acceptable.",
+      "doneWhen": "A named person has made and recorded each consequential judgement.",
+      "rowIds": [
+        "TL-11",
+        "TL-12",
+        "TL-13",
+        "TL-14",
+        "TL-15"
+      ]
+    }
+  ]
+}
