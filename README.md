@@ -20,9 +20,7 @@ The last part is the point. Most published guidance tells you what to do. This t
 | `registers/README.md` | How to read a row: the columns, the class letters, the evidence labels, and the two registers that read their class words differently. |
 | `METHODOLOGY.md` | How the rows were derived, what a row has to prove before it is counted, how the set has been tested, the prediction record, and what we already know is wrong with it. |
 
-That is the whole of this release, on purpose. **This first cut is the catalogue and its method, and nothing else.** Clone it or download the zip and read the registers – that is what it is for today.
-
-The tooling that surrounds the catalogue in our own work – the extraction script, the checker that fails a build when a page states counts the registers disagree with, and a single-page self-assessment tool – is real and in use, and it is not in here yet. It ships when it is ready to be read by other people, as its own release with its own note. Nothing has been removed to keep it back; it has simply not been published yet.
+The catalogue remains free to read, quote and build on. It is now accompanied by a local Stage 1 configuration check: [install Trust-check](tools/trust-check/README.md#install). It reports only supported configuration it can establish; it does not certify runtime effectiveness.
 
 ## Reporting a failure
 

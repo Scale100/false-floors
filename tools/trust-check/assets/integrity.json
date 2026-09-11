@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "016fdec2e1a39359d9bf72accffd076762c704f8",
+  "briefCommit": "42b2df85c693c7db2274b3d18eb970ec2e383b33",
+  "sha256": {
+    "assets/register-data.json": "464242cfe0aa6bed5cf9731076f343c9b05f7999b7594ab077eeeed9db2ebcfe",
+    "assets/catalogue-releases.json": "f09942dc1f711b5d4a9af4a59b08951119ad6f66e75da943c53f786daef574ac",
+    "assets/editorial.json": "ccb14209e46626350b5117009692e711dfcc0186312848be5f8139430340a1be",
+    "assets/detectors.json": "1de2954a6ab96ebd04e20a70728e062bd0287b9fa1ee1a78d8ee08028e0bedc3",
+    "scripts/check-assessment.py": "b9d1a53f50934204240bc9c0f19839738ccbbe12946d2df0256b253d683fe502",
+    "scripts/diff-catalogue.py": "7b04aaa01e9e9f92a21b43ccd9bd0727687ccaab454aebad1f4c42518ea08a69"
+  }
+}

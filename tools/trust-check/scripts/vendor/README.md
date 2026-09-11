@@ -1,0 +1,1 @@
+PyYAML 6.0.3, pure Python modules only, copied from the installed distribution. MIT licence in LICENSE-PyYAML. Used only for safe parsing of configuration; no constructors or target code are executed. Source: https://github.com/yaml/pyyaml/tree/6.0.3

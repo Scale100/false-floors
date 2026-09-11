@@ -1,0 +1,909 @@
+{
+  "IL-1A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-rule-budget|check-rule-size|lint-rule-budget)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "token|budget",
+      "limit|max"
+    ],
+    "scope": "recognised Size and token-budget lint on the rule file; connected configuration only"
+  },
+  "IL-1C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-rules|lint-rules|check-policy-lint)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rule|policy",
+      "lint|violation"
+    ],
+    "scope": "recognised Custom lint rule, run as a CI check; connected configuration only"
+  },
+  "IL-1D": {
+    "kind": "field",
+    "paths": [
+      "CLAUDE.md",
+      "AGENTS.md"
+    ],
+    "pattern": "precedence:\\s*\\S.+",
+    "qualification": "An explicit precedence field exists; conflict resolution still requires judgement.",
+    "status": "active",
+    "scope": "explicit field declaration only"
+  },
+  "IL-1E": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-decision-schema|validate-decision-records)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "decision",
+      "rationale",
+      "constraints"
+    ],
+    "scope": "recognised Schema on the record, lint fails on a missing field; connected configuration only"
+  },
+  "IL-1F": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-generated-agents|check-rule-projection|check-generated-rules)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "AGENTS.md|CLAUDE.md",
+      "diff|generated"
+    ],
+    "scope": "recognised Regenerate AGENTS.md and byte-diff the committed copy; connected configuration only"
+  },
+  "IL-2A": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Instruction loading is runtime behavior. Defaults reading dated 2026-08-10 is not reverified."
+  },
+  "IL-2B": {
+    "kind": "rules",
+    "paths": [
+      ".claude/rules/*.md",
+      "*/CLAUDE.md"
+    ],
+    "status": "active",
+    "scope": "scoped instruction file presence only"
+  },
+  "IL-3A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-weak-wording|check-prohibitions)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "must|prohibit",
+      "weak|should"
+    ],
+    "scope": "recognised Grep gate finds weak wording, not the reading; connected configuration only"
+  },
+  "IL-4A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-eslint-rules|check-rule-compliance)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rule|eslint",
+      "violation|error"
+    ],
+    "scope": "recognised ESLint rule enforced pre-commit; connected configuration only"
+  },
+  "IL-4B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-banned-defaults|check-eslint-defaults)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "default|banned",
+      "violation|error"
+    ],
+    "scope": "recognised ESLint rule enforced pre-commit; connected configuration only"
+  },
+  "IL-4C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:read-before-write|check-read-before-write)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "read",
+      "write|edit",
+      "unread"
+    ],
+    "scope": "recognised PreToolUse gate refuses a write to an unread file; connected configuration only",
+    "tools": [
+      "Write",
+      "Edit"
+    ]
+  },
+  "IL-4D": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-ticket-scope|check-touched-scope)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "scope",
+      "ticket",
+      "touched|changed"
+    ],
+    "scope": "recognised Touched-file diff gate, scoped to the ticket; connected configuration only"
+  },
+  "IL-4E": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "pull_request"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only"
+  },
+  "IL-5B": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Subagent instruction delivery is runtime behavior, not the presence of CLAUDE.md."
+  },
+  "IL-5C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-settled-topics|check-decision-links)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "decision|settled",
+      "link|reachable"
+    ],
+    "scope": "recognised Link check proves the record reachable, not obeyed; connected configuration only"
+  },
+  "IL-6A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-rule-coverage|check-rule-checks)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rule",
+      "check",
+      "missing"
+    ],
+    "scope": "recognised Schema finds rules with no check, not violations; connected configuration only"
+  },
+  "IL-6B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-committed-evidence|check-generated-artifacts)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "evidence|artifact",
+      "committed|diff"
+    ],
+    "scope": "recognised CI artefact gates; byte-diff checks; connected configuration only"
+  },
+  "IL-6C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-repeat-findings|check-promoted-controls)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "repeat|recurrence",
+      "check|control"
+    ],
+    "scope": "recognised Checks promoted from repeat findings; connected configuration only"
+  },
+  "CL-1B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-decision-rationale|check-decision-schema)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rationale",
+      "required|missing"
+    ],
+    "scope": "recognised Schema on the decision log fails on a missing why; connected configuration only"
+  },
+  "CL-1C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-path-taxonomy|check-file-placement)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "path",
+      "taxonomy|placement"
+    ],
+    "scope": "recognised Path lint refuses a file filed off-taxonomy; connected configuration only"
+  },
+  "CL-1D": {
+    "kind": "field",
+    "paths": [
+      "*.md",
+      "docs/*.md"
+    ],
+    "pattern": "supersedes:\\s*\\S.+",
+    "qualification": "A supersedes field exists; consistency and retrieval priority remain unverified.",
+    "status": "active",
+    "scope": "explicit field declaration only"
+  },
+  "CL-1E": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-raw-sources|check-source-capture)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "raw-file|raw_source",
+      "exists|is_file|missing"
+    ],
+    "scope": "recognised A curated note must name its raw source file; connected configuration only"
+  },
+  "CL-1F": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:capture-transcripts|check-transcript-capture)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "transcript",
+      "record|capture"
+    ],
+    "scope": "recognised Recorder writes the transcript; triage files it; connected configuration only"
+  },
+  "CL-2A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:read-before-claim|check-read-evidence)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "read",
+      "claim|citation"
+    ],
+    "scope": "recognised A prior read cannot bind a natural-language claim to evidence; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "CL-2B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-naming-aliases|check-retired-paths)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "alias|retired",
+      "path|target"
+    ],
+    "scope": "recognised Naming changelog resolves every retired path; connected configuration only"
+  },
+  "CL-3C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-register-artifacts|check-register-files)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "register",
+      "artifact|file",
+      "diff|exists|is_file"
+    ],
+    "scope": "recognised CI diffs the register against the files it names; connected configuration only"
+  },
+  "CL-3D": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Memory-write admission is a platform/runtime behavior; no local artefact establishes a source-lineage or integrity check runs."
+  },
+  "CL-4A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit"
+    ],
+    "entry": "(?:check-citations|check-claim-sources|pre-commit-claim-sources)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "citation|source",
+      "claim|document"
+    ],
+    "scope": "recognised Citation check on every generated document; connected configuration only"
+  },
+  "CL-4B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-banned-values|check-wrong-defaults)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "banned|forbidden",
+      "value|default"
+    ],
+    "scope": "recognised Banned-value grep gate, run pre-commit; connected configuration only"
+  },
+  "CL-4D": {
+    "kind": "rules",
+    "paths": [
+      ".claude/rules/*.md",
+      "*/CLAUDE.md"
+    ],
+    "status": "active",
+    "scope": "scoped instruction file presence only"
+  },
+  "CL-4E": {
+    "kind": "field",
+    "paths": [
+      "*.md",
+      "docs/*.md"
+    ],
+    "pattern": "verification-status:\\s*\\S.+",
+    "qualification": "A verification-status field exists; propagation of caveats remains unverified.",
+    "status": "active",
+    "scope": "explicit field declaration only"
+  },
+  "CL-5A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-fact-dates|check-source-freshness)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "effective|checked",
+      "review|expir"
+    ],
+    "scope": "recognised Schema requires an effective date and a review date; connected configuration only"
+  },
+  "CL-5B": {
+    "kind": "mcp",
+    "status": "active",
+    "scope": "read-only mcp configuration audit"
+  },
+  "CL-5C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-archive-exclusion|check-retrieval-exclusions)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "archive",
+      "exclude|retrieval"
+    ],
+    "scope": "recognised Archive folder excluded from the retrieval path; connected configuration only"
+  },
+  "CL-6A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-fact-coverage|check-claim-checks)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "fact|claim",
+      "check",
+      "missing"
+    ],
+    "scope": "recognised Schema finds facts with no check, not wrong facts; connected configuration only"
+  },
+  "AL-1A": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "No local mechanism establishes the complete set of reachable accounts."
+  },
+  "AL-1B": {
+    "kind": "settings",
+    "paths": [
+      ".claude/settings.json",
+      ".claude/settings.local.json"
+    ],
+    "keys": [
+      "permissions",
+      "deny"
+    ],
+    "test": "nonempty-list",
+    "qualification": "Deny entries exist in project settings; mutable policy does not create an external boundary.",
+    "status": "active",
+    "scope": "local configuration declaration only"
+  },
+  "AL-1C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-grant-diff|check-access-comments)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "grant",
+      "comment|stated",
+      "diff"
+    ],
+    "scope": "recognised CI diffs the stated grant against the shipped one; connected configuration only"
+  },
+  "AL-1D": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-function-revokes|check-grants)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "function",
+      "revoke"
+    ],
+    "scope": "recognised Lint fails a new function with no explicit revoke; connected configuration only"
+  },
+  "AL-1E": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-definer-grantees|check-security-definers)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "definer",
+      "grantee|grant"
+    ],
+    "scope": "recognised CI lists definer functions and their grantees; connected configuration only"
+  },
+  "AL-1F": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-forged-fields|test-field-policy)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "column|field",
+      "forged|refus"
+    ],
+    "scope": "recognised A test writes the forged value and expects refusal; connected configuration only"
+  },
+  "AL-2A": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Which effective credential a live session holds is not established by project files."
+  },
+  "AL-2B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-admin-transitions|test-admin-policy)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "admin",
+      "reverse|transition"
+    ],
+    "scope": "recognised A test asserts admin cannot reverse a one-way step; connected configuration only"
+  },
+  "AL-2C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-tenant-matrix|test-tenant-isolation)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "tenant",
+      "matrix|isolation"
+    ],
+    "scope": "recognised The isolation matrix has a cell for every path; connected configuration only"
+  },
+  "AL-3A": {
+    "kind": "local-unlinked",
+    "status": "active",
+    "scope": "read-only local-unlinked configuration audit"
+  },
+  "AL-3B": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "pull_request"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only"
+  },
+  "AL-3C": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Other active sessions and their writable surfaces are not established by project files."
+  },
+  "AL-4A": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "required_status_checks"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only"
+  },
+  "AL-4B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-policy-diff|check-guard-scope)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "policy",
+      "grant",
+      "diff"
+    ],
+    "scope": "recognised The guard reads the diff for policy and grant changes; connected configuration only"
+  },
+  "AL-4C": {
+    "kind": "settings",
+    "paths": [
+      ".claude/settings.json",
+      ".claude/settings.local.json"
+    ],
+    "keys": [
+      "permissions",
+      "deny"
+    ],
+    "test": "nonempty-list",
+    "qualification": "Deny entries exist; these do not establish that the current session is read-only.",
+    "status": "active",
+    "scope": "local configuration declaration only"
+  },
+  "AL-4E": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "pull_request"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only",
+    "reviewer": true
+  },
+  "AL-4F": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Egress/DLP policy enforcement is a runtime or platform-level control; no local artefact establishes it is installed."
+  },
+  "AL-5A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-grant-expiry|test-grant-expiry)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "grant",
+      "expir|window"
+    ],
+    "scope": "recognised A test asserts the grant expires with the window; connected configuration only"
+  },
+  "AL-5B": {
+    "kind": "subagent-tools",
+    "status": "active",
+    "scope": "read-only subagent-tools configuration audit"
+  },
+  "AL-6A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-guard-replay|check-control-calibration)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "known.bad|replay",
+      "guard|control"
+    ],
+    "scope": "recognised The guard pattern is replayed against real history; connected configuration only"
+  },
+  "RL-1B": {
+    "kind": "git-tracked",
+    "status": "active",
+    "scope": "read-only git-tracked configuration audit"
+  },
+  "RL-1C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:check-migration-snapshot|require-restore-point)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "snapshot|backup",
+      "migrat"
+    ],
+    "scope": "recognised Snapshot or branch gate before migrate; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "RL-1D": {
+    "kind": "field",
+    "paths": [
+      "*.md",
+      "docs/*.md"
+    ],
+    "pattern": "restore-scope:\\s*\\S.+",
+    "qualification": "A restore-scope field exists; coverage of actual system state remains unverified.",
+    "status": "active",
+    "scope": "explicit field declaration only"
+  },
+  "RL-1E": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:check-worktree-isolation|check-writer-isolation)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "worktree",
+      "writer|agent"
+    ],
+    "scope": "recognised Worktrees separate paths but remain mutually reachable; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "RL-1F": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Backup snapshot cadence and recoverability require backup-provider evidence."
+  },
+  "RL-2A": {
+    "kind": "settings",
+    "paths": [
+      ".claude/settings.json",
+      ".claude/settings.local.json"
+    ],
+    "keys": [
+      "sandbox",
+      "enabled"
+    ],
+    "test": "true",
+    "qualification": "Sandbox enabled is configured locally; enforcement outside the agent OS principal is unverified.",
+    "status": "active",
+    "scope": "local configuration declaration only"
+  },
+  "RL-2C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:destructive-git-guard|check-destructive-commands)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "dirty",
+      "reset|clean|destructive"
+    ],
+    "scope": "recognised Deny pattern on destructive shell shapes when the tree is dirty; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "RL-2D": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "pull_request",
+      "required_status_checks"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only",
+    "deploy": true
+  },
+  "RL-3A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-diff-review|require-diff-review)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "diff",
+      "review|approval"
+    ],
+    "scope": "recognised Diff review gate on agent commits; connected configuration only"
+  },
+  "RL-3B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-regressions|test-regression-invariants)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "regression",
+      "invariant|test"
+    ],
+    "scope": "recognised Regression test on the broken invariant; connected configuration only"
+  },
+  "RL-3D": {
+    "kind": "field",
+    "paths": [
+      ".claude/agents/*.md"
+    ],
+    "pattern": "incremental-write:\\s*true\\s*",
+    "qualification": "A brief declares incremental writes; agent compliance remains unverified.",
+    "status": "active",
+    "scope": "explicit field declaration only"
+  },
+  "RL-4A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-branch-reuse|check-branch-parents)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "branch",
+      "squash|parent|cherry"
+    ],
+    "scope": "recognised Parent-count check before branching; connected configuration only"
+  },
+  "RL-4B": {
+    "kind": "remote",
+    "status": "active",
+    "rules": [
+      "non_fast_forward"
+    ],
+    "scope": "effective GitHub branch policy; opt-in API only"
+  },
+  "RL-4C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-commit"
+    ],
+    "entry": "(?:check-down-migrations|check-migration-reversal)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "migrat",
+      "down|rollback"
+    ],
+    "scope": "recognised Migration refused without a down script; connected configuration only"
+  },
+  "RL-4D": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:check-copy-verify|copy-and-verify)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "copy",
+      "verify|checksum"
+    ],
+    "scope": "recognised Copy-and-verify gate in place of move; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "RL-4E": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "pre-tool"
+    ],
+    "entry": "(?:confirm-outbound|check-external-actions)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "confirm",
+      "outbound|payment|external"
+    ],
+    "scope": "recognised Confirm gate on outbound and paid actions; connected configuration only",
+    "tools": [
+      "Bash"
+    ]
+  },
+  "RL-5A": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-paired-rollback|check-rollback-plan)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rollback",
+      "code",
+      "data"
+    ],
+    "scope": "recognised Paired code and data rollback plan; connected configuration only"
+  },
+  "RL-5D": {
+    "kind": "unobservable",
+    "status": "draft",
+    "scope": "project-local static inspection",
+    "reason": "Recovery of orphan agent output requires the actual retry history."
+  },
+  "RL-6B": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI"
+    ],
+    "entry": "(?:check-snapshot-age|check-backup-freshness)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "snapshot|backup",
+      "age|fresh"
+    ],
+    "scope": "recognised Snapshot freshness check; connected configuration only"
+  },
+  "RL-6C": {
+    "kind": "gate",
+    "status": "active",
+    "surfaces": [
+      "CI",
+      "pre-commit",
+      "session start",
+      "stop"
+    ],
+    "entry": "(?:check-rollback-authority|validate-recovery-owner)\\.(?:py|sh|mjs|js)",
+    "tokens": [
+      "rollback",
+      "authority|owner"
+    ],
+    "scope": "recognised Named rollback authority, required field; connected configuration only"
+  }
+}
