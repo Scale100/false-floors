@@ -6,7 +6,7 @@ Trust-check gives you a grounded starting point for improving the controls aroun
 
 ## How it works
 
-The scanner maps configured controls by their structure rather than trusting filenames or comments. It reads the relevant local configuration, follows supported command and hook connections, and records where a mechanism is wired, missing, or cannot be interpreted safely. It does not run code belonging to the repository being assessed. Its default report gives three next improvements in plain language; the accompanying JSON retains the evidence and any uncertainty for maintainers. Controls that are connected but need behavioural proof are placed in a Stage 2 testing queue. That separation matters: an installed hook is evidence of configuration, not proof that it catches every real failure. Unsupported custom patterns stay explicit rather than being guessed into coverage.
+The scanner maps configured controls by their structure rather than trusting filenames or comments. It reads the relevant local configuration, follows supported command and hook connections, and records where a mechanism is wired, missing, or cannot be interpreted safely. It does not run code belonging to the repository being assessed. Its default report gives three next improvements in plain language; the accompanying JSON retains the evidence and any uncertainty for maintainers. Controls that are connected but need behavioural proof are placed in a Stage 2 testing queue. An installed hook is evidence of configuration, not proof that it catches every real failure. Unsupported custom patterns stay explicit rather than being guessed into coverage.
 
 ## How to read the result
 
