@@ -2,6 +2,16 @@
 
 Trust-check shows which supported agent controls are configured in a repository, which supported patterns were not found, and which wired controls should be tested next. It gives teams a quick, evidence-backed starting point for improving agent safety without running repository code or producing a meaningless score.
 
+## Install
+
+Copy `tools/trust-check/` to `.claude/skills/trust-check/` or `.agents/skills/trust-check/` in the repository you want to assess. Then run:
+
+```sh
+python3 -B .claude/skills/trust-check/scripts/trust_check.py --repo "$(git rev-parse --show-toplevel)"
+```
+
+Use the matching `.agents/skills/` path if that is where your agent reads skills. Requires Python 3.10+ and Git.
+
 ## What you get
 
 - A concise Markdown report with the three most useful improvements to make next.
@@ -15,16 +25,6 @@ The scan is local, deterministic and bounded. A normal run writes only `false-fl
 Agent controls are easy to mistake for guarantees. A hook may exist but be disconnected; a policy may be present but bypassable; a convincing filename may contain no enforcement at all.
 
 Trust-check separates what static inspection can establish from what still needs testing. It recognises supported Claude Code configurations, explains practical gaps in plain language, and preserves uncertainty instead of converting it into false confidence.
-
-## Install
-
-Copy `tools/trust-check/` to `.claude/skills/trust-check/` or `.agents/skills/trust-check/` in the repository you want to assess. Then run:
-
-```sh
-python3 -B .claude/skills/trust-check/scripts/trust_check.py --repo "$(git rev-parse --show-toplevel)"
-```
-
-Use the matching `.agents/skills/` path if that is where your agent reads skills. Requires Python 3.10+ and Git.
 
 ## How to read the result
 
